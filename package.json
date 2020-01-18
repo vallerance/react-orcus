@@ -19,8 +19,6 @@
     "chai": "^4.2.0",
     "check-prop-types": "^1.1.2",
     "dev-tasks": "github:joshuacwebdeveloper/dev-tasks#16abf14",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
     "gulp-util": "^3.0.8",
