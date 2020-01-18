@@ -11,7 +11,7 @@ function OrcusWhiteboard (props) {
             programMenu={false}
         />
             <Orcus.App
-                key="file-manager"
+                slug="file-manager"
                 name="File Manager"
                 icon="file"
                 initialOpened={true}
@@ -24,7 +24,7 @@ function OrcusWhiteboard (props) {
             </Orcus.App>
             
             <Orcus.App
-                key="tetris"
+                slug="tetris"
                 name="Tetris"
                 icon="blocks"
                 initialPosition={[550, 200, 200, 600]}    //{x, y, w, h}
