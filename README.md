@@ -35,11 +35,11 @@ var Desktop = (
         programMenu={false}
     />
         <Orcus.App
-            key="file-manager"
+            slug="file-manager"
             name="File Manager"
             icon="file"
             initialOpened={true}
-            initialPosition={150, 200, 500, 300}    //{x, y, w, h}
+            initialPosition={[150, 200, 500, 300]}    //{x, y, w, h}
         >
             <h1>Welcome to my File Manager</h1>
             
@@ -48,14 +48,14 @@ var Desktop = (
         </Orcus.App>
         
         <Orcus.App
-            key="tetris"
+            slug="tetris"
             name="Tetris"
             icon="blocks"
-            initialPosition={550, 200, 200, 600}    //{x, y, w, h}
+            initialPosition={[550, 200, 200, 600]}    //{x, y, w, h}
         >
             <p>Does anyone know how to build a tetris game?</p>
         </Orcus.App>
-    </Orcus.Dektop>
+    </Orcus.Desktop>
     
 );
 ```
