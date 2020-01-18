@@ -31,7 +31,7 @@ function OrcusWhiteboard (props) {
             >
                 <p>Does anyone know how to build a tetris game?</p>
             </Orcus.App>
-        </Orcus.Dektop>
+        </Orcus.Desktop>
         
     );
     
