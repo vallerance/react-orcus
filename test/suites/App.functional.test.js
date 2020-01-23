@@ -159,6 +159,27 @@ describe ('<App /> should render', function () {
                     "Unexpected node with orcus-maximize class"
                 );
             });
+            
+            it ("Maximize button if maximized then restored", function () {
+                // click maximize button
+                rtl.fireEvent.click(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-maximize").get(0)
+                );
+                rtl.fireEvent.click(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-restore").get(0)
+                );
+                // restore button should be replaced
+                assert.lengthOf(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-maximize"),
+                    1,
+                    "Missing node with orcus-restore class"
+                );
+                assert.lengthOf(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-restore"),
+                    0,
+                    "Unexpected node with orcus-maximize class"
+                );
+            });
         });
         
     });
