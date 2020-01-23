@@ -1,6 +1,6 @@
 {
   "name": "react-orcus",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "React library for creating an app with a windowed desktop interface.",
   "dependencies": {
     "@material-ui/core": "^4.0.2",
