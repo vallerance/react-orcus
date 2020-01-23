@@ -75,14 +75,8 @@ describe ('<App /> should render', function () {
         
         it ("Nothing if closed", function () {
             //render app that is closed (default)
-            var renderResult = rtl.render(h(App, Object.assign({}, extraProps))),
-                closedWrapper = jQuery(renderResult.container.firstChild);
-            //no class names
-            assert.notInclude(closedWrapper.get(0).className, "orcus-app");
-            assert.notInclude(closedWrapper.get(0).className, "orcus-window");
-            assert.notInclude(closedWrapper.get(0).className, extraProps.className);
-            // no id
-            assert.notInclude(closedWrapper.container.firstChild.id, "orcus-app-");
+            var renderResult = rtl.render(h(App, Object.assign({}, extraProps)));
+            assert.isNotOk(renderResult.container.firstChild);
         });
     });
     
