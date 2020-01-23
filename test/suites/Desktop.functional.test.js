@@ -37,6 +37,7 @@ describe ('<Desktop /> should render', function () {
     describe ("Desktop with", function () {
         it ("Library class names", function () {
             assert.include(desktopWrapper.get(0).className, "orcus-desktop");
+            assert.lengthOf(desktopWrapper.find(".orcus-desktop-content"), 1, "Missing node with orcus-desktop-content class");
         });
 
         it ("Transfered class name", function () {
