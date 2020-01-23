@@ -122,19 +122,27 @@ describe ('<App /> should render', function () {
         });
         
         describe ("Window controls section that has", function () {
+            it ("Class name", function () {
+                assert.lengthOf(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-controls"),
+                    1,
+                    "Missing node with orcus-controls class"
+                );
+            });
+            
             it ("Initial control buttons", function () {
                 assert.lengthOf(
-                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-minimize"),
+                    titleBarWrapper.find(".orcus-controls .orcus-ui.orcus-button.orcus-minimize"),
                     1,
                     "Missing node with orcus-minimize class"
                 );
                 assert.lengthOf(
-                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-maximize"),
+                    titleBarWrapper.find(".orcus-controls .orcus-ui.orcus-button.orcus-maximize"),
                     1,
                     "Missing node with orcus-maximize class"
                 );
                 assert.lengthOf(
-                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-close"),
+                    titleBarWrapper.find(".orcus-controls .orcus-ui.orcus-button.orcus-close"),
                     1,
                     "Missing node with orcus-close class"
                 );
