@@ -52,7 +52,7 @@ describe ('<Desktop /> should render', function () {
         it ("Default id", function () {
             //render desktop with no given id
             var renderResult = rtl.render(h(Desktop, {}));
-            //should inculde default id
+            //should include default id
             assert.include(renderResult.container.firstChild.id, "orcus-desktop-");
         });
 
@@ -60,7 +60,7 @@ describe ('<Desktop /> should render', function () {
             //render two desktops with no given id
             var renderResult1 = rtl.render(h(Desktop, {})),
                 renderResult2 = rtl.render(h(Desktop, {}));
-            //should inculde default id
+            //should include default id
             assert.notEqual(
                 renderResult1.container.firstChild.id,
                 renderResult2.container.firstChild.id
@@ -92,7 +92,7 @@ describe ('<Desktop /> should render', function () {
         it ("Unless prop is false", function () {
             //render desktop with no shortcuts
             var renderResult = rtl.render(h(Desktop, {shortcuts: false}));
-            //should inculde default id
+            //should contain no shortcuts
             assert.lengthOf(
                 jQuery(renderResult.container.firstChild).find(".orcus-shortcuts"),
                 0,
@@ -125,7 +125,7 @@ describe ('<Desktop /> should render', function () {
         it ("Unless prop is false", function () {
             //render desktop with no taskbar
             var renderResult = rtl.render(h(Desktop, {taskbar: false}));
-            //should inculde default id
+            //should contain no taskbar
             assert.lengthOf(
                 jQuery(renderResult.container.firstChild).find(".orcus-taskbar"),
                 0,
@@ -158,7 +158,7 @@ describe ('<Desktop /> should render', function () {
         it ("Unless prop is false", function () {
             //render desktop with no program menu
             var renderResult = rtl.render(h(Desktop, {programMenu: false}));
-            //should inculde default id
+            //should contain no program menu
             assert.lengthOf(
                 jQuery(renderResult.container.firstChild).find(".orcus-program-menu"),
                 0,
