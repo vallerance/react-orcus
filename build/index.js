@@ -5,24 +5,33 @@
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
-"use strict";
-//include dependencies
+"use strict"; //include dependencies
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.App = exports.Desktop = undefined;
+Object.defineProperty(exports, "Desktop", {
+  enumerable: true,
+  get: function get() {
+    return _Desktop.Desktop;
+  }
+});
+Object.defineProperty(exports, "App", {
+  enumerable: true,
+  get: function get() {
+    return _OrcusApp.OrcusApp;
+  }
+});
+exports["default"] = void 0;
 
-var _Desktop = require('./Desktop.js');
+var _Desktop = require("./Desktop.js");
 
-var _OrcusApp = require('./OrcusApp.js');
+var _OrcusApp = require("./OrcusApp.js");
 
 //export modules
-exports.Desktop = _Desktop.Desktop;
-exports.App = _OrcusApp.OrcusApp;
 //export default
-
-exports.default = {
-    Desktop: _Desktop.Desktop,
-    App: _OrcusApp.OrcusApp
+var _default = {
+  Desktop: _Desktop.Desktop,
+  App: _OrcusApp.OrcusApp
 };
+exports["default"] = _default;
