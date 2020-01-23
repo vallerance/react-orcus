@@ -15,17 +15,21 @@ var assert = require('chai').assert,
 
 //begin mocha tests
 describe ('<App /> should render', function () {
-    var extraProps = {
+    var reqProps = {
+            name: "Test App",
+            slug: "test-app"
+        },
+        extraProps = Object.assign({}, reqProps, {
             className: "custom-class",
             id: "custom-id",
             "data-prop": "prop-val",
-            name: "Test App",
-            key: "test-app"
-        },
+        }),
+        reqPropsOpened = Object.assign({initialOpened: true}, reqProps),
+        extraPropsOpened = Object.assign({initialOpened: true}, extraProps),
         appWrapper = null;
             
     beforeEach (function () {
-        var renderResult = rtl.render(h(App, Object.assign({initialOpened: true}, extraProps)));
+        var renderResult = rtl.render(h(App, extraPropsOpened));
         appWrapper = jQuery(renderResult.container.firstChild);
     });
 
@@ -53,15 +57,15 @@ describe ('<App /> should render', function () {
 
         it ("Default id", function () {
             //render app with no given id
-            var renderResult = rtl.render(h(App, {}));
-            //should inculde default id
+            var renderResult = rtl.render(h(App, reqPropsOpened));
+            //should include default id
             assert.include(renderResult.container.firstChild.id, "orcus-app-");
         });
 
         it ("Unique default id", function () {
             //render two apps with no given id
-            var renderResult1 = rtl.render(h(App, {})),
-                renderResult2 = rtl.render(h(App, {}));
+            var renderResult1 = rtl.render(h(App, reqPropsOpened)),
+                renderResult2 = rtl.render(h(App, reqPropsOpened));
             //should inculde default id
             assert.notEqual(
                 renderResult1.container.firstChild.id,
@@ -88,7 +92,7 @@ describe ('<App /> should render', function () {
         beforeEach (function () {
             var renderResult = rtl.render(h(
                 App,
-                Object.assign({initialOpened: true}, extraProps)
+                extraPropsOpened
             ));
             titleBarWrapper = jQuery(renderResult.container.firstChild); 
         });
@@ -161,7 +165,7 @@ describe ('<App /> should render', function () {
         beforeEach (function () {
             var renderResult = rtl.render(h(
                 App,
-                Object.assign({initialOpened: true}, extraProps),
+                extraPropsOpened,
                 h("div", {className: "child-class"})
             ));
             clientAreaWrapper = jQuery(renderResult.container.firstChild); 
@@ -192,7 +196,7 @@ describe ('<App /> should render', function () {
             
             it ("Not rendered if closed", function () {
                 //render app that is closed (default)
-                var renderResult = rtl.render(h(App, {}, h("div", {className: "child-class"})));
+                var renderResult = rtl.render(h(App, reqProps, h("div", {className: "child-class"})));
                 //should not have children
                 assert.lengthOf(
                     jQuery(renderResult.container.firstChild).find(".child-class"),

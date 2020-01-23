@@ -173,7 +173,7 @@ describe ('<Desktop /> should render', function () {
             var renderResult = rtl.render(h(
                 Desktop,
                 Object.assign({}, extraProps),
-                h(App, {key: "test-app", name: "Test App"})
+                h(App, {slug: "test-app", name: "Test App", initialOpened: true})
             ));
             appsWrapper = jQuery(renderResult.container.firstChild); 
         });
