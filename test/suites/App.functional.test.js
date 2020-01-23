@@ -115,10 +115,10 @@ describe ('<App /> should render', function () {
             assert.lengthOf(
                 titleBarWrapper.find(".orcus-title-bar .orcus-title"),
                 1,
-                "Missing node with orcus-window-title class"
+                "Missing node with orcus-title class"
             );
             //check for content
-            assert.include(titleBarWrapper.find(".orcus-window-title").text(), extraProps.name);
+            assert.include(titleBarWrapper.find(".orcus-title").text(), extraProps.name);
         });
         
         describe ("Window controls section that has", function () {
