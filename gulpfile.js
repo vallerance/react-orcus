@@ -8,7 +8,7 @@
 //include modules
 var DevOps = require("dev-tasks"),
     gulp = require("gulp"),
-    gutil = require("gulp-util");
+    log = require("fancy-log");
 
 //configure dev-tasks
 DevOps.init({
@@ -28,7 +28,7 @@ DevOps.init({
 
 //default gulp task: documentation
 gulp.task('default', function () {
-    gutil.log(
+    log(
 `
 
 Available Gulp Commands:
@@ -42,8 +42,9 @@ Available Gulp Commands:
 });
 
 //lint code using ESLint
-gulp.task('lint', function () {
-    return DevOps.lint();
+gulp.task('lint', function (cb) {
+    DevOps.lint();
+    return cb();
 });
 
 //transpile code using babel
@@ -78,8 +79,8 @@ gulp.task('release', function () {
 
 
 //create dummy tasks so that we can use non-hyphentated arguments
-var dummy = function () {
-        return;
+var dummy = function (cb) {
+        return cb();
     },
     dummies = ['patch', 'minor', 'major'];
 for (let i=0; i<dummies.length; i++) {

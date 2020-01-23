@@ -12,6 +12,7 @@
   },
   "parserOptions": {
     "sourceType": "module",
+    "ecmaVersion": 2020,
     "ecmaFeatures": {
       "jsx": true
     }
@@ -28,8 +29,9 @@
       2,
       4,
       {
-        "SwitchCase": 1
-      }
+        "SwitchCase": 1,
+        "ignoredNodes": ["TemplateLiteral"]
+      },
     ],
     "no-use-before-define": 0,
     "new-cap": 0,
@@ -50,7 +52,6 @@
       2,
       {
         "code": 140,
-        "ignorePattern": "^\\s*{.*}(,\\s*)?",
         "ignoreComments": false,
         "ignoreTrailingComments": true,
         "ignoreUrls": true,
