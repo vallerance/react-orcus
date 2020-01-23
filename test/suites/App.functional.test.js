@@ -144,7 +144,9 @@ describe ('<App /> should render', function () {
             
             it ("Restore button if maximized", function () {
                 // click maximize button
-                rtl.fireEvent.click(titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-maximize"));
+                rtl.fireEvent.click(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-maximize").get(0)
+                );
                 // maximize button should be replaced
                 assert.lengthOf(
                     titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-restore"),
