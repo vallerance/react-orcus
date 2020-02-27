@@ -75,39 +75,6 @@ describe ('<Desktop /> should render', function () {
         });
     });
     
-    describe ("Shortcuts", function () {
-        var shortcutsWrapper = null;
-
-        beforeEach (function () {
-            var renderResult = rtl.render(h(Desktop, Object.assign({}, extraProps)));
-            shortcutsWrapper = jQuery(renderResult.container.firstChild); 
-        });
-
-        afterEach (function () {
-            //destroy wrapper
-            shortcutsWrapper = null;
-        });
-
-        it ("With class name", function () {
-            assert.lengthOf(
-                shortcutsWrapper.find(".orcus-shortcuts"),
-                1,
-                "Missing node with orcus-shortcuts class"
-            );
-        });
-        
-        it ("Unless prop is false", function () {
-            //render desktop with no shortcuts
-            var renderResult = rtl.render(h(Desktop, {shortcuts: false}));
-            //should contain no shortcuts
-            assert.lengthOf(
-                jQuery(renderResult.container.firstChild).find(".orcus-shortcuts"),
-                0,
-                "Found unexpected node with orcus-shortcuts class"
-            );
-        });
-    });
-
     describe ("Taskbar", function () {
         var taskbarWrapper = null;
 
