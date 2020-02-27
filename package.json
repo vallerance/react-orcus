@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "React library for creating an app with a windowed desktop interface.",
   "dependencies": {
+    "@iconify/iconify": "^1.0.4",
     "@material-ui/core": "^4.0.2",
+    "@reduxjs/toolkit": "^1.2.3",
     "extend": "^3.0.2",
     "memoize-one": "^5.0.4",
     "prop-types": "^15.7.2",
@@ -12,6 +14,10 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-draggable": "^3.3.0"
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.5",
+    "redux-orm": "^0.16.1",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -19,6 +25,8 @@
     "chai": "^4.2.0",
     "check-prop-types": "^1.1.2",
     "dev-tasks": "github:joshuacwebdeveloper/dev-tasks#05f36fc",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
     "fancy-log": "^1.3.3",
