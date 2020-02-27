@@ -11,8 +11,8 @@ var assert = require('chai').assert,
 class Util {
     
     constructor (Component) {
-        this.Component = Component;
         this.name = Component.name;
+        this.propTypes = Component.propTypes;
     }
     
     _generatePropDescription ({prop, value, ofType=false, withValue=false, required=false}) {
@@ -54,7 +54,7 @@ class Util {
     testProp (prop, value) {
         return checkPropTypes(
             {
-                [prop]: this.Component.propTypes[prop]
+                [prop]: this.propTypes[prop]
             },
             {
                 [prop]: value
