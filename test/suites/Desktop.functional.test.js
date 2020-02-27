@@ -20,6 +20,13 @@ describe ('<Desktop /> should render', function () {
             id: "custom-id",
             "data-prop": "prop-val"
         },
+        appProps = {
+            slug: "test-app",
+            name: "Test App",
+            className: "custom-class",
+            id: "custom-id",
+            icon: "fa:home"
+        },
         desktopWrapper = null;
             
     beforeEach (function () {
@@ -174,7 +181,7 @@ describe ('<Desktop /> should render', function () {
             var renderResult = rtl.render(h(
                 Desktop,
                 Object.assign({}, extraProps),
-                h(App, {slug: "test-app", name: "Test App", initialOpened: true})
+                h(App, Object.assign({initialOpened: true}, appProps))
             ));
             appsWrapper = jQuery(renderResult.container); 
         });
