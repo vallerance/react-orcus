@@ -15,6 +15,11 @@ DevOps.init({
     appName: 'react-orcus',
     bundleDir: "dist",
     bundleName: "react-orcus",
+    babelExtOptions: {
+        "plugins": [
+            ["@babel/plugin-proposal-class-properties", { "loose": true }]
+        ]
+    },
     wpSingleEntryPoint: "./src/index.js",
     wpExtOptions: {
         output: {

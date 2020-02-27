@@ -14,9 +14,10 @@
     "react-draggable": "^3.3.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "chai": "^4.2.0",
     "check-prop-types": "^1.1.2",
-    "dev-tasks": "github:joshuacwebdeveloper/dev-tasks#6d0cc3f",
+    "dev-tasks": "github:joshuacwebdeveloper/dev-tasks#05f36fc",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.2.0",
     "fancy-log": "^1.3.3",
