@@ -10,11 +10,22 @@
   "globals": {
     "APPCONFIG": false
   },
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2020,
     "ecmaFeatures": {
       "jsx": true
+    },
+    "babelOptions": {
+      "overrides": [
+        {
+          "presets": [
+            '@babel/preset-env',
+            '@babel/preset-react'
+          ]
+        }
+      ]
     }
   },
   "rules": {
