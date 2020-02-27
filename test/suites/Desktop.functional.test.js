@@ -24,7 +24,7 @@ describe ('<Desktop /> should render', function () {
             
     beforeEach (function () {
         var renderResult = rtl.render(h(Desktop, Object.assign({}, extraProps)));
-        desktopWrapper = jQuery(renderResult.container.firstChild);
+        desktopWrapper = jQuery(renderResult.container);
     });
 
     afterEach (function () {
@@ -36,17 +36,17 @@ describe ('<Desktop /> should render', function () {
 
     describe ("Desktop with", function () {
         it ("Library class names", function () {
-            assert.include(desktopWrapper.get(0).className, "orcus-desktop");
+            assert.lengthOf(desktopWrapper.find(".orcus-desktop"), 1, "Missing node with orcus-desktop class");
             assert.lengthOf(desktopWrapper.find(".orcus-desktop-content"), 1, "Missing node with orcus-desktop-content class");
         });
 
         it ("Transfered class name", function () {
-            assert.include(desktopWrapper.get(0).className, extraProps.className);
+            assert.include(desktopWrapper.find(".orcus-desktop").get(0).className, extraProps.className);
         });
 
         it ("Other transfered props", function () {
-            assert.equal(desktopWrapper.eq(0).data("prop"), extraProps["data-prop"]);
-            assert.equal(desktopWrapper[0].id, extraProps.id);
+            assert.equal(desktopWrapper.find(".orcus-desktop").eq(0).data("prop"), extraProps["data-prop"]);
+            assert.equal(desktopWrapper.find(".orcus-desktop")[0].id, extraProps.id);
         });
 
         it ("Default id", function () {
@@ -106,7 +106,7 @@ describe ('<Desktop /> should render', function () {
 
         beforeEach (function () {
             var renderResult = rtl.render(h(Desktop, Object.assign({}, extraProps)));
-            taskbarWrapper = jQuery(renderResult.container.firstChild); 
+            taskbarWrapper = jQuery(renderResult.container); 
         });
 
         afterEach (function () {
@@ -139,7 +139,7 @@ describe ('<Desktop /> should render', function () {
 
         beforeEach (function () {
             var renderResult = rtl.render(h(Desktop, Object.assign({}, extraProps)));
-            menuWrapper = jQuery(renderResult.container.firstChild); 
+            menuWrapper = jQuery(renderResult.container); 
         });
 
         afterEach (function () {
@@ -176,7 +176,7 @@ describe ('<Desktop /> should render', function () {
                 Object.assign({}, extraProps),
                 h(App, {slug: "test-app", name: "Test App", initialOpened: true})
             ));
-            appsWrapper = jQuery(renderResult.container.firstChild); 
+            appsWrapper = jQuery(renderResult.container); 
         });
 
         afterEach (function () {

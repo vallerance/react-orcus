@@ -46,7 +46,7 @@ describe ('<App /> should render', function () {
             
     beforeEach (function () {
         var renderResult = renderApp(App, extraPropsOpened);
-        appWrapper = jQuery(renderResult.container.firstChild);
+        appWrapper = jQuery(renderResult.container);
     });
 
     afterEach (function () {
@@ -58,17 +58,17 @@ describe ('<App /> should render', function () {
 
     describe ("App with", function () {
         it ("Library class names", function () {
-            assert.include(appWrapper.get(0).className, "orcus-app");
-            assert.include(appWrapper.get(0).className, "orcus-window");
+            assert.lengthOf(appWrapper.find(".orcus-app"), 1, "Missing node with orcus-app class");
+            assert.lengthOf(appWrapper.find(".orcus-window"), 1, "Missing node with orcus-window class");
         });
 
         it ("Transfered class name", function () {
-            assert.include(appWrapper.get(0).className, extraProps.className);
+            assert.include(appWrapper.find(".orcus-app").get(0).className, extraProps.className);
         });
 
         it ("Other transfered props", function () {
-            assert.equal(appWrapper.eq(0).data("prop"), extraProps["data-prop"]);
-            assert.equal(appWrapper[0].id, extraProps.id);
+            assert.equal(appWrapper.find(".orcus-app").eq(0).data("prop"), extraProps["data-prop"]);
+            assert.equal(appWrapper.find(".orcus-app")[0].id, extraProps.id);
         });
 
         it ("Default id", function () {
@@ -103,8 +103,8 @@ describe ('<App /> should render', function () {
             var renderResult = renderApp(
                 App,
                 extraPropsOpened
-            ));
-            titleBarWrapper = jQuery(renderResult.container.firstChild); 
+            );
+            titleBarWrapper = jQuery(renderResult.container); 
         });
 
         afterEach (function () {
@@ -128,7 +128,10 @@ describe ('<App /> should render', function () {
                 "Missing node with orcus-title class"
             );
             //check for content
-            assert.include(titleBarWrapper.find(".orcus-title").text(), extraProps.name);
+            assert.include(
+                titleBarWrapper.find(".orcus-title-bar .orcus-title").text(),
+                extraProps.name
+            );
         });
         
         describe ("Window controls section that has", function () {
@@ -223,8 +226,8 @@ describe ('<App /> should render', function () {
                 App,
                 extraPropsOpened,
                 h("div", {className: "child-class"})
-            ));
-            clientAreaWrapper = jQuery(renderResult.container.firstChild); 
+            );
+            clientAreaWrapper = jQuery(renderResult.container); 
         });
 
         afterEach (function () {
