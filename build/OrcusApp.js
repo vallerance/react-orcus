@@ -1,6 +1,9 @@
 /* OrcusApp.js
  * Represents a single application in the react-orcus desktop
- * Dependencies: react, prop-types modules, OrcusUiButton components
+ * Dependencies: 
+    - modules: react, prop-types, reselect
+    - components: OrcusUiButton
+    - other: OrcusApp class, reduxConventionalConnect function
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
@@ -9,17 +12,29 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrcusApp = void 0;
+exports.OrcusAppUnit = exports.OrcusApp = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _reselect = require("reselect");
+
+var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
+
 var _OrcusUiButton = require("./OrcusUiButton.js");
+
+var _reduxConventionalConnect = require("./util/reduxConventionalConnect.js");
+
+var _class, _temp, _handleMaximizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -43,49 +58,90 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-//define constants
-var DEFAULT_ID = "ORCUS_APP_DEFAULT_ID_VALUE_68142"; //create our OrcusApp class
+function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
 
-var OrcusApp =
+var id = 0;
+
+function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
+
+//create our OrcusApp class
+var OrcusApp = (_temp = _class =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(OrcusApp, _React$Component);
 
-  function OrcusApp(props, context) {
+  function OrcusApp() {
+    var _getPrototypeOf2;
+
     var _this;
 
     _classCallCheck(this, OrcusApp);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(OrcusApp).call(this, props, context)); //bind event handlers
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
-    _this.handleMaximizeClick = _this.handleMaximizeClick.bind(_assertThisInitialized(_this));
-    _this.handleRestoreClick = _this.handleRestoreClick.bind(_assertThisInitialized(_this)); //init state
-
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(OrcusApp)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    Object.defineProperty(_assertThisInitialized(_this), _handleMaximizeClick, {
+      writable: true,
+      value: _this.handleMaximizeClick.bind(_assertThisInitialized(_this))
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _handleRestoreClick, {
+      writable: true,
+      value: _this.handleRestoreClick.bind(_assertThisInitialized(_this))
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _handleCloseClick, {
+      writable: true,
+      value: _this.handleCloseClick.bind(_assertThisInitialized(_this))
+    });
     _this.state = {
-      opened: _this.props.initialOpened,
       maximized: false
-    }; //create default id
-
-    _this.defaultId = "orcus-app-" + Math.floor(Math.random() * 10000);
+    };
+    Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
+      writable: true,
+      value: "orcus-app-" + Math.floor(Math.random() * 10000)
+    });
     return _this;
   }
 
   _createClass(OrcusApp, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var update = {},
+          props = this.props; // check for prop changes
+
+      ["name", "icon", "id"].forEach(function (prop) {
+        if (props[prop] != prevProps[prop]) {
+          update[prop] = props[prop];
+        }
+      }); // if we have updates, update our store
+
+      if (Object.keys(update).length > 0) {
+        this.props.updateApp({
+          slug: this.props.slug,
+          props: update
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var className = "orcus-app orcus-window " + this.props.className,
-          id = this.props.id == DEFAULT_ID ? this.defaultId : this.props.id,
+          id = this.props.id == _OrcusApp.DEFAULT_ID ? _classPrivateFieldLooseBase(this, _defaultId)[_defaultId] : this.props.id,
           _this$props = this.props,
           slug = _this$props.slug,
           name = _this$props.name,
           icon = _this$props.icon,
           initialOpened = _this$props.initialOpened,
           initialPosition = _this$props.initialPosition,
-          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition"]),
+          opened = _this$props.opened,
+          updateApp = _this$props.updateApp,
+          closeApp = _this$props.closeApp,
+          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "opened", "updateApp", "closeApp"]),
           restoreMaximizeContent = ""; //if we are closed
 
 
-      if (!this.state.opened) {
+      if (!this.props.opened) {
         //render nothing
         return null;
       } //if we are maximized
@@ -95,7 +151,7 @@ function (_React$Component) {
         //show restore button
         restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-restore",
-          onClick: this.handleRestoreClick
+          onClick: _classPrivateFieldLooseBase(this, _handleRestoreClick)[_handleRestoreClick]
         }, _react["default"].createElement("span", {
           className: "glyphicon glyphicon-resize-small"
         }));
@@ -103,7 +159,7 @@ function (_React$Component) {
         //show maximize button
         restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-maximize",
-          onClick: this.handleMaximizeClick
+          onClick: _classPrivateFieldLooseBase(this, _handleMaximizeClick)[_handleMaximizeClick]
         }, _react["default"].createElement("span", {
           className: "glyphicon glyphicon-resize-full"
         }));
@@ -124,7 +180,8 @@ function (_React$Component) {
       }, _react["default"].createElement("span", {
         className: "glyphicon glyphicon-minus"
       })), restoreMaximizeContent, _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
-        className: "orcus-close"
+        className: "orcus-close",
+        onClick: _classPrivateFieldLooseBase(this, _handleCloseClick)[_handleCloseClick]
       }, _react["default"].createElement("span", {
         className: "glyphicon glyphicon-remove"
       })))), _react["default"].createElement("section", {
@@ -145,29 +202,55 @@ function (_React$Component) {
         maximized: false
       });
     }
+  }, {
+    key: "handleCloseClick",
+    value: function handleCloseClick(e) {
+      //dispatch close action
+      this.props.closeApp({
+        slug: this.props.slug
+      });
+    }
   }]);
 
   return OrcusApp;
-}(_react["default"].Component); //define default props
-
-
-exports.OrcusApp = OrcusApp;
-OrcusApp.defaultProps = {
-  icon: "th-large",
+}(_react["default"].Component), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+  className: "",
+  id: _OrcusApp.DEFAULT_ID,
+  icon: "fa:home",
   initialOpened: false,
   initialPosition: [0, 0, 100, 100],
-  className: "",
-  id: DEFAULT_ID
-}; //define props
-
-OrcusApp.propTypes = {
+  opened: false
+}, _class.propTypes = {
+  //custom html props
+  className: _propTypes["default"].string,
+  id: _propTypes["default"].string,
+  //component props
   slug: _propTypes["default"].string.isRequired,
   name: _propTypes["default"].string.isRequired,
   icon: _propTypes["default"].string,
   initialOpened: _propTypes["default"].bool,
   initialPosition: _propTypes["default"].arrayOf(_propTypes["default"].number),
-  className: _propTypes["default"].string,
-  id: _propTypes["default"].string
-}; //define context
+  //state props
+  opened: _propTypes["default"].bool,
+  //dispatch props
+  closeApp: _propTypes["default"].func.isRequired,
+  updateApp: _propTypes["default"].func.isRequired
+}, _class.selectApp = function (state, ownProps) {
+  return _OrcusApp["default"].select.app(state, ownProps.slug);
+}, _class.selectAppProps = (0, _reselect.createSelector)([_class.selectApp, function (state, ownProps) {
+  return ownProps;
+}], function (app, ownProps) {
+  var _ref = app || _OrcusApp["default"].getInitialStateFromProps(ownProps),
+      opened = _ref.opened;
 
-OrcusApp.contextTypes = {}; //export OrcusApp class
+  return {
+    opened: opened
+  };
+}), _class.mapDispatchToProps = {
+  updateApp: _OrcusApp.updateApp,
+  closeApp: _OrcusApp.closeApp
+}, _class.mapStateToProps = _class.selectAppProps, _temp); //export OrcusApp class
+
+exports.OrcusAppUnit = OrcusApp;
+var Connected = (0, _reduxConventionalConnect.reduxConventionalConnect)(OrcusApp);
+exports.OrcusApp = Connected;

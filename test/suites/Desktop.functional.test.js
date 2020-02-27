@@ -2,15 +2,15 @@
  * Tests functionality of Desktop component
  * Dependencies: assert, jquery, react-testing-library, react-hyperscript modules, mocha context
  * Author: Joshua Carter
- * Created: December 7, 2018
+ * Created: December 7, 2019
  */
 "use strict";
 //include dependencies
 var assert = require('chai').assert,
     jQuery = require('jquery'),
     h = require('react-hyperscript'),
-    //rtl = require("@testing-library/react"),
-    rtl = require("react-testing-library"),
+    rtl = require("@testing-library/react"),
+    //rtl = require("react-testing-library"),
     {Desktop, App} = require('../../build/index.js');
 
 //begin mocha tests

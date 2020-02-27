@@ -1,7 +1,7 @@
 /* index.js
  * Loads the react-orcus library
  * Dependencies: 
-    - classes: 
+    - components: Desktop, OrcusApp
  * Author: Joshua Carter
  * Created: January 18, 2020
  */

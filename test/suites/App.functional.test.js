@@ -2,16 +2,32 @@
  * Tests functionality of App component
  * Dependencies: assert, jquery, react-testing-library, react-hyperscript modules, mocha context
  * Author: Joshua Carter
- * Created: December 7, 2018
+ * Created: December 7, 2019
  */
 "use strict";
 //include dependencies
 var assert = require('chai').assert,
     jQuery = require('jquery'),
     h = require('react-hyperscript'),
-    //rtl = require("@testing-library/react"),
-    rtl = require("react-testing-library"),
-    {App} = require('../../build/index.js');
+    rtl = require("@testing-library/react"),
+    //rtl = require("react-testing-library"),
+    enzyme = require('enzyme'),
+    {App, Desktop} = require('../../build/index.js'),
+    //include redux store
+    {configureStore} = require("@reduxjs/toolkit"),
+    {Provider} = require("react-redux"),
+    {default: ormReducer} = require('../../build/redux/ormReducer.js');
+    
+var renderApp = function (...args) {
+    //mount dekstop
+    var mountedDesktop = enzyme.mount(h(Desktop, {}, h(...args)));
+    //render app, wrapped in a provider
+    return rtl.render(h(
+        Provider,
+        {store: mountedDesktop.instance().reduxStore},
+        h(...args)
+    ));        
+}
 
 //begin mocha tests
 describe ('<App /> should render', function () {
@@ -29,7 +45,7 @@ describe ('<App /> should render', function () {
         appWrapper = null;
             
     beforeEach (function () {
-        var renderResult = rtl.render(h(App, extraPropsOpened));
+        var renderResult = renderApp(App, extraPropsOpened);
         appWrapper = jQuery(renderResult.container.firstChild);
     });
 
@@ -57,16 +73,16 @@ describe ('<App /> should render', function () {
 
         it ("Default id", function () {
             //render app with no given id
-            var renderResult = rtl.render(h(App, reqPropsOpened));
+            var renderResult = renderApp(App, reqPropsOpened);
             //should include default id
             assert.include(renderResult.container.firstChild.id, "orcus-app-");
         });
 
         it ("Unique default id", function () {
             //render two apps with no given id
-            var renderResult1 = rtl.render(h(App, reqPropsOpened)),
-                renderResult2 = rtl.render(h(App, reqPropsOpened));
-            //should inculde default id
+            var renderResult1 = renderApp(App, reqPropsOpened),
+                renderResult2 = renderApp(App, reqPropsOpened);
+            //default ids should be different
             assert.notEqual(
                 renderResult1.container.firstChild.id,
                 renderResult2.container.firstChild.id
@@ -75,7 +91,7 @@ describe ('<App /> should render', function () {
         
         it ("Nothing if closed", function () {
             //render app that is closed (default)
-            var renderResult = rtl.render(h(App, Object.assign({}, extraProps)));
+            var renderResult = renderApp(App, Object.assign({}, extraProps));
             assert.isNotOk(renderResult.container.firstChild);
         });
     });
@@ -84,7 +100,7 @@ describe ('<App /> should render', function () {
         var titleBarWrapper = null;
 
         beforeEach (function () {
-            var renderResult = rtl.render(h(
+            var renderResult = renderApp(
                 App,
                 extraPropsOpened
             ));
@@ -142,6 +158,21 @@ describe ('<App /> should render', function () {
                 );
             });
             
+            it ("Close button that closes the app", function () {
+                //render app that will be closed
+                var renderResult = renderApp(App, reqPropsOpened);
+                //should currently be open
+                assert.isOk(renderResult.container.firstChild);
+                // click close button
+                rtl.fireEvent.click(
+                    jQuery(renderResult.container.firstChild)
+                        .find(".orcus-title-bar .orcus-ui.orcus-button.orcus-close")
+                        .get(0)
+                );
+                //app should now be closed
+                assert.isNotOk(renderResult.container.firstChild);
+            });
+            
             it ("Restore button if maximized", function () {
                 // click maximize button
                 rtl.fireEvent.click(
@@ -188,7 +219,7 @@ describe ('<App /> should render', function () {
         var clientAreaWrapper = null;
 
         beforeEach (function () {
-            var renderResult = rtl.render(h(
+            var renderResult = renderApp(
                 App,
                 extraPropsOpened,
                 h("div", {className: "child-class"})
@@ -221,7 +252,7 @@ describe ('<App /> should render', function () {
             
             it ("Not rendered if closed", function () {
                 //render app that is closed (default)
-                var renderResult = rtl.render(h(App, reqProps, h("div", {className: "child-class"})));
+                var renderResult = renderApp(App, reqProps, h("div", {className: "child-class"}));
                 //should not have children
                 assert.lengthOf(
                     jQuery(renderResult.container.firstChild).find(".child-class"),

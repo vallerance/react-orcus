@@ -1,6 +1,9 @@
 /* OrcusApp.js
  * Represents a single application in the react-orcus desktop
- * Dependencies: react, prop-types modules, OrcusUiButton components
+ * Dependencies: 
+    - modules: react, prop-types, reselect
+    - components: OrcusUiButton
+    - other: OrcusApp class, reduxConventionalConnect function
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
@@ -8,38 +11,109 @@
 //import modules
 import React from 'react';
 import PropTypes from 'prop-types';
+import { createSelector } from 'reselect';
+//import redux models and actions
+import AppModel, { updateApp, closeApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
 //import components
 import { OrcusUiButton } from './OrcusUiButton.js';
-//define constants
-const DEFAULT_ID = "ORCUS_APP_DEFAULT_ID_VALUE_68142";
+//import functions
+import { reduxConventionalConnect } from './util/reduxConventionalConnect.js';
 //create our OrcusApp class
 var OrcusApp = class extends React.Component {
-    constructor (props, context) {
-        super(props, context);
+    
+    //define default props
+    static defaultProps = {
+        className: "",
+        id: DEFAULT_ID,
         
-        //bind event handlers
-        this.handleMaximizeClick = this.handleMaximizeClick.bind(this);
-        this.handleRestoreClick = this.handleRestoreClick.bind(this);
+        icon: "fa:home",
+        initialOpened: false,
+        initialPosition: [0, 0, 100, 100],
         
-        //init state
-        this.state = {
-            opened: this.props.initialOpened,
-            maximized: false
-        };
-        
-        //create default id
-        this.defaultId = "orcus-app-" + Math.floor(Math.random() * 10000);
+        opened: false
+    };
+    //define props
+    static propTypes = {
+        //custom html props
+        className: PropTypes.string,
+        id: PropTypes.string,
+        //component props
+        slug: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        icon: PropTypes.string,
+        initialOpened: PropTypes.bool,
+        initialPosition: PropTypes.arrayOf(PropTypes.number),
+        //state props
+        opened: PropTypes.bool,
+        //dispatch props
+        closeApp: PropTypes.func.isRequired,
+        updateApp: PropTypes.func.isRequired
+    };
+
+    //define selectors
+    static selectApp = (state, ownProps) => AppModel.select.app(state, ownProps.slug);
+    static selectAppProps = createSelector(
+        [
+            this.selectApp,
+            (state, ownProps) => ownProps
+        ],
+        function (app, ownProps) {
+            var {
+                opened
+            } = app || AppModel.getInitialStateFromProps(ownProps);
+            return {
+                opened
+            };
+        }
+    );
+    
+    //map dispatch and state to props
+    static mapDispatchToProps = { updateApp, closeApp };
+    static mapStateToProps = this.selectAppProps;
+    
+    //INSTANCE PROPS
+    //bind event handlers
+    #handleMaximizeClick = this.handleMaximizeClick.bind(this);
+    #handleRestoreClick = this.handleRestoreClick.bind(this);
+    #handleCloseClick = this.handleCloseClick.bind(this);
+    //init state
+    state = {
+        maximized: false
+    };
+    //create default id
+    #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000);
+    
+    componentDidUpdate (prevProps) {
+        var update = {},
+            props = this.props;
+        // check for prop changes
+        ["name", "icon", "id"].forEach(function (prop) {
+            if (props[prop] != prevProps[prop]) {
+                update[prop] = props[prop];
+            }
+        });
+        // if we have updates, update our store
+        if (Object.keys(update).length > 0) {
+            this.props.updateApp({
+                slug: this.props.slug,
+                props: update
+            });
+        }
     }
     
     render () {
         var className = "orcus-app orcus-window " + this.props.className,
             //get id, either property or default
-            id = (this.props.id == DEFAULT_ID) ? this.defaultId : this.props.id,
-            {slug, name, icon, initialOpened, initialPosition, ...props} = this.props,
+            id = (this.props.id == DEFAULT_ID) ? this.#defaultId : this.props.id,
+            {
+                slug, name, icon, initialOpened, initialPosition,
+                opened, updateApp, closeApp,
+                ...props
+            } = this.props,
             restoreMaximizeContent = "";
         
         //if we are closed
-        if (!this.state.opened) {
+        if (!this.props.opened) {
             //render nothing
             return null;
         }
@@ -48,7 +122,7 @@ var OrcusApp = class extends React.Component {
         if (this.state.maximized) {
             //show restore button
             restoreMaximizeContent = (
-                <OrcusUiButton className="orcus-restore" onClick={this.handleRestoreClick}>
+                <OrcusUiButton className="orcus-restore" onClick={this.#handleRestoreClick}>
                     <span className="glyphicon glyphicon-resize-small" />
                 </OrcusUiButton>
             );
@@ -56,7 +130,7 @@ var OrcusApp = class extends React.Component {
         else {
             //show maximize button
             restoreMaximizeContent = (
-                <OrcusUiButton className="orcus-maximize" onClick={this.handleMaximizeClick}>
+                <OrcusUiButton className="orcus-maximize" onClick={this.#handleMaximizeClick}>
                     <span className="glyphicon glyphicon-resize-full" />
                 </OrcusUiButton>
             );
@@ -77,7 +151,7 @@ var OrcusApp = class extends React.Component {
             
                         {restoreMaximizeContent}
             
-                        <OrcusUiButton className="orcus-close">
+                        <OrcusUiButton className="orcus-close" onClick={this.#handleCloseClick}>
                             <span className="glyphicon glyphicon-remove" />
                         </OrcusUiButton>
                     </p>
@@ -97,30 +171,12 @@ var OrcusApp = class extends React.Component {
     handleRestoreClick (e) {
         this.setState({maximized: false});
     }
-};
-//define default props
-OrcusApp.defaultProps = {
-    icon: "th-large",
-    initialOpened: false,
-    initialPosition: [0, 0, 100, 100],
-    
-    className: "",
-    id: DEFAULT_ID
-};
-//define props
-OrcusApp.propTypes = {
-    slug: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    icon: PropTypes.string,
-    initialOpened: PropTypes.bool,
-    initialPosition: PropTypes.arrayOf(PropTypes.number),
-    
-    className: PropTypes.string,
-    id: PropTypes.string
-};
-//define context
-OrcusApp.contextTypes = {
-    
+
+    handleCloseClick (e) {
+        //dispatch close action
+        this.props.closeApp({slug: this.props.slug});
+    }
 };
 //export OrcusApp class
-export { OrcusApp };
+var Connected = reduxConventionalConnect(OrcusApp);
+export { Connected as OrcusApp, OrcusApp as OrcusAppUnit };
