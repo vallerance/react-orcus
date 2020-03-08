@@ -11,23 +11,21 @@ var assert = require('chai').assert,
     h = require('react-hyperscript'),
     rtl = require("@testing-library/react"),
     //rtl = require("react-testing-library"),
-    enzyme = require('enzyme'),
+    TestRenderer = require('react-test-renderer'),
     {App, Desktop} = require('../../build/index.js'),
     //include redux store
-    {configureStore} = require("@reduxjs/toolkit"),
-    {Provider} = require("react-redux"),
-    {default: ormReducer} = require('../../build/redux/ormReducer.js');
+    {Provider} = require("react-redux");
     
 var renderApp = function (...args) {
     //mount dekstop
-    var mountedDesktop = enzyme.mount(h(Desktop, {}, h(...args)));
+    var mountedDesktop = TestRenderer.create(h(Desktop, {}, h(...args)));
     //render app, wrapped in a provider
     return rtl.render(h(
         Provider,
-        {store: mountedDesktop.instance().reduxStore},
+        {store: mountedDesktop.getInstance().reduxStore},
         h(...args)
     ));        
-}
+};
 
 //begin mocha tests
 describe ('<App /> should render', function () {
