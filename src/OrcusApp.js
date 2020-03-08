@@ -1,7 +1,7 @@
 /* OrcusApp.js
  * Represents a single application in the react-orcus desktop
  * Dependencies: 
-    - modules: react, prop-types, reselect
+    - modules: react, prop-types, reselect, react-rnd
     - components: OrcusUiButton
     - other: OrcusApp class, reduxConventionalConnect function
  * Author: Joshua Carter
@@ -12,6 +12,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
+import { Rnd } from 'react-rnd';
 //import redux models and actions
 import AppModel, { updateApp, closeApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
 //import components
@@ -110,6 +111,7 @@ var OrcusApp = class extends React.Component {
                 opened, updateApp, closeApp,
                 ...props
             } = this.props,
+            [x, y, width, height] = initialPosition,
             restoreMaximizeContent = "";
         
         //if we are closed
@@ -138,7 +140,21 @@ var OrcusApp = class extends React.Component {
         
         //render
         return (
-            <div {...props} className={className} id={id}>
+            <Rnd
+                {...props} className={className} id={id}
+                default={{x, y, width, height}}
+                dragHandleClassName="orcus-title-bar"
+                resizeHandleClasses={{
+                    top: "orcus-resize-handle top",
+                    right: "orcus-resize-handle right",
+                    bottom: "orcus-resize-handle bottom",
+                    left: "orcus-resize-handle left",
+                    topRight: "orcus-resize-handle top right",
+                    bottomRight: "orcus-resize-handle bottom right",
+                    bottomLeft: "orcus-resize-handle bottom left",
+                    topLeft: "orcus-resize-handle top left"
+                }}
+            >
                 <header className="orcus-title-bar">
                     <h2 className="orcus-title">
                         {this.props.name}
@@ -160,7 +176,7 @@ var OrcusApp = class extends React.Component {
                 <section className="orcus-client-area">
                     {this.props.children}
                 </section>
-            </div>
+            </Rnd>
         );
     }
     

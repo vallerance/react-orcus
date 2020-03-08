@@ -59,6 +59,17 @@ describe ('<App /> should render', function () {
             assert.lengthOf(appWrapper.find(".orcus-app"), 1, "Missing node with orcus-app class");
             assert.lengthOf(appWrapper.find(".orcus-window"), 1, "Missing node with orcus-window class");
         });
+        
+        it ("Resize handles", function () {
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.top"), 3, "Missing 3 nodes with .orcus-resize-handle.top class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.right"), 3, "Missing 3 nodes with .orcus-resize-handle.right class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.bottom"), 3, "Missing 3 nodes with .orcus-resize-handle.bottom class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.left"), 3, "Missing 3 nodes with .orcus-resize-handle.left class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.top.right"), 1, "Missing node with .orcus-resize-handle.top.right class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.bottom.right"), 1, "Missing node with .orcus-resize-handle.bottom.right class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.bottom.left"), 1, "Missing node with .orcus-resize-handle.bottom.left class");
+            assert.lengthOf(appWrapper.find(".orcus-resize-handle.top.left"), 1, "Missing node with .orcus-resize-handle.top.left class");
+        });
 
         it ("Transfered class name", function () {
             assert.include(appWrapper.find(".orcus-app").get(0).className, extraProps.className);
