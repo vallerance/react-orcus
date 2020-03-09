@@ -1,6 +1,8 @@
 React Orcus
 ====
 
+[![Codefresh build status]( https://g.codefresh.io/api/badges/pipeline/joshuacwebdeveloper/react-orcus%2Fgithub-test-hook?branch=master&key=eyJhbGciOiJIUzI1NiJ9.NWU2NGIwZDk4ZTc3MDkyNWRlMzk4NTY4.1RyVgiNLIw7YYzkLCJLcJtK-p6zRYarO3sCielzfkP4&type=cf-1)]( https%3A%2F%2Fg.codefresh.io%2Fpipelines%2Fgithub-test-hook%2Fbuilds%3FrepoOwner%3DJoshuaCWebDeveloper%26repoName%3Dreact-orcus%26serviceName%3DJoshuaCWebDeveloper%252Freact-orcus%26filter%3Dtrigger%3Abuild~Build%3Bbranch%3Amaster%3Bpipeline%3A5e65bd75d7e4d02008a90182~github-test-hook)
+
 React library for creating an app with a windowed desktop interface.
 
 - [Installation/Setup](#installation)
