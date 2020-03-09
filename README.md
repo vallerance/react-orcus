@@ -1,7 +1,7 @@
 React Orcus
 ====
 
-[![Codefresh build status](https://g.codefresh.io/api/badges/pipeline/joshuacwebdeveloper/react-orcus%2Fgithub-test-hook?branch=master&key=eyJhbGciOiJIUzI1NiJ9.NWU2NGIwZDk4ZTc3MDkyNWRlMzk4NTY4.1RyVgiNLIw7YYzkLCJLcJtK-p6zRYarO3sCielzfkP4&type=cf-1)](https://g.codefresh.io/pipelines/github-test-hook/builds?repoOwner=JoshuaCWebDeveloper&repoName=react-orcus&serviceName=JoshuaCWebDeveloper%2Freact-orcus&filter=trigger:build~Build;branch:master;pipeline:5e65bd75d7e4d02008a90182~github-test-hook)
+[![Codefresh build status](https://g.codefresh.io/api/badges/pipeline/joshuacwebdeveloper/react-orcus%2Fgithub-test-hook?branch=master&key=eyJhbGciOiJIUzI1NiJ9.NWU2NGIwZDk4ZTc3MDkyNWRlMzk4NTY4.1RyVgiNLIw7YYzkLCJLcJtK-p6zRYarO3sCielzfkP4&type=cf-1)](https://g.codefresh.io/public/accounts/joshuacwebdeveloper/pipelines/5e65bd75d7e4d02008a90182)
 
 React library for creating an app with a windowed desktop interface.
 
