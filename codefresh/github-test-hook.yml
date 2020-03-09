@@ -1,0 +1,27 @@
+version: "1.0"
+stages:
+  - "clone"
+  - "test"
+steps:
+  clone:
+    description: "Cloning main repository..."
+    type: "git-clone"
+    stage: "clone"
+    repo: "JoshuaCWebDeveloper/react-orcus"
+    revision: "${{CF_BRANCH}}"
+  build:
+    type: "build"
+    stage: "test"
+    title: "Building Docker Image for Testing"
+    image_name: "JoshuaCWebDeveloper/react-orcus-test"
+    working_directory: "${{clone}}"
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    dockerfile: codefresh/test.Dockerfile
+  test:
+    type: freestyle
+    stage: test
+    title: Running docker image
+    arguments:
+      image: '${{build}}'
+      shell: bash
+      working_directory: IMAGE_WORK_DIR
