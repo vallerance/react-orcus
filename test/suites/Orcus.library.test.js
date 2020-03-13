@@ -20,7 +20,11 @@ describe('Orcus', function () {
             //include the file via a script tag
             var dom = new JSDOM(
                 `
-<html><head><script src="${filename}"></script></head></html>
+<html><head>
+    <script src="../node_modules/react/umd/react.development.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="${filename}"></script>
+</head></html>
                 `, 
                 {
                     url: `file://${__dirname}`,
@@ -73,6 +77,14 @@ describe('Orcus', function () {
 <html><head>
     <script src="../node_modules/requirejs/require.js"></script>
     <script>
+        //setup dependencies
+        requirejs.config({
+            paths: {
+                'react': '../node_modules/react/umd/react.development',
+                'react-dom': '../node_modules/react-dom/umd/react-dom.development',
+            }
+        });
+        
         //include using RequireJS
         requirejs(['../dist/react-orcus.js'], function (OrcusInc) {
             window.onOrcusLoad(OrcusInc);
