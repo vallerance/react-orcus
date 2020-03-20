@@ -1,7 +1,7 @@
 /* OrcusApp.js
  * Represents a single application in the react-orcus desktop
  * Dependencies: 
-    - modules: react, prop-types, reselect, react-rnd
+    - modules: react, prop-types, iconify, reselect, react-rnd
     - components: OrcusUiButton
     - other: OrcusApp class, reduxConventionalConnect function
  * Author: Joshua Carter
@@ -11,6 +11,7 @@
 //import modules
 import React from 'react';
 import PropTypes from 'prop-types';
+import Iconify from '@iconify/iconify';
 import { createSelector } from 'reselect';
 import { Rnd } from 'react-rnd';
 //import redux models and actions
@@ -124,16 +125,22 @@ var OrcusApp = class extends React.Component {
         if (this.state.maximized) {
             //show restore button
             restoreMaximizeContent = (
-                <OrcusUiButton className="orcus-restore" onClick={this.#handleRestoreClick}>
-                    <span className="glyphicon glyphicon-resize-small" />
+                <OrcusUiButton
+                    className="orcus-restore" key="restore"
+                    onClick={this.#handleRestoreClick}
+                >
+                    <i className="iconify" data-icon="fa:window-restore" />    
                 </OrcusUiButton>
             );
         }
         else {
             //show maximize button
             restoreMaximizeContent = (
-                <OrcusUiButton className="orcus-maximize" onClick={this.#handleMaximizeClick}>
-                    <span className="glyphicon glyphicon-resize-full" />
+                <OrcusUiButton
+                    className="orcus-maximize" key="maximize"
+                    onClick={this.#handleMaximizeClick}
+                >
+                    <i className="iconify" data-icon="fa:window-maximize" />    
                 </OrcusUiButton>
             );
         }
@@ -162,13 +169,13 @@ var OrcusApp = class extends React.Component {
                     
                     <p className="orcus-controls">
                         <OrcusUiButton className="orcus-minimize">
-                            <span className="glyphicon glyphicon-minus" />
+                            <i className="iconify" data-icon="fa:window-minimize" />    
                         </OrcusUiButton>
             
                         {restoreMaximizeContent}
             
                         <OrcusUiButton className="orcus-close" onClick={this.#handleCloseClick}>
-                            <span className="glyphicon glyphicon-remove" />
+                            <i className="iconify" data-icon="fa:close" />    
                         </OrcusUiButton>
                     </p>
                 </header>

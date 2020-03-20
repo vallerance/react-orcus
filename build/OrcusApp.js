@@ -1,7 +1,7 @@
 /* OrcusApp.js
  * Represents a single application in the react-orcus desktop
  * Dependencies: 
-    - modules: react, prop-types, reselect, react-rnd
+    - modules: react, prop-types, iconify, reselect, react-rnd
     - components: OrcusUiButton
     - other: OrcusApp class, reduxConventionalConnect function
  * Author: Joshua Carter
@@ -17,6 +17,8 @@ exports.OrcusAppUnit = exports.OrcusApp = void 0;
 var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _iconify = _interopRequireDefault(require("@iconify/iconify"));
 
 var _reselect = require("reselect");
 
@@ -166,17 +168,21 @@ function (_React$Component) {
         //show restore button
         restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-restore",
+          key: "restore",
           onClick: _classPrivateFieldLooseBase(this, _handleRestoreClick)[_handleRestoreClick]
-        }, _react["default"].createElement("span", {
-          className: "glyphicon glyphicon-resize-small"
+        }, _react["default"].createElement("i", {
+          className: "iconify",
+          "data-icon": "fa:window-restore"
         }));
       } else {
         //show maximize button
         restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-maximize",
+          key: "maximize",
           onClick: _classPrivateFieldLooseBase(this, _handleMaximizeClick)[_handleMaximizeClick]
-        }, _react["default"].createElement("span", {
-          className: "glyphicon glyphicon-resize-full"
+        }, _react["default"].createElement("i", {
+          className: "iconify",
+          "data-icon": "fa:window-maximize"
         }));
       } //render
 
@@ -209,13 +215,15 @@ function (_React$Component) {
         className: "orcus-controls"
       }, _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
         className: "orcus-minimize"
-      }, _react["default"].createElement("span", {
-        className: "glyphicon glyphicon-minus"
+      }, _react["default"].createElement("i", {
+        className: "iconify",
+        "data-icon": "fa:window-minimize"
       })), restoreMaximizeContent, _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
         className: "orcus-close",
         onClick: _classPrivateFieldLooseBase(this, _handleCloseClick)[_handleCloseClick]
-      }, _react["default"].createElement("span", {
-        className: "glyphicon glyphicon-remove"
+      }, _react["default"].createElement("i", {
+        className: "iconify",
+        "data-icon": "fa:close"
       })))), _react["default"].createElement("section", {
         className: "orcus-client-area"
       }, this.props.children));
