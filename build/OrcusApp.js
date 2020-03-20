@@ -190,6 +190,7 @@ function (_React$Component) {
       return _react["default"].createElement(_reactRnd.Rnd, _extends({}, props, {
         className: className,
         id: id,
+        tabIndex: "0",
         "default": {
           x: x,
           y: y,

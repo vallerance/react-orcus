@@ -148,7 +148,7 @@ var OrcusApp = class extends React.Component {
         //render
         return (
             <Rnd
-                {...props} className={className} id={id}
+                {...props} className={className} id={id} tabIndex="0"
                 default={{x, y, width, height}}
                 dragHandleClassName="orcus-title-bar"
                 resizeHandleClasses={{
