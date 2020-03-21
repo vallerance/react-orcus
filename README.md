@@ -30,29 +30,25 @@ Then, in your React component:
 ```JavaScript
 var Desktop = (
     
-    <Orcus.Desktop
-        shortcuts={false}
-        taskbar={false}
-        programMenu={false}
-    />
+    <Orcus.Desktop>
         <Orcus.App
             slug="file-manager"
             name="File Manager"
-            icon="file"
+            icon="fa:folder"
             initialOpened={true}
-            initialPosition={[150, 200, 500, 300]}    //{x, y, w, h}
+            initialPosition={[150, 200, 500, 300]}    // [x, y, w, h]
         >
             <h1>Welcome to my File Manager</h1>
-            
+
             <p>Yeah so.... building a file manager is really hard.
             But please enjoy this complimentary welcome paragraph!</p>
         </Orcus.App>
-        
+
         <Orcus.App
             slug="tetris"
             name="Tetris"
-            icon="blocks"
-            initialPosition={[550, 200, 200, 600]}    //{x, y, w, h}
+            icon="fa:th-large"
+            initialPosition={[550, 200, 280, 450]}    // [x, y, w, h]
         >
             <p>Does anyone know how to build a tetris game?</p>
         </Orcus.App>
