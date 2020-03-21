@@ -54,11 +54,15 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -76,9 +80,9 @@ var DEFAULT_ID = "ORCUS_DESKTOP_DEFAULT_ID_VALUE_392183"; //create our Desktop c
 var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   _inherits(Desktop, _React$Component);
 
-  function Desktop() {
-    var _getPrototypeOf2;
+  var _super = _createSuper(Desktop);
 
+  function Desktop() {
     var _this;
 
     _classCallCheck(this, Desktop);
@@ -87,7 +91,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Desktop)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
     _this.reduxStore = (0, _toolkit.configureStore)({
       reducer: _ormReducer["default"]
     });
@@ -158,28 +162,28 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           programMenuContent = "";
 
       if (shortcuts) {
-        shortcutsContent = _react["default"].createElement(_Shortcuts.Shortcuts, null);
+        shortcutsContent = /*#__PURE__*/_react["default"].createElement(_Shortcuts.Shortcuts, null);
       }
 
       if (taskbar) {
-        taskbarContent = _react["default"].createElement("div", {
+        taskbarContent = /*#__PURE__*/_react["default"].createElement("div", {
           className: "orcus-taskbar"
         });
       }
 
       if (programMenu) {
-        programMenuContent = _react["default"].createElement("div", {
+        programMenuContent = /*#__PURE__*/_react["default"].createElement("div", {
           className: "orcus-program-menu"
         });
       } //render
 
 
-      return _react["default"].createElement(_reactRedux.Provider, {
+      return /*#__PURE__*/_react["default"].createElement(_reactRedux.Provider, {
         store: this.reduxStore
-      }, _react["default"].createElement("div", _extends({}, props, {
+      }, /*#__PURE__*/_react["default"].createElement("div", _extends({}, props, {
         className: className,
         id: id
-      }), _react["default"].createElement("div", {
+      }), /*#__PURE__*/_react["default"].createElement("div", {
         className: "orcus-desktop-content"
       }, shortcutsContent, this.props.children), taskbarContent, programMenuContent));
     }

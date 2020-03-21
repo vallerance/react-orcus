@@ -23,7 +23,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 var OrcusUiButton = function OrcusUiButton(props) {
   var className = "orcus-ui orcus-button " + props.className; //render
 
-  return _react["default"].createElement("span", _extends({}, props, {
+  return /*#__PURE__*/_react["default"].createElement("span", _extends({}, props, {
     className: className
   }), props.children);
 }; //define default props

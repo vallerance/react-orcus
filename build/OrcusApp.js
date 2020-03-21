@@ -42,11 +42,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -60,11 +64,15 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -80,9 +88,9 @@ function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + n
 var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   _inherits(OrcusApp, _React$Component);
 
-  function OrcusApp() {
-    var _getPrototypeOf2;
+  var _super = _createSuper(OrcusApp);
 
+  function OrcusApp() {
     var _this;
 
     _classCallCheck(this, OrcusApp);
@@ -91,7 +99,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(OrcusApp)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = _super.call.apply(_super, [this].concat(args));
     Object.defineProperty(_assertThisInitialized(_this), _handleMaximizeClick, {
       writable: true,
       value: _this.handleMaximizeClick.bind(_assertThisInitialized(_this))
@@ -164,28 +172,28 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
 
       if (this.state.maximized) {
         //show restore button
-        restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
+        restoreMaximizeContent = /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-restore",
           key: "restore",
           onClick: _classPrivateFieldLooseBase(this, _handleRestoreClick)[_handleRestoreClick]
-        }, _react["default"].createElement("i", {
+        }, /*#__PURE__*/_react["default"].createElement("i", {
           className: "iconify",
           "data-icon": "fa:window-restore"
         }));
       } else {
         //show maximize button
-        restoreMaximizeContent = _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
+        restoreMaximizeContent = /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
           className: "orcus-maximize",
           key: "maximize",
           onClick: _classPrivateFieldLooseBase(this, _handleMaximizeClick)[_handleMaximizeClick]
-        }, _react["default"].createElement("i", {
+        }, /*#__PURE__*/_react["default"].createElement("i", {
           className: "iconify",
           "data-icon": "fa:window-maximize"
         }));
       } //render
 
 
-      return _react["default"].createElement(_reactRnd.Rnd, _extends({}, props, {
+      return /*#__PURE__*/_react["default"].createElement(_reactRnd.Rnd, _extends({}, props, {
         className: className,
         id: id,
         tabIndex: "0",
@@ -206,24 +214,24 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           bottomLeft: "orcus-resize-handle bottom left",
           topLeft: "orcus-resize-handle top left"
         }
-      }), _react["default"].createElement("header", {
+      }), /*#__PURE__*/_react["default"].createElement("header", {
         className: "orcus-title-bar"
-      }, _react["default"].createElement("h2", {
+      }, /*#__PURE__*/_react["default"].createElement("h2", {
         className: "orcus-title"
-      }, this.props.name), _react["default"].createElement("p", {
+      }, this.props.name), /*#__PURE__*/_react["default"].createElement("p", {
         className: "orcus-controls"
-      }, _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
+      }, /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
         className: "orcus-minimize"
-      }, _react["default"].createElement("i", {
+      }, /*#__PURE__*/_react["default"].createElement("i", {
         className: "iconify",
         "data-icon": "fa:window-minimize"
-      })), restoreMaximizeContent, _react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
+      })), restoreMaximizeContent, /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
         className: "orcus-close",
         onClick: _classPrivateFieldLooseBase(this, _handleCloseClick)[_handleCloseClick]
-      }, _react["default"].createElement("i", {
+      }, /*#__PURE__*/_react["default"].createElement("i", {
         className: "iconify",
         "data-icon": "fa:close"
-      })))), _react["default"].createElement("section", {
+      })))), /*#__PURE__*/_react["default"].createElement("section", {
         className: "orcus-client-area"
       }, this.props.children));
     }
