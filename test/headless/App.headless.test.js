@@ -28,7 +28,7 @@ var renderApp = function (...args) {
             {store: mountedDesktop.getInstance().reduxStore},
             h(
                 "div",
-                {style: {position: "relative"}},
+                {className: "react-desktop", style: {position: "relative"}},
                 h(...args)
             )
         ));        
@@ -111,8 +111,8 @@ describe ('<App /> in browser should render', function () {
             var app = appWrapper.find(".orcus-app"),
                 //get size of app
                 appSize = {
-                    width: app.width(),
-                    height: app.height()
+                    width: app.outerWidth(),
+                    height: app.outerHeight()
                 },
                 //get resize handles
                 rightHandle = app.find(".orcus-resize-handle.right"),
@@ -129,7 +129,7 @@ describe ('<App /> in browser should render', function () {
                 {left: rightPos.left+202, top: rightPos.top+20}
             );
             //app should be wider
-            assert.isAbout(app.width(), appSize.width + 200, sizeTolerance);
+            assert.isAbout(app.outerWidth(), appSize.width + 200, sizeTolerance);
             //perform a drag on the bottom handle, 100px down
             simulateDrag(
                 bottomHandle.get(0),
@@ -137,11 +137,11 @@ describe ('<App /> in browser should render', function () {
                 {left: bottomPos.left+20, top: bottomPos.top+102}
             );
             //app should be taller
-            assert.isAbout(app.height(), appSize.height + 100, sizeTolerance);
+            assert.isAbout(app.outerHeight(), appSize.height + 100, sizeTolerance);
             //update app size
             appSize = {
-                width: app.width(),
-                height: app.height()
+                width: app.outerWidth(),
+                height: app.outerHeight()
             };  
             //perform a drag on the top left handle, 100px over, 50px down
             simulateDrag(
@@ -150,8 +150,8 @@ describe ('<App /> in browser should render', function () {
                 {left: topLeftPos.left+102, top: topLeftPos.top+52}
             );
             //app should be narrower and shorter
-            assert.isAbout(app.width(), appSize.width - 100, sizeTolerance);
-            assert.isAbout(app.height(), appSize.height - 50, sizeTolerance);
+            assert.isAbout(app.outerWidth(), appSize.width - 100, sizeTolerance);
+            assert.isAbout(app.outerHeight(), appSize.height - 50, sizeTolerance);
         });
         
         it ("Can NOT be dragged from anywhere BUT the title bar", function () {
@@ -183,8 +183,8 @@ describe ('<App /> in browser should render', function () {
                 appPos = app.offset(),
                 //get size of app
                 appSize = {
-                    width: app.width(),
-                    height: app.height()
+                    width: app.outerWidth(),
+                    height: app.outerHeight()
                 };
             assert.equal(appPos.left - wrapperPos.left, testLeft);
             assert.equal(appPos.top - wrapperPos.top, testTop);
