@@ -1,6 +1,6 @@
 /* Orcus.library.test.js
  * Tests module inclusion
- * Dependencies: assert, extend, jsdom modules, mocha context
+ * Dependencies: assert, jsdom modules, mocha context
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
