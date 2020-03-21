@@ -50,12 +50,19 @@ function Shortcut (props) {
         className += " selected ";
     }
     
+    function onClick (e) {
+        setSelected(!selected);
+    }
+    
+    function onDoubleClick (e) {
+        dispatch(openApp({ slug }));
+    }
+    
     //render
     return (
         <div
             {...htmlProps} id={id} className={className}
-            onClick={() => setSelected(!selected)}
-            onDoubleClick={() => dispatch(openApp({ slug }))}
+            onClick={onClick} onDoubleClick={onDoubleClick}
         >
             <div className="orcus-ui orcus-icon">
                 <i className="iconify" data-icon={app.icon} />

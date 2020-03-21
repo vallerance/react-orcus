@@ -71,20 +71,24 @@ function Shortcut(props) {
 
   if (selected) {
     className += " selected ";
+  }
+
+  function onClick(e) {
+    setSelected(!selected);
+  }
+
+  function onDoubleClick(e) {
+    dispatch((0, _OrcusApp.openApp)({
+      slug: slug
+    }));
   } //render
 
 
   return _react["default"].createElement("div", _extends({}, htmlProps, {
     id: id,
     className: className,
-    onClick: function onClick() {
-      return setSelected(!selected);
-    },
-    onDoubleClick: function onDoubleClick() {
-      return dispatch((0, _OrcusApp.openApp)({
-        slug: slug
-      }));
-    }
+    onClick: onClick,
+    onDoubleClick: onDoubleClick
   }), _react["default"].createElement("div", {
     className: "orcus-ui orcus-icon"
   }, _react["default"].createElement("i", {
