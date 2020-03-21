@@ -73,9 +73,7 @@ function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + n
 //define constants
 var DEFAULT_ID = "ORCUS_DESKTOP_DEFAULT_ID_VALUE_392183"; //create our Desktop class
 
-var Desktop = (_temp = _class =
-/*#__PURE__*/
-function (_React$Component) {
+var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   _inherits(Desktop, _React$Component);
 
   function Desktop() {

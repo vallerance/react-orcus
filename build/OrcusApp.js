@@ -77,9 +77,7 @@ var id = 0;
 function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
 
 //create our OrcusApp class
-var OrcusApp = (_temp = _class =
-/*#__PURE__*/
-function (_React$Component) {
+var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   _inherits(OrcusApp, _React$Component);
 
   function OrcusApp() {

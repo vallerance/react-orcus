@@ -32,9 +32,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 //create our EnhancedModel model
-var EnhancedModel =
-/*#__PURE__*/
-function (_Model) {
+var EnhancedModel = /*#__PURE__*/function (_Model) {
   _inherits(EnhancedModel, _Model);
 
   function EnhancedModel() {

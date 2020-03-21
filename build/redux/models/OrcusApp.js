@@ -41,9 +41,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 var DEFAULT_ID = "ORCUS_APP_DEFAULT_ID_VALUE_68142"; //create our OrcusApp model
 
 exports.DEFAULT_ID = DEFAULT_ID;
-var OrcusApp = (_temp = _class =
-/*#__PURE__*/
-function (_EnhancedModel) {
+var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   _inherits(OrcusApp, _EnhancedModel);
 
   function OrcusApp() {
