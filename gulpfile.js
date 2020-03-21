@@ -7,9 +7,11 @@
 "use strict";
 //include modules
 var DevOps = require("dev-tasks"),
+    fs = require("fs"),
     gulp = require("gulp"),
     log = require("fancy-log"),
-    path = require("path");
+    path = require("path"),
+    Q = require("q");
 
 //configure dev-tasks
 DevOps.init({
@@ -112,6 +114,13 @@ gulp.task('minify', function () {
     return DevOps.bundle().then(function () {
         //now minify
         return DevOps.bundle("production", true);
+    }).then(function (stats) {
+        return Q.nbind(fs.writeFile)(
+            "./webpack-stats.json",
+            JSON.stringify(stats.toJson())
+        );
+    }).catch(err => {
+        console.warn("Error writing Webpack stats to file: ", err);
     });
 });
 
