@@ -9,6 +9,8 @@ React library for creating an app with a windowed desktop interface.
 - [Examples](#examples)
 - [API](#api)
 
+![Demo GIF](demo.gif)
+
 ## <a name="installation"></a>Installation/Setup
 Run:
 
