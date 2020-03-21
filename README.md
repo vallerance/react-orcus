@@ -26,9 +26,6 @@ Include it in your HTML header:
 
 `<script type="text/javascript" src="./react-orcus/dist/react-orcus.min.js"></script>`
 
-Include `assets/react-orcus.css` in your HTML header (this is not mandatory, but the CSS file contains basic styles needed for the library components to be readable):
-`<link rel="stylesheet" href="./react-orcus/assets/react-orcus.css" />`
-
 Then, in your React component:
 ```JavaScript
 var Desktop = (
