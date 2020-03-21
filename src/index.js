@@ -2,10 +2,13 @@
  * Loads the react-orcus library
  * Dependencies: 
     - components: Desktop, OrcusApp
+    - static assets: main.css styles
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
 "use strict";
+//import static assets
+import mainClasses from './styles/main.css';
 //include dependencies
 import { Desktop } from './Desktop.js';
 import { OrcusApp } from './OrcusApp.js';

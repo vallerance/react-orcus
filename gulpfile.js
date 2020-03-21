@@ -17,8 +17,12 @@ DevOps.init({
     bundleDir: "dist",
     bundleName: "react-orcus",
     babelExtOptions: {
+        "ignore": [
+            "./src/styles"
+        ],
         "plugins": [
-            ["@babel/plugin-proposal-class-properties", { "loose": true }]
+            ["@babel/plugin-proposal-class-properties", { "loose": true }],
+            ["transform-import-css", {"generateScopedName": "[local]"}]
         ]
     },
     wpSingleEntryPoint: "./src/index.js",
