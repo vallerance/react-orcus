@@ -35,7 +35,9 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send edit request to JIRA API
       run: |-
-        ISSUE_BODY=${{toJson(github.event.issue.body)}}
+        ISSUE_BODY="$(jq .issue.body ${{github.event_path}})"
+        
+        echo "Original ISSUE_BODY: $ISSUE_BODY"
         ISSUE_BODY=${ISSUE_BODY//\'/\'\"\'\"\'}
         echo "ISSUE_BODY: $ISSUE_BODY"
         
