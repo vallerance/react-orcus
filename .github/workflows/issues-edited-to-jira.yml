@@ -36,12 +36,12 @@ jobs:
     - name: Send edit request to JIRA API
       run: |-
         curl --request PUT \
-        --url '$(${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/$(echo ${{github.event.issue.title}} | awk -F' - ' '{print $1}'))' \
+        --url '$(${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}'))' \
         --header 'Accept: application/json' \
         --header 'Content-Type: application/json' \
         --data '{
           "fields": {
-            "summary": "$(echo ${{github.event.issue.title}} | awk -F' - ' '{print $2}')",
+            "summary": "$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')",
             "description": {
               "version": 1,
               "type": "doc",
