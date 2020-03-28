@@ -35,6 +35,10 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send edit request to JIRA API
       run: |-
+        ISSUE_BODY=${{toJson(github.event.issue.body)}}
+        ISSUE_BODY=${ISSUE_BODY//\'/\'\"\'\"\'}
+        echo "ISSUE_BODY: $ISSUE_BODY"
+        
         curl --request PUT \
         --url "${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')" \
         --header 'Accept: application/json' \
@@ -51,7 +55,7 @@ jobs:
                   "content": [
                     {
                       "type": "text",
-                      "text": "${{toJson(github.event.issue.body)}}"
+                      "text": '"$ISSUE_BODY"'
                     }
                   ]
                 }
