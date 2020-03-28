@@ -41,7 +41,7 @@ jobs:
         --header 'Content-Type: application/json' \
         --data '{
           "fields": {
-            "summary": "$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')",
+            "summary": "'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')"'",
             "description": {
               "version": 1,
               "type": "doc",
