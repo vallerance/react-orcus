@@ -38,8 +38,6 @@ jobs:
         ISSUE_BODY="$(jq .issue.body ${{github.event_path}})"
         
         echo "Original ISSUE_BODY: $ISSUE_BODY"
-        ISSUE_BODY=${ISSUE_BODY//\'/\'\"\'\"\'}
-        echo "ISSUE_BODY: $ISSUE_BODY"
         
         JSON_DATA='{
           "fields": {
