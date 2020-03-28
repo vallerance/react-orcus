@@ -51,7 +51,7 @@ jobs:
                   "content": [
                     {
                       "type": "text",
-                      "text": "${{github.event.issue.body}}"
+                      "text": "${{toJson(github.event.issue.body)}}"
                     }
                   ]
                 }
