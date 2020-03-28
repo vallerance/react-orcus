@@ -41,6 +41,7 @@ jobs:
         
         JSON_DATA='{
           "fields": {
+            "customfield_10030": "ignore",
             "summary": "'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')"'",
             "description": {
               "version": 1,
