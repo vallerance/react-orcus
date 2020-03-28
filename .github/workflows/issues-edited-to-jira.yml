@@ -41,11 +41,7 @@ jobs:
         ISSUE_BODY=${ISSUE_BODY//\'/\'\"\'\"\'}
         echo "ISSUE_BODY: $ISSUE_BODY"
         
-        curl --request PUT \
-        --url "${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')" \
-        --header 'Accept: application/json' \
-        --header 'Content-Type: application/json' \
-        --data '{
+        JSON_DATA='{
           "fields": {
             "summary": "'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')"'",
             "description": {
@@ -65,3 +61,10 @@ jobs:
             }
           }
         }'
+        echo "JSON_DATA: $JSON_DATA"
+        
+        curl --request PUT \
+        --url "${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')" \
+        --header 'Accept: application/json' \
+        --header 'Content-Type: application/json' \
+        --data "$JSON_DATA"
