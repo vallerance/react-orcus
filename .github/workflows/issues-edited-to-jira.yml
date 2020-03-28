@@ -61,7 +61,7 @@ jobs:
         }'
         echo "JSON_DATA: $JSON_DATA"
         
-        ISSUE_ENDPOINT='${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')"
+        ISSUE_ENDPOINT='https://${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')"
         echo "ISSUE_ENDPOINT: $ISSUE_ENDPOINT"
         
         curl --netrc --request PUT \
