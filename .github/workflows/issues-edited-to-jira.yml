@@ -36,8 +36,9 @@ jobs:
     - name: Send edit request to JIRA API
       run: |-
         ISSUE_BODY="$(jq .issue.body ${{github.event_path}})"
-        
         echo "Original ISSUE_BODY: $ISSUE_BODY"
+        ISSUE_BODY="$(echo "$ISSUE_BODY" | awk -F'</react-orcus-jira-ticket>' '{print $2}')"
+        echo "ISSUE_BODY: $ISSUE_BODY"
         
         JSON_DATA='{
           "fields": {
