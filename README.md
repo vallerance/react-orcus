@@ -8,6 +8,7 @@ React library for creating an app with a windowed desktop interface.
 - [Installation/Setup](#installation)
 - [Examples](#examples)
 - [API](#api)
+- [Development](#development)
 
 ![Demo GIF](demo.gif)
 
@@ -60,3 +61,34 @@ var Desktop = (
 ## <a name="examples"></a>Examples
 
 ## <a name="api"></a>API
+
+## <a name="development"></a>Development & Contributions
+
+#### Branches
+
+The `master` branch contains the latest production release. The `develop` branch
+contains the latest stable build. Most PRs should be submitted to the `develop`
+branch in order to ensure they are based on the most recent version of the code.
+Most PRs submitted to `master` will be rebased onto `develop`. Exceptions
+include changes like critical bugfixes that need to be pushed ahead of the next
+planned release.
+
+#### Roadmap
+
+- [ ] Taskbar ([#53][i53])
+- [ ] Program menu ([#55][i55])
+- [ ] Themes ([#43][i43])
+- [ ] App Groups ([#48][i48])
+
+[i53]: https://github.com/vallerance/react-orcus/issues/53
+[i55]: https://github.com/vallerance/react-orcus/issues/55
+[i43]: https://github.com/vallerance/react-orcus/issues/43
+[i48]: https://github.com/vallerance/react-orcus/issues/48
+
+#### Building and testing
+
+Run `npm install` to install/update dependencies.
+
+Run `npm run build && npm run minify` to build and bundle app.
+
+Run `npm test` to run the tests.
