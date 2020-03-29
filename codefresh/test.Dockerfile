@@ -17,9 +17,9 @@ RUN apt install -y nodejs
 USER seluser
 WORKDIR /home/seluser
 RUN rm -rf .npm
-COPY . ./
+COPY --chown=seluser:seluser . ./
 
 # install app
 RUN npm install
 
-ENTRYPOINT npm test
+ENTRYPOINT npm run minify && npm test
