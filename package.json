@@ -1,6 +1,6 @@
 {
   "name": "react-orcus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React library for creating an app with a windowed desktop interface.",
   "dependencies": {
     "@iconify/iconify": "^1.0.4",
