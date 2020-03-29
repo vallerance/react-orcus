@@ -5,6 +5,7 @@
   "dependencies": {
     "@iconify/iconify": "^1.0.4",
     "@reduxjs/toolkit": "^1.2.3",
+    "minimist": "^1.2.2",
     "prop-types": "^15.7.2",
     "react-redux": "^7.1.3",
     "react-rnd": "^10.1.6",
