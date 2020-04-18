@@ -46,7 +46,7 @@ describe ('<Desktop /> should render shortcuts', function () {
 
     it ("With class name", function () {
         assert.lengthOf(
-            shortcutsWrapper.find(".orcus-shortcuts"),
+            shortcutsWrapper.find(".orcus-desktop-content .orcus-shortcuts"),
             1,
             "Missing node with orcus-shortcuts class"
         );
@@ -57,7 +57,7 @@ describe ('<Desktop /> should render shortcuts', function () {
         var renderResult = rtl.render(h(Desktop, {shortcuts: false}));
         //should contain no shortcuts
         assert.lengthOf(
-            jQuery(renderResult.container).find(".orcus-shortcuts"),
+            jQuery(renderResult.container).find(".orcus-desktop-content .orcus-shortcuts"),
             0,
             "Found unexpected node with orcus-shortcuts class"
         );
@@ -93,17 +93,17 @@ describe ('<Desktop /> should render shortcuts', function () {
         it ("Is selected when clicked", function () {
             //shortcut should not be selected
             assert.lengthOf(
-                appsShortcutsWrapper.find(".orcus-desktop-shortcut.selected"),
+                appsShortcutsWrapper.find(".orcus-desktop-content .orcus-shortcut.selected"),
                 0,
                 "Unexpected node with selected class"
             );
             //click shortcut
             rtl.fireEvent.click(
-                appsShortcutsWrapper.find(".orcus-desktop-shortcut").get(0)
+                appsShortcutsWrapper.find(".orcus-desktop-content .orcus-shortcut").get(0)
             );
             //shortcut should now be selected
             assert.lengthOf(
-                appsShortcutsWrapper.find(".orcus-desktop-shortcut.selected"),
+                appsShortcutsWrapper.find(".orcus-desktop-content .orcus-shortcut.selected"),
                 1,
                 "Missing node with selected class"
             );
@@ -118,7 +118,7 @@ describe ('<Desktop /> should render shortcuts', function () {
             );
             //double click shortcut
             rtl.fireEvent.dblClick(
-                appsShortcutsWrapper.find(".orcus-desktop-shortcut").get(0)
+                appsShortcutsWrapper.find(".orcus-desktop-content .orcus-shortcut").get(0)
             );
             assert.lengthOf(
                 appsShortcutsWrapper.find(".orcus-app"),

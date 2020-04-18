@@ -19,7 +19,7 @@ function Shortcut (props) {
     var defaultId = useRef(
             "orcus-desktop-shortcut-" + Math.floor(Math.random() * 10000)
         ),
-        className = "orcus-desktop-shortcut " + props.className,
+        className = "orcus-shortcut " + props.className,
         {slug, ...htmlProps} = props,
         //get the app for this slug
         //use shallow equals to re-render when ANY app props change

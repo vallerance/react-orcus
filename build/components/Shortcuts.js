@@ -51,7 +51,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 function Shortcut(props) {
   //create defaultId for this component
   var defaultId = (0, _react.useRef)("orcus-desktop-shortcut-" + Math.floor(Math.random() * 10000)),
-      className = "orcus-desktop-shortcut " + props.className,
+      className = "orcus-shortcut " + props.className,
       slug = props.slug,
       htmlProps = _objectWithoutProperties(props, ["slug"]),
       app = (0, _reactRedux.useSelector)(function (state) {
