@@ -9,7 +9,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DEFAULT_ID = exports.destroyApp = exports.closeApp = exports.openApp = exports.updateApp = exports.updateAppProp = exports.createApp = exports["default"] = void 0;
+exports.DEFAULT_ID = exports.destroyApp = exports.restoreApp = exports.minimizeApp = exports.closeApp = exports.openApp = exports.updateApp = exports.updateAppProp = exports.createApp = exports["default"] = void 0;
 
 var _reduxOrm = require("redux-orm");
 
@@ -68,7 +68,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       return Object.fromEntries(Object.entries(Object.assign({}, OrcusApp.defaultProps, props, {
         opened: props.initialOpened
       })).filter(function (it) {
-        return ['slug', 'id', 'icon', 'name', 'opened'].includes(it[0]);
+        return it[0] in OrcusApp.fields;
       }));
     } // SELECTORS
 
@@ -90,7 +90,9 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   id: (0, _reduxOrm.attr)(),
   icon: (0, _reduxOrm.attr)(),
   name: (0, _reduxOrm.attr)(),
-  opened: (0, _reduxOrm.attr)() //bool
+  opened: (0, _reduxOrm.attr)(),
+  //bool
+  minimized: (0, _reduxOrm.attr)() //bool
 
 }, _class.options = {
   idAttribute: "slug"
@@ -98,7 +100,8 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   id: DEFAULT_ID,
   icon: "fa:home",
   name: "",
-  opened: false
+  opened: false,
+  minimized: false
 }, _class.select = {}, _class.slice = (0, _toolkit.createSlice)({
   name: 'OrcusAppSlice',
   initialState: undefined,
@@ -118,6 +121,9 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
     closeApp: function closeApp(App, action) {
       App.requireId(action.payload.slug).set("opened", false);
     },
+    minimizeApp: function minimizeApp(App, action) {
+      App.requireId(action.payload.slug).set("minimized", true);
+    },
     destroyApp: function destroyApp(App, action) {
       App.requireId(action.payload.slug)["delete"]();
     }
@@ -133,9 +139,12 @@ var _OrcusApp$slice$actio = OrcusApp.slice.actions,
     updateApp = _OrcusApp$slice$actio.updateApp,
     openApp = _OrcusApp$slice$actio.openApp,
     closeApp = _OrcusApp$slice$actio.closeApp,
+    minimizeApp = _OrcusApp$slice$actio.minimizeApp,
+    restoreApp = _OrcusApp$slice$actio.restoreApp,
     destroyApp = _OrcusApp$slice$actio.destroyApp; //export DEFAULT_ID constant for default id functionality in render layer
 
 exports.destroyApp = destroyApp;
+exports.minimizeApp = minimizeApp;
 exports.closeApp = closeApp;
 exports.openApp = openApp;
 exports.updateApp = updateApp;

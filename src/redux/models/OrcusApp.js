@@ -20,11 +20,12 @@ var OrcusApp = class extends EnhancedModel {
     static fields = {
         // non-relational fields
         // component props
-        slug: attr(),   //string, required
+        slug: attr(),       //string, required
         id: attr(),
         icon: attr(),
         name: attr(),
-        opened: attr(),  //bool
+        opened: attr(),     //bool
+        minimized: attr()   //bool
     };
     
     static options = {
@@ -35,7 +36,8 @@ var OrcusApp = class extends EnhancedModel {
         id: DEFAULT_ID,
         icon: "fa:home",
         name: "",
-        opened: false
+        opened: false,
+        minimized: false
     };
     
     //return an initial state object that is derived from some component props
@@ -46,9 +48,7 @@ var OrcusApp = class extends EnhancedModel {
                     opened: props.initialOpened
                 })
             ).filter(
-                it => [
-                    'slug', 'id', 'icon', 'name', 'opened'
-                ].includes(it[0])
+                it => it[0] in OrcusApp.fields
             )
         );
     }
@@ -87,6 +87,9 @@ var OrcusApp = class extends EnhancedModel {
             closeApp (App, action) {
                 App.requireId(action.payload.slug).set("opened", false);
             },
+            minimizeApp (App, action) {
+                App.requireId(action.payload.slug).set("minimized", true);
+            },
             destroyApp (App, action) {
                 App.requireId(action.payload.slug).delete();
             }
@@ -103,7 +106,9 @@ var OrcusApp = class extends EnhancedModel {
 export default OrcusApp;
 //export actions
 export const {
-    createApp, updateAppProp, updateApp, openApp, closeApp, destroyApp
+    createApp, updateAppProp, updateApp,
+    openApp, closeApp, minimizeApp,
+    destroyApp
 } = OrcusApp.slice.actions;
 //export DEFAULT_ID constant for default id functionality in render layer
 export { DEFAULT_ID };

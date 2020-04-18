@@ -15,7 +15,7 @@ import Iconify from '@iconify/iconify';
 import { createSelector } from 'reselect';
 import { Rnd } from 'react-rnd';
 //import redux models and actions
-import AppModel, { updateApp, closeApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
+import AppModel, { closeApp, minimizeApp, updateApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
 //import components
 import { OrcusUiButton } from './OrcusUiButton.js';
 //import functions
@@ -46,9 +46,11 @@ var OrcusApp = class extends React.Component {
         initialOpened: PropTypes.bool,
         initialPosition: PropTypes.arrayOf(PropTypes.number),
         //state props
+        minimized: PropTypes.bool,
         opened: PropTypes.bool,
         //dispatch props
         closeApp: PropTypes.func.isRequired,
+        minimizeApp: PropTypes.func.isRequired,
         updateApp: PropTypes.func.isRequired
     };
 
@@ -61,21 +63,22 @@ var OrcusApp = class extends React.Component {
         ],
         function (app, ownProps) {
             var {
-                opened
+                minimized, opened
             } = app || AppModel.getInitialStateFromProps(ownProps);
             return {
-                opened
+                minimized, opened
             };
         }
     );
     
     //map dispatch and state to props
-    static mapDispatchToProps = { updateApp, closeApp };
+    static mapDispatchToProps = { closeApp, minimizeApp, updateApp };
     static mapStateToProps = this.selectAppProps;
     
     //INSTANCE PROPS
     //bind event handlers
     #handleMaximizeClick = this.handleMaximizeClick.bind(this);
+    #handleMinimizeClick = this.handleMinimizeClick.bind(this);
     #handleRestoreClick = this.handleRestoreClick.bind(this);
     #handleCloseClick = this.handleCloseClick.bind(this);
     //init state
@@ -109,7 +112,7 @@ var OrcusApp = class extends React.Component {
             id = (this.props.id == DEFAULT_ID) ? this.#defaultId : this.props.id,
             {
                 slug, name, icon, initialOpened, initialPosition,
-                opened, updateApp, closeApp,
+                minimized, opened, closeApp, minimizeApp, updateApp,
                 ...props
             } = this.props,
             [x, y, width, height] = initialPosition,
@@ -145,6 +148,12 @@ var OrcusApp = class extends React.Component {
             );
         }
         
+        //if we are minimized
+        if (this.props.minimized) {
+            //add minimize class
+            className += " minimized";
+        }
+        
         //render
         return (
             <Rnd
@@ -168,7 +177,10 @@ var OrcusApp = class extends React.Component {
                     </h2>
                     
                     <p className="orcus-controls">
-                        <OrcusUiButton className="orcus-minimize">
+                        <OrcusUiButton
+                            className="orcus-minimize"
+                            onClick={this.#handleMinimizeClick}
+                        >
                             <i className="iconify" data-icon="fa:window-minimize" />    
                         </OrcusUiButton>
             
@@ -189,6 +201,11 @@ var OrcusApp = class extends React.Component {
     
     handleMaximizeClick (e) {
         this.setState({maximized: true});
+    }
+
+    handleMinimizeClick (e) {
+        //dispatch minimize action
+        this.props.minimizeApp({slug: this.props.slug});
     }
     
     handleRestoreClick (e) {

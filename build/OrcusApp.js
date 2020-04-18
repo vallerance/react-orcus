@@ -30,7 +30,7 @@ var _OrcusUiButton = require("./OrcusUiButton.js");
 
 var _reduxConventionalConnect = require("./util/reduxConventionalConnect.js");
 
-var _class, _temp, _handleMaximizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
+var _class, _temp, _handleMaximizeClick, _handleMinimizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -104,6 +104,10 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       writable: true,
       value: _this.handleMaximizeClick.bind(_assertThisInitialized(_this))
     });
+    Object.defineProperty(_assertThisInitialized(_this), _handleMinimizeClick, {
+      writable: true,
+      value: _this.handleMinimizeClick.bind(_assertThisInitialized(_this))
+    });
     Object.defineProperty(_assertThisInitialized(_this), _handleRestoreClick, {
       writable: true,
       value: _this.handleRestoreClick.bind(_assertThisInitialized(_this))
@@ -152,10 +156,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           icon = _this$props.icon,
           initialOpened = _this$props.initialOpened,
           initialPosition = _this$props.initialPosition,
+          minimized = _this$props.minimized,
           opened = _this$props.opened,
-          updateApp = _this$props.updateApp,
           closeApp = _this$props.closeApp,
-          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "opened", "updateApp", "closeApp"]),
+          minimizeApp = _this$props.minimizeApp,
+          updateApp = _this$props.updateApp,
+          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "minimized", "opened", "closeApp", "minimizeApp", "updateApp"]),
           _initialPosition = _slicedToArray(initialPosition, 4),
           x = _initialPosition[0],
           y = _initialPosition[1],
@@ -190,6 +196,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           className: "iconify",
           "data-icon": "fa:window-maximize"
         }));
+      } //if we are minimized
+
+
+      if (this.props.minimized) {
+        //add minimize class
+        className += " minimized";
       } //render
 
 
@@ -221,7 +233,8 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       }, this.props.name), /*#__PURE__*/_react["default"].createElement("p", {
         className: "orcus-controls"
       }, /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
-        className: "orcus-minimize"
+        className: "orcus-minimize",
+        onClick: _classPrivateFieldLooseBase(this, _handleMinimizeClick)[_handleMinimizeClick]
       }, /*#__PURE__*/_react["default"].createElement("i", {
         className: "iconify",
         "data-icon": "fa:window-minimize"
@@ -243,6 +256,14 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "handleMinimizeClick",
+    value: function handleMinimizeClick(e) {
+      //dispatch minimize action
+      this.props.minimizeApp({
+        slug: this.props.slug
+      });
+    }
+  }, {
     key: "handleRestoreClick",
     value: function handleRestoreClick(e) {
       this.setState({
@@ -260,7 +281,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return OrcusApp;
-}(_react["default"].Component), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+}(_react["default"].Component), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleMinimizeClick = _classPrivateFieldLooseKey("handleMinimizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
   className: "",
   id: _OrcusApp.DEFAULT_ID,
   icon: "fa:home",
@@ -278,9 +299,11 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   initialOpened: _propTypes["default"].bool,
   initialPosition: _propTypes["default"].arrayOf(_propTypes["default"].number),
   //state props
+  minimized: _propTypes["default"].bool,
   opened: _propTypes["default"].bool,
   //dispatch props
   closeApp: _propTypes["default"].func.isRequired,
+  minimizeApp: _propTypes["default"].func.isRequired,
   updateApp: _propTypes["default"].func.isRequired
 }, _class.selectApp = function (state, ownProps) {
   return _OrcusApp["default"].select.app(state, ownProps.slug);
@@ -288,14 +311,17 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   return ownProps;
 }], function (app, ownProps) {
   var _ref = app || _OrcusApp["default"].getInitialStateFromProps(ownProps),
+      minimized = _ref.minimized,
       opened = _ref.opened;
 
   return {
+    minimized: minimized,
     opened: opened
   };
 }), _class.mapDispatchToProps = {
-  updateApp: _OrcusApp.updateApp,
-  closeApp: _OrcusApp.closeApp
+  closeApp: _OrcusApp.closeApp,
+  minimizeApp: _OrcusApp.minimizeApp,
+  updateApp: _OrcusApp.updateApp
 }, _class.mapStateToProps = _class.selectAppProps, _temp); //export OrcusApp class
 
 exports.OrcusAppUnit = OrcusApp;
