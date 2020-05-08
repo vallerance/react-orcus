@@ -75,39 +75,6 @@ describe ('<Desktop /> should render', function () {
         });
     });
     
-    describe ("Taskbar", function () {
-        var taskbarWrapper = null;
-
-        beforeEach (function () {
-            var renderResult = rtl.render(h(Desktop, Object.assign({}, extraProps)));
-            taskbarWrapper = jQuery(renderResult.container); 
-        });
-
-        afterEach (function () {
-            //destroy wrapper
-            taskbarWrapper = null;
-        });
-
-        it ("With class name", function () {
-            assert.lengthOf(
-                taskbarWrapper.find(".orcus-taskbar"),
-                1,
-                "Missing node with orcus-taskbar class"
-            );
-        });
-        
-        it ("Unless prop is false", function () {
-            //render desktop with no taskbar
-            var renderResult = rtl.render(h(Desktop, {taskbar: false}));
-            //should contain no taskbar
-            assert.lengthOf(
-                jQuery(renderResult.container.firstChild).find(".orcus-taskbar"),
-                0,
-                "Found unexpected node with orcus-taskbar class"
-            );
-        });
-    });
-
     describe ("Program Menu", function () {
         var menuWrapper = null;
 
