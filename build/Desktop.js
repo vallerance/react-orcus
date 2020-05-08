@@ -2,7 +2,7 @@
  * The top-level component for react-orcus. Renders the entire desktop.
  * Dependencies:
     - modules: react, prop-types, @reduxjs/toolkit, react-redux, reselect
-    - components: OrcusApp, Shortcuts
+    - components: OrcusApp, DesktopShortcuts
     - other: orm reducer, OrcusApp class
  * Author: Joshua Carter
  * Created: January 18, 2020
@@ -32,7 +32,7 @@ var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
 
 var _OrcusApp2 = require("./OrcusApp.js");
 
-var _Shortcuts = require("./components/Shortcuts.js");
+var _DesktopShortcuts = require("./components/DesktopShortcuts.js");
 
 var _class, _temp, _initialState, _session, _create, _defaultId;
 
@@ -177,7 +177,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           programMenuContent = "";
 
       if (shortcuts) {
-        shortcutsContent = /*#__PURE__*/_react["default"].createElement(_Shortcuts.Shortcuts, null);
+        shortcutsContent = /*#__PURE__*/_react["default"].createElement(_DesktopShortcuts.DesktopShortcuts, null);
       }
 
       if (taskbar) {

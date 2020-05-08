@@ -1,8 +1,14 @@
-/* Shortcuts.js
+/* DesktopShortcuts.js
  * Components to render the shortcuts area of the desktop
- * Dependencies: react, prop-types, react-redux, iconify modules, OrcusApp class
+ * Dependencies:
+    - modules: react, prop-types, react-redux, iconify
+    - components: Shortcut
+    - other: OrcusApp class
  * Author: Joshua Carter
- * Created: Februrary 23, 2020
+ * Created: April 18, 2020
+ * Previously: Shortcuts.js:
+    - Author: Joshua Carter
+    - Created: Februrary 23, 2020
  */
 "use strict"; //import modules
 
@@ -11,7 +17,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Shortcuts = DesktopShortcuts;
+exports.DesktopShortcuts = DesktopShortcuts;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -22,6 +28,8 @@ var _reactRedux = require("react-redux");
 var _iconify = _interopRequireDefault(require("@iconify/iconify"));
 
 var _OrcusApp = _interopRequireWildcard(require("../redux/models/OrcusApp.js"));
+
+var _Shortcut = require("./Shortcut.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -43,35 +51,14 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
 //individual shortcut
-function Shortcut(props) {
-  //create defaultId for this component
-  var defaultId = (0, _react.useRef)("orcus-desktop-shortcut-" + Math.floor(Math.random() * 10000)),
-      className = "orcus-shortcut " + props.className,
-      slug = props.slug,
-      htmlProps = _objectWithoutProperties(props, ["slug"]),
-      app = (0, _reactRedux.useSelector)(function (state) {
-    return _OrcusApp["default"].select.app(state, props.slug);
-  }, _reactRedux.shallowEqual),
+function DesktopShortcut(props) {
+  var className = props.className,
       dispatch = (0, _reactRedux.useDispatch)(),
       _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       selected = _useState2[0],
-      setSelected = _useState2[1],
-      id; //if we couldn't find our app
-
-
-  if (!app) {
-    console.warn("Shortcut: Unable to find app with slug: ".concat(props.slug, " in state"));
-    return;
-  } //get id, either property or default
-
-
-  id = app.id == _OrcusApp.DEFAULT_ID ? defaultId.current : "orcus-desktop-shortcut-".concat(app.id);
+      setSelected = _useState2[1];
 
   if (selected) {
     className += " selected ";
@@ -83,33 +70,26 @@ function Shortcut(props) {
 
   function onDoubleClick(e) {
     dispatch((0, _OrcusApp.openApp)({
-      slug: slug
+      slug: props.slug
     }));
   } //render
 
 
-  return /*#__PURE__*/_react["default"].createElement("div", _extends({}, htmlProps, {
-    id: id,
+  return /*#__PURE__*/_react["default"].createElement(_Shortcut.Shortcut, _extends({}, props, {
     className: className,
+    idPrefix: "orcus-desktop-shortcut",
     onClick: onClick,
     onDoubleClick: onDoubleClick
-  }), /*#__PURE__*/_react["default"].createElement("div", {
-    className: "orcus-ui orcus-icon"
-  }, /*#__PURE__*/_react["default"].createElement("i", {
-    className: "iconify",
-    "data-icon": app.icon
-  })), /*#__PURE__*/_react["default"].createElement("p", {
-    className: "orcus-title"
-  }, app.name));
+  }));
 }
 
-Shortcut.propTypes = {
+_Shortcut.Shortcut.propTypes = {
   //custom html props
   className: _propTypes["default"].string,
   //component props
   slug: _propTypes["default"].string.isRequired
 };
-Shortcut.defaultProps = {
+_Shortcut.Shortcut.defaultProps = {
   className: ""
 }; //create our main Shortcuts component
 
@@ -122,7 +102,7 @@ function DesktopShortcuts(props) {
   return /*#__PURE__*/_react["default"].createElement("div", {
     className: "orcus-shortcuts"
   }, appSlugs.map(function (it) {
-    return /*#__PURE__*/_react["default"].createElement(Shortcut, {
+    return /*#__PURE__*/_react["default"].createElement(DesktopShortcut, {
       key: it,
       slug: it
     });
