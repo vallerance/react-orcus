@@ -117,7 +117,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     };
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
-      value: "orcus-app-" + Math.floor(Math.random() * 10000)
+      value: "orcus-app-" + Math.floor(Math.random() * 10000000)
     });
     return _this;
   }
