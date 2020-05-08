@@ -103,7 +103,7 @@ var OrcusApp = class extends React.Component {
         maximized: false
     };
     //create default id
-    #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000);
+    #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000000);
     
     componentDidUpdate (prevProps) {
         var update = {},

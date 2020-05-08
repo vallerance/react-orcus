@@ -29,7 +29,7 @@ registerModels(orm, [Desktop, OrcusApp]);
 const ormReducer = createReducer(orm, function (session, action) {
     session.sessionBoundModels.forEach(modelClass => {
         if (typeof modelClass.slice.reducer === 'function') {
-            modelClass.slice.reducer(modelClass, action, session);
+            modelClass.slice.reducer(modelClass, action);
         }
     });
 });

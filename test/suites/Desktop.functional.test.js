@@ -24,7 +24,7 @@ describe ('<Desktop /> should render', function () {
             slug: "test-app",
             name: "Test App",
             className: "custom-class",
-            id: "custom-id",
+            id: "custom-app-id",
             icon: "fa:home"
         },
         desktopWrapper = null;

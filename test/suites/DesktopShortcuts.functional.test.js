@@ -18,7 +18,7 @@ var assert = require('chai').assert,
 describe ('<Desktop /> should render shortcuts', function () {
     var extraProps = {
             className: "custom-class",
-            id: "custom-id",
+            id: "custom-desktop-id",
             "data-prop": "prop-val"
         },
         appPropsNoId = {

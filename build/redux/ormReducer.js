@@ -54,7 +54,7 @@ registerModels(orm, [_Desktop["default"], _OrcusApp["default"]]); // use custom 
 var ormReducer = (0, _reduxOrm.createReducer)(orm, function (session, action) {
   session.sessionBoundModels.forEach(function (modelClass) {
     if (typeof modelClass.slice.reducer === 'function') {
-      modelClass.slice.reducer(modelClass, action, session);
+      modelClass.slice.reducer(modelClass, action);
     }
   });
 });

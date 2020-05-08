@@ -114,7 +114,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     });
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
-      value: "orcus-desktop-" + Math.floor(Math.random() * 100)
+      value: "orcus-desktop-" + Math.floor(Math.random() * 10000000)
     });
     return _this;
   }

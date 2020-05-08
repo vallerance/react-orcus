@@ -88,7 +88,7 @@ var Desktop = class extends React.Component {
     });
 
     //create default id
-    #defaultId = "orcus-desktop-" + Math.floor(Math.random() * 100);
+    #defaultId = "orcus-desktop-" + Math.floor(Math.random() * 10000000);
     
     updateAppList (children) {
         // get app children
