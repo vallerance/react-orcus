@@ -122,13 +122,31 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       App.requireId(action.payload.slug).update(action.payload.props);
     },
     openApp: function openApp(App, action) {
-      App.requireId(action.payload.slug).set("opened", true);
+      // get our app
+      var app = App.requireId(action.payload.slug); // open it
+
+      app.set("opened", true); // focus it
+
+      app.desktop.focusApp(action.payload.slug);
     },
     closeApp: function closeApp(App, action) {
-      App.requireId(action.payload.slug).set("opened", false);
+      // get our app
+      var app = App.requireId(action.payload.slug); // close it
+
+      app.set("opened", false); // blur it
+
+      app.desktop.blurApp(action.payload.slug);
     },
     minimizeApp: function minimizeApp(App, action) {
       App.requireId(action.payload.slug).set("minimized", true);
+    },
+    restoreApp: function restoreApp(App, action) {
+      // get our app
+      var app = App.requireId(action.payload.slug); // restore it
+
+      app.set("minimized", false); // focus it
+
+      app.desktop.focusApp(action.payload.slug);
     },
     destroyApp: function destroyApp(App, action) {
       App.requireId(action.payload.slug)["delete"]();
@@ -150,6 +168,7 @@ var _OrcusApp$slice$actio = OrcusApp.slice.actions,
     destroyApp = _OrcusApp$slice$actio.destroyApp; //export DEFAULT_ID constant for default id functionality in render layer
 
 exports.destroyApp = destroyApp;
+exports.restoreApp = restoreApp;
 exports.minimizeApp = minimizeApp;
 exports.closeApp = closeApp;
 exports.openApp = openApp;
