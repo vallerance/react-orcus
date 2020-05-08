@@ -7,19 +7,23 @@
 "use strict";
 //import dependencies
 import { ORM, createReducer } from 'redux-orm';
+import Desktop from './models/Desktop.js';
 import OrcusApp from './models/OrcusApp.js';
 
-function registerModel (orm, model) {
-    orm.register(model);
-    if (typeof model.createSelectors == "function") {
-        model.createSelectors(orm);
+function registerModels (orm, models) {
+    orm.register(...models);
+    for (let i=0; i<models.length; i++) {
+        let model = models[i];
+        if (typeof model.createSelectors == "function") {
+            model.createSelectors(orm);
+        }
     }
 }
 
 const orm = new ORM({
     stateSelector: state => state,
 });
-registerModel(orm, OrcusApp);
+registerModels(orm, [Desktop, OrcusApp]);
 
 // use custom updater that calls slice reducer for each model
 const ormReducer = createReducer(orm, function (session, action) {

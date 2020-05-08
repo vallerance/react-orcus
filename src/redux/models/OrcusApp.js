@@ -25,7 +25,8 @@ var OrcusApp = class extends EnhancedModel {
         icon: attr(),
         name: attr(),
         opened: attr(),     //bool
-        minimized: attr()   //bool
+        minimized: attr(),  //bool
+        desktop: fk("Desktop", "apps")
     };
     
     static options = {
@@ -67,8 +68,13 @@ var OrcusApp = class extends EnhancedModel {
         initialState: undefined,
         reducers: {
             createApp (App, action) {
+                // get desktop id
+                var session = App.session,
+                    desktopId = session.Desktop.select.singleDesktop(session).id;
                 App.create(
-                    Object.assign({}, OrcusApp.defaultProps, action.payload)
+                    Object.assign({
+                        desktop: desktopId
+                    }, OrcusApp.defaultProps, action.payload)
                 );
             },
             updateAppProp (App, action) {
