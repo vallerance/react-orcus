@@ -15,8 +15,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { createSelector } from 'reselect';
 //import reducers
-import ormReducer from './redux/ormReducer.js';
+import ormReducer, { orm } from './redux/ormReducer.js';
 //import redux models and actions
+import DesktopModel from './redux/models/Desktop.js';
 import AppModel, { createApp, openApp, closeApp, destroyApp } from './redux/models/OrcusApp.js';
 // import components
 import { OrcusApp } from './OrcusApp.js';
@@ -72,9 +73,17 @@ var Desktop = class extends React.Component {
      * the constructor of the component itself.
      *
      */
-
+    
+    // create a Desktop instance for our state tree
+    #initialState = orm.getEmptyState();
+    #session = orm.mutableSession(this.#initialState)
+    #__create = this.#session.Desktop.create(
+        DesktopModel.getInitialStateFromProps({})
+    );
+    // create redux store
     reduxStore = configureStore({
         reducer: ormReducer,
+        preloadedState: this.#initialState
     });
 
     //create default id

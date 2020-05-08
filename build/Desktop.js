@@ -24,7 +24,9 @@ var _reactRedux = require("react-redux");
 
 var _reselect = require("reselect");
 
-var _ormReducer = _interopRequireDefault(require("./redux/ormReducer.js"));
+var _ormReducer = _interopRequireWildcard(require("./redux/ormReducer.js"));
+
+var _Desktop = _interopRequireDefault(require("./redux/models/Desktop.js"));
 
 var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
 
@@ -32,7 +34,7 @@ var _OrcusApp2 = require("./OrcusApp.js");
 
 var _Shortcuts = require("./components/Shortcuts.js");
 
-var _class, _temp, _defaultId;
+var _class, _temp, _initialState, _session, _create, _defaultId;
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -92,8 +94,21 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     }
 
     _this = _super.call.apply(_super, [this].concat(args));
+    Object.defineProperty(_assertThisInitialized(_this), _initialState, {
+      writable: true,
+      value: _ormReducer.orm.getEmptyState()
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _session, {
+      writable: true,
+      value: _ormReducer.orm.mutableSession(_classPrivateFieldLooseBase(_assertThisInitialized(_this), _initialState)[_initialState])
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _create, {
+      writable: true,
+      value: _classPrivateFieldLooseBase(_assertThisInitialized(_this), _session)[_session].Desktop.create(_Desktop["default"].getInitialStateFromProps({}))
+    });
     _this.reduxStore = (0, _toolkit.configureStore)({
-      reducer: _ormReducer["default"]
+      reducer: _ormReducer["default"],
+      preloadedState: _classPrivateFieldLooseBase(_assertThisInitialized(_this), _initialState)[_initialState]
     });
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
@@ -190,7 +205,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return Desktop;
-}(_react["default"].Component), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+}(_react["default"].Component), _initialState = _classPrivateFieldLooseKey("initialState"), _session = _classPrivateFieldLooseKey("session"), _create = _classPrivateFieldLooseKey("__create"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
   shortcuts: true,
   taskbar: true,
   programMenu: true,
