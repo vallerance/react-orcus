@@ -75,7 +75,7 @@ planned release.
 
 #### Roadmap
 
-- [ ] Taskbar ([#53][i53])
+- [x] Taskbar ([#53][i53])
 - [ ] Program menu ([#55][i55])
 - [ ] Themes ([#43][i43])
 - [ ] App Groups ([#48][i48])
