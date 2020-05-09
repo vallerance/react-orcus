@@ -31,7 +31,7 @@ var Desktop = class extends React.Component {
     //define default props
     static defaultProps = {
         shortcuts: true,
-        taskbar: true,
+        taskbar: "bottom",
         programMenu: true,
 
         className: "",
@@ -44,7 +44,10 @@ var Desktop = class extends React.Component {
         id: PropTypes.string,
         //component props
         shortcuts: PropTypes.bool,
-        taskbar:  PropTypes.bool,
+        taskbar:  PropTypes.oneOfType([
+            PropTypes.bool,
+            PropTypes.oneOf(["top", "right", "bottom", "left"])
+        ]),
         programMenu:  PropTypes.bool
     };
 
@@ -146,7 +149,11 @@ var Desktop = class extends React.Component {
                 <DesktopShortcuts />
             );
         }
+        if (taskbar === true) {
+            taskbar = Desktop.defaultProps.taskbar;
+        }
         if (taskbar) {
+            className += " taskbar-"+taskbar;
             taskbarContent = (
                 <Taskbar />
             );

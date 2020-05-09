@@ -45,8 +45,8 @@ describe ('<Desktop /> should render taskbar', function () {
     });
 
     it ("With class names", function () {
-        assert.lengthOf(taskbarWrapper.find(".orcus-taskbar") , 1, "Missing node with orcus-taskbar class");
-        assert.lengthOf(taskbarWrapper.find(".orcus-taskbar .orcus-shortcuts") , 1, "Missing node with orcus-shortcuts class");
+        assert.lengthOf(taskbarWrapper.find(".orcus-taskbar"), 1, "Missing node with orcus-taskbar class");
+        assert.lengthOf(taskbarWrapper.find(".orcus-taskbar .orcus-shortcuts"), 1, "Missing node with orcus-shortcuts class");
     });
 
     it ("Unless prop is false", function () {
@@ -57,6 +57,23 @@ describe ('<Desktop /> should render taskbar', function () {
             jQuery(renderResult.container.firstChild).find(".orcus-taskbar"),
             0,
             "Found unexpected node with orcus-taskbar class"
+        );
+    });
+    
+    it ("In the correct location", function () {
+        //render desktop taskbar at top
+        var renderResult = rtl.render(h(Desktop, {taskbar: "top"}));
+        //should contain top taskbar
+        assert.lengthOf(
+            jQuery(renderResult.container).find(".orcus-desktop.taskbar-top"),
+            1,
+            "Missing node with .orcus-desktop.taskbar-top class"
+        );
+        //should be at bottom by default
+        assert.lengthOf(
+            taskbarWrapper.find(".orcus-desktop.taskbar-bottom"),
+            1,
+            "Missing node with .orcus-desktop.taskbar-bottom class"
         );
     });
     

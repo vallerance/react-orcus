@@ -7,7 +7,7 @@ function OrcusWhiteboard (props) {
         
         <Orcus.Desktop
             shortcuts={false}
-            taskbar={false}
+            taskbar={"right"}
             programMenu={false}
         />
             <Orcus.App

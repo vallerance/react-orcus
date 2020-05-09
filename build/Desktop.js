@@ -182,7 +182,12 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
         shortcutsContent = /*#__PURE__*/_react["default"].createElement(_DesktopShortcuts.DesktopShortcuts, null);
       }
 
+      if (taskbar === true) {
+        taskbar = Desktop.defaultProps.taskbar;
+      }
+
       if (taskbar) {
+        className += " taskbar-" + taskbar;
         taskbarContent = /*#__PURE__*/_react["default"].createElement(_Taskbar.Taskbar, null);
       }
 
@@ -207,7 +212,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   return Desktop;
 }(_react["default"].Component), _initialState = _classPrivateFieldLooseKey("initialState"), _session = _classPrivateFieldLooseKey("session"), _create = _classPrivateFieldLooseKey("__create"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
   shortcuts: true,
-  taskbar: true,
+  taskbar: "bottom",
   programMenu: true,
   className: "",
   id: DEFAULT_ID
@@ -217,7 +222,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   id: _propTypes["default"].string,
   //component props
   shortcuts: _propTypes["default"].bool,
-  taskbar: _propTypes["default"].bool,
+  taskbar: _propTypes["default"].oneOfType([_propTypes["default"].bool, _propTypes["default"].oneOf(["top", "right", "bottom", "left"])]),
   programMenu: _propTypes["default"].bool
 }, _class.selectAppSlugs = function (state) {
   return _OrcusApp["default"].select.appSlug(state);

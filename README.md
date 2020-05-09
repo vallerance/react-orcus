@@ -31,7 +31,7 @@ Then, in your React component:
 ```JavaScript
 var Desktop = (
     
-    <Orcus.Desktop>
+    <Orcus.Desktop taskbar="right">
         <Orcus.App
             slug="file-manager"
             name="File Manager"
