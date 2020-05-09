@@ -91,8 +91,9 @@ TaskbarShortcut.defaultProps = {
 
 //create our Taskbar component
 function Taskbar (props) {
-    //get a list of our open apps
-    var openAppSlugs = useSelector(
+    var className = props.className + " orcus-taskbar ",
+        //get a list of our open apps
+        openAppSlugs = useSelector(
             selectOpenAppSlugs,
             shallowEqual
         ),
@@ -106,7 +107,7 @@ function Taskbar (props) {
         );
     //render
     return (
-        <div className="orcus-taskbar">
+        <div className={className}>
             <div className="orcus-shortcuts">
                 {
                     openAppSlugs.map(it => {
@@ -124,11 +125,12 @@ function Taskbar (props) {
 };
 //define default props
 Taskbar.defaultProps = {
-
+    className: ""
 };
 //define props
 Taskbar.propTypes = {
-
+    //html props
+    className: PropTypes.string
 };
 
 

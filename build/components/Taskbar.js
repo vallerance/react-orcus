@@ -113,8 +113,9 @@ TaskbarShortcut.defaultProps = {
 }; //create our Taskbar component
 
 function Taskbar(props) {
-  //get a list of our open apps
-  var openAppSlugs = (0, _reactRedux.useSelector)(selectOpenAppSlugs, _reactRedux.shallowEqual),
+  var className = props.className + " orcus-taskbar ",
+      //get a list of our open apps
+  openAppSlugs = (0, _reactRedux.useSelector)(selectOpenAppSlugs, _reactRedux.shallowEqual),
       //get our desktop
   desktop = (0, _reactRedux.useSelector)(function (state) {
     return _Desktop["default"].select.singleDesktop(state);
@@ -125,7 +126,7 @@ function Taskbar(props) {
   }); //render
 
   return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "orcus-taskbar"
+    className: className
   }, /*#__PURE__*/_react["default"].createElement("div", {
     className: "orcus-shortcuts"
   }, openAppSlugs.map(function (it) {
@@ -140,6 +141,11 @@ function Taskbar(props) {
 
 ; //define default props
 
-Taskbar.defaultProps = {}; //define props
+Taskbar.defaultProps = {
+  className: ""
+}; //define props
 
-Taskbar.propTypes = {}; //export Taskbar component
+Taskbar.propTypes = {
+  //html props
+  className: _propTypes["default"].string
+}; //export Taskbar component
