@@ -160,7 +160,11 @@
 }
 
 .orcus-desktop-content .orcus-shortcut .orcus-title {
+    font-size: .8em;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
 }
 
 .orcus-taskbar .orcus-shortcuts {
