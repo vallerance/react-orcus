@@ -66,9 +66,10 @@
 .orcus-desktop.taskbar-bottom .orcus-taskbar { border-top-width: 2px; }
 .orcus-desktop.taskbar-left .orcus-taskbar { border-right-width: 2px; }
 
-.orcus-desktop-content .orcus-shortcut,
+.orcus-shortcut,
 .orcus-title-bar {
     cursor: default;
+    font-family: calibri, sans-serif;
 }
 
 .orcus-app,
@@ -97,7 +98,6 @@
 
 .orcus-title-bar .orcus-title {
     float: left;
-    font-family: calibri, sans-serif;
     font-size: inherit;
     margin: 0;
     padding: 0;
