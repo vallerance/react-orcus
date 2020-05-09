@@ -83,13 +83,13 @@ function DesktopShortcut(props) {
   }));
 }
 
-_Shortcut.Shortcut.propTypes = {
+DesktopShortcut.propTypes = {
   //custom html props
   className: _propTypes["default"].string,
   //component props
   slug: _propTypes["default"].string.isRequired
 };
-_Shortcut.Shortcut.defaultProps = {
+DesktopShortcut.defaultProps = {
   className: ""
 }; //create our main Shortcuts component
 
