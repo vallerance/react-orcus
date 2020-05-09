@@ -136,6 +136,7 @@
 .orcus-resize-handle.top.left { cursor: nw-resize !important; }
 
 .orcus-desktop-content .orcus-shortcut {
+    border: 1px transparent solid;
     margin: 10px;
     outline: none;
     padding: 5px 1px;
@@ -151,7 +152,7 @@
 
 .orcus-desktop-content .orcus-shortcut.selected {
     background-color: #e0e0e0;
-    border: 1px #bbb solid;
+    border-color: #bbb;
 }
 
 .orcus-desktop-content .orcus-shortcut .orcus-icon {
