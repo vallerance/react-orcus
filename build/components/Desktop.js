@@ -24,17 +24,17 @@ var _reactRedux = require("react-redux");
 
 var _reselect = require("reselect");
 
-var _ormReducer = _interopRequireWildcard(require("./redux/ormReducer.js"));
+var _ormReducer = _interopRequireWildcard(require("../redux/ormReducer.js"));
 
-var _Desktop = _interopRequireDefault(require("./redux/models/Desktop.js"));
+var _Desktop = _interopRequireDefault(require("../redux/models/Desktop.js"));
 
-var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
+var _OrcusApp = _interopRequireWildcard(require("../redux/models/OrcusApp.js"));
 
 var _OrcusApp2 = require("./OrcusApp.js");
 
-var _DesktopShortcuts = require("./components/DesktopShortcuts.js");
+var _DesktopShortcuts = require("./DesktopShortcuts.js");
 
-var _Taskbar = require("./components/Taskbar.js");
+var _Taskbar = require("./Taskbar.js");
 
 var _class, _temp, _initialState, _session, _create, _defaultId;
 

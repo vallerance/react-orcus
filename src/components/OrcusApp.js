@@ -15,12 +15,12 @@ import Iconify from '@iconify/iconify';
 import { createSelector } from 'reselect';
 import { Rnd } from 'react-rnd';
 //import redux models and actions
-import Desktop, { focusApp, blurApp } from './redux/models/Desktop.js';
-import AppModel, { closeApp, minimizeApp, updateApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
+import Desktop, { focusApp, blurApp } from '../redux/models/Desktop.js';
+import AppModel, { closeApp, minimizeApp, updateApp, DEFAULT_ID } from '../redux/models/OrcusApp.js';
 //import components
 import { OrcusUiButton } from './OrcusUiButton.js';
 //import functions
-import { reduxConventionalConnect } from './util/reduxConventionalConnect.js';
+import { reduxConventionalConnect } from '../util/reduxConventionalConnect.js';
 //create our OrcusApp class
 var OrcusApp = class extends React.Component {
     

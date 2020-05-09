@@ -25,9 +25,9 @@ Object.defineProperty(exports, "App", {
 });
 exports["default"] = void 0;
 
-var _Desktop = require("./Desktop.js");
+var _Desktop = require("./components/Desktop.js");
 
-var _OrcusApp = require("./OrcusApp.js");
+var _OrcusApp = require("./components/OrcusApp.js");
 
 var mainClasses = {
   "orcus-desktop": "orcus-desktop",

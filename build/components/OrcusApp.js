@@ -24,13 +24,13 @@ var _reselect = require("reselect");
 
 var _reactRnd = require("react-rnd");
 
-var _Desktop = _interopRequireWildcard(require("./redux/models/Desktop.js"));
+var _Desktop = _interopRequireWildcard(require("../redux/models/Desktop.js"));
 
-var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
+var _OrcusApp = _interopRequireWildcard(require("../redux/models/OrcusApp.js"));
 
 var _OrcusUiButton = require("./OrcusUiButton.js");
 
-var _reduxConventionalConnect = require("./util/reduxConventionalConnect.js");
+var _reduxConventionalConnect = require("../util/reduxConventionalConnect.js");
 
 var _class, _temp, _handleFocus, _handleBlur, _handleMaximizeClick, _handleMinimizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
 

@@ -6,7 +6,7 @@
  */
 "use strict";
 //include dependencies
-var App = require('../../build/OrcusApp.js').OrcusAppUnit,
+var App = require('../../build/components/OrcusApp.js').OrcusAppUnit,
     checkProp = new (require('../util/checkPropTypes.util.js'))(App);
 
 //begin mocha tests

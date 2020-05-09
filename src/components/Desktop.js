@@ -15,14 +15,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { createSelector } from 'reselect';
 //import reducers
-import ormReducer, { orm } from './redux/ormReducer.js';
+import ormReducer, { orm } from '../redux/ormReducer.js';
 //import redux models and actions
-import DesktopModel from './redux/models/Desktop.js';
-import AppModel, { createApp, openApp, closeApp, destroyApp } from './redux/models/OrcusApp.js';
+import DesktopModel from '../redux/models/Desktop.js';
+import AppModel, { createApp, openApp, closeApp, destroyApp } from '../redux/models/OrcusApp.js';
 // import components
 import { OrcusApp } from './OrcusApp.js';
-import { DesktopShortcuts } from './components/DesktopShortcuts.js';
-import { Taskbar } from './components/Taskbar.js';
+import { DesktopShortcuts } from './DesktopShortcuts.js';
+import { Taskbar } from './Taskbar.js';
 //define constants
 const DEFAULT_ID = "ORCUS_DESKTOP_DEFAULT_ID_VALUE_392183";
 //create our Desktop class
