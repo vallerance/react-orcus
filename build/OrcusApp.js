@@ -162,7 +162,9 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
         // if our state is focused, but our element is NOT
         if (props.focused && element != document.activeElement) {
           // then focus our element
-          element.focus();
+          element.focus({
+            preventScroll: true
+          });
         } // if our state is NOT focused, but our element is
 
 
