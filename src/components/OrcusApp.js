@@ -15,11 +15,12 @@ import Iconify from '@iconify/iconify';
 import { createSelector } from 'reselect';
 import { Rnd } from 'react-rnd';
 //import redux models and actions
-import AppModel, { updateApp, closeApp, DEFAULT_ID } from './redux/models/OrcusApp.js';
+import Desktop, { focusApp, blurApp } from '../redux/models/Desktop.js';
+import AppModel, { closeApp, minimizeApp, updateApp, DEFAULT_ID } from '../redux/models/OrcusApp.js';
 //import components
 import { OrcusUiButton } from './OrcusUiButton.js';
 //import functions
-import { reduxConventionalConnect } from './util/reduxConventionalConnect.js';
+import { reduxConventionalConnect } from '../util/reduxConventionalConnect.js';
 //create our OrcusApp class
 var OrcusApp = class extends React.Component {
     
@@ -32,6 +33,8 @@ var OrcusApp = class extends React.Component {
         initialOpened: false,
         initialPosition: [0, 0, 100, 100],
         
+        focused: false,
+        minimized: false,
         opened: false
     };
     //define props
@@ -46,36 +49,53 @@ var OrcusApp = class extends React.Component {
         initialOpened: PropTypes.bool,
         initialPosition: PropTypes.arrayOf(PropTypes.number),
         //state props
+        focused: PropTypes.bool,
+        minimized: PropTypes.bool,
         opened: PropTypes.bool,
+        desktopModelId: PropTypes.string.isRequired,
         //dispatch props
         closeApp: PropTypes.func.isRequired,
-        updateApp: PropTypes.func.isRequired
+        minimizeApp: PropTypes.func.isRequired,
+        updateApp: PropTypes.func.isRequired,
+        focusApp: PropTypes.func.isRequired,
+        blurApp: PropTypes.func.isRequired
     };
 
     //define selectors
     static selectApp = (state, ownProps) => AppModel.select.app(state, ownProps.slug);
+    static selectDesktop = state => Desktop.select.singleDesktop(state)
+    static selectFocusedApp = createSelector(
+        state => state,
+        this.selectDesktop,
+        (state, desktop) => Desktop.select.focusedApp(state, desktop.id)
+    );  
     static selectAppProps = createSelector(
-        [
-            this.selectApp,
-            (state, ownProps) => ownProps
-        ],
-        function (app, ownProps) {
+        this.selectApp,
+        this.selectDesktop,
+        this.selectFocusedApp,
+        (state, ownProps) => ownProps,
+        function (app, desktop, focusedApp, ownProps) {
             var {
-                opened
-            } = app || AppModel.getInitialStateFromProps(ownProps);
+                    minimized, opened
+                } = app || AppModel.getInitialStateFromProps(ownProps),
+                focused = focusedApp && app.slug == focusedApp.slug,
+                desktopModelId = desktop.id;
             return {
-                opened
+                desktopModelId, focused, minimized, opened
             };
         }
     );
     
     //map dispatch and state to props
-    static mapDispatchToProps = { updateApp, closeApp };
+    static mapDispatchToProps = { closeApp, minimizeApp, updateApp, focusApp, blurApp };
     static mapStateToProps = this.selectAppProps;
     
     //INSTANCE PROPS
     //bind event handlers
+    #handleFocus = this.handleFocus.bind(this);
+    #handleBlur = this.handleBlur.bind(this);
     #handleMaximizeClick = this.handleMaximizeClick.bind(this);
+    #handleMinimizeClick = this.handleMinimizeClick.bind(this);
     #handleRestoreClick = this.handleRestoreClick.bind(this);
     #handleCloseClick = this.handleCloseClick.bind(this);
     //init state
@@ -83,11 +103,12 @@ var OrcusApp = class extends React.Component {
         maximized: false
     };
     //create default id
-    #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000);
+    #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000000);
     
     componentDidUpdate (prevProps) {
         var update = {},
-            props = this.props;
+            props = this.props,
+            element = document.getElementById(this.getId());
         // check for prop changes
         ["name", "icon", "id"].forEach(function (prop) {
             if (props[prop] != prevProps[prop]) {
@@ -101,15 +122,46 @@ var OrcusApp = class extends React.Component {
                 props: update
             });
         }
+        // check for state prop changes
+        // focus/blur
+        if (props.focused != prevProps.focused) {
+            // if our state is focused, but our element is NOT
+            if (props.focused && element != document.activeElement) {
+                // then focus our element
+                element.focus({preventScroll: true});
+            }
+            // if our state is NOT focused, but our element is
+            if (!props.focused && element == document.activeElement) {
+                // then blur our element
+                element.blur();
+            }
+        }
+        /*
+        // restore
+        if (prevProps.minimized && !props.minimized) {
+            // focus ourselves when we are restored
+            element.focus();
+        }
+        // open
+        if (!prevProps.opened && props.opened) {
+            // focus ourselves when we are opened
+            
+        }
+        */
+    }
+
+    getId () {
+        return (this.props.id == DEFAULT_ID) ? this.#defaultId : this.props.id;
     }
     
     render () {
         var className = "orcus-app orcus-window " + this.props.className,
             //get id, either property or default
-            id = (this.props.id == DEFAULT_ID) ? this.#defaultId : this.props.id,
+            id = this.getId(),
             {
                 slug, name, icon, initialOpened, initialPosition,
-                opened, updateApp, closeApp,
+                desktopModelId, focused, minimized, opened,
+                closeApp, minimizeApp, updateApp, focusApp, blurApp,
                 ...props
             } = this.props,
             [x, y, width, height] = initialPosition,
@@ -145,6 +197,12 @@ var OrcusApp = class extends React.Component {
             );
         }
         
+        //if we are minimized
+        if (this.props.minimized) {
+            //add minimize class
+            className += " minimized";
+        }
+        
         //render
         return (
             <Rnd
@@ -161,6 +219,8 @@ var OrcusApp = class extends React.Component {
                     bottomLeft: "orcus-resize-handle bottom left",
                     topLeft: "orcus-resize-handle top left"
                 }}
+                onFocus={this.#handleFocus}
+                onBlur={this.#handleBlur}
             >
                 <header className="orcus-title-bar">
                     <h2 className="orcus-title">
@@ -168,7 +228,10 @@ var OrcusApp = class extends React.Component {
                     </h2>
                     
                     <p className="orcus-controls">
-                        <OrcusUiButton className="orcus-minimize">
+                        <OrcusUiButton
+                            className="orcus-minimize"
+                            onClick={this.#handleMinimizeClick}
+                        >
                             <i className="iconify" data-icon="fa:window-minimize" />    
                         </OrcusUiButton>
             
@@ -187,8 +250,54 @@ var OrcusApp = class extends React.Component {
         );
     }
     
+    handleFocus (e) {
+        //if we are NOT currently focused
+        if (!this.props.focused) {
+            //we need to be
+            this.props.focusApp({
+                id: this.props.desktopModelId,
+                slug: this.props.slug
+            });
+        }
+    }
+    
+    handleBlur (e) {
+        //first, check if this is a valid blur
+        //if the element gaining focus is a taskbar shortcut
+        if (
+            e.relatedTarget instanceof window.Element &&
+            e.relatedTarget.closest(".orcus-taskbar .orcus-shortcut")
+        ) {
+            //If it is ours, then it should not steal focus from us. If it is
+            //another app's, it is fine to retain focus for now; the click
+            //handler of the shortcut will focus the other app shortly
+            e.preventDefault();
+            e.target.focus();
+            return;
+        }
+        //else, if we are losing focus to ourselves
+        if (e.relatedTarget == e.target) {
+            //this is probably because we are being focused by the above code
+            //get out of this loop
+            return;
+        }   //else, we are legitimately losing focus 
+        //if we are currently focused
+        if (this.props.focused) {
+            //relax
+            this.props.blurApp({
+                id: this.props.desktopModelId,
+                slug: this.props.slug
+            });
+        }
+    }
+    
     handleMaximizeClick (e) {
         this.setState({maximized: true});
+    }
+
+    handleMinimizeClick (e) {
+        //dispatch minimize action
+        this.props.minimizeApp({slug: this.props.slug});
     }
     
     handleRestoreClick (e) {

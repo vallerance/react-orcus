@@ -1,19 +1,21 @@
-/* OrcusApp.js
- * redux-orm model for an App instance
- * Dependencies: redux-orm, @reduxjs/toolkit modules, EnhancedModel class
+/* Desktop.js
+ * redux-orm model for a Desktop instance (top-level)
+ * Dependencies: redux-orm, @reduxjs/toolkit, uuid modules, EnhancedModel class
  * Author: Joshua Carter
- * Created: February 2, 2020
+ * Created: April 19, 2020
  */
 "use strict"; //import dependencies
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DEFAULT_ID = exports.destroyApp = exports.restoreApp = exports.minimizeApp = exports.closeApp = exports.openApp = exports.updateApp = exports.updateAppProp = exports.createApp = exports["default"] = void 0;
+exports.destroyDesktop = exports.updateDesktop = exports.updateDesktopProp = exports.createDesktop = exports.blurApp = exports.focusApp = exports["default"] = void 0;
 
 var _reduxOrm = require("redux-orm");
 
 var _toolkit = require("@reduxjs/toolkit");
+
+var _uuid = require("uuid");
 
 var _EnhancedModel2 = require("./EnhancedModel.js");
 
@@ -41,137 +43,124 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-//define constants
-var DEFAULT_ID = "ORCUS_APP_DEFAULT_ID_VALUE_68142"; //create our OrcusApp model
+//create our Desktop model
+var Desktop = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
+  _inherits(Desktop, _EnhancedModel);
 
-exports.DEFAULT_ID = DEFAULT_ID;
-var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
-  _inherits(OrcusApp, _EnhancedModel);
+  var _super = _createSuper(Desktop);
 
-  var _super = _createSuper(OrcusApp);
-
-  function OrcusApp() {
-    _classCallCheck(this, OrcusApp);
+  function Desktop() {
+    _classCallCheck(this, Desktop);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(OrcusApp, [{
+  _createClass(Desktop, [{
     key: "toString",
     value: function toString() {
-      return "OrcusApp: ".concat(this.name);
+      return "Desktop: ".concat(this.id);
+    }
+    /**
+     * Focus the given app (bluring the existing focused app).
+     * @param {string} appSlug - the identifier of the app to focus
+     */
+
+  }, {
+    key: "focusApp",
+    value: function focusApp(appSlug) {
+      // focus the given app
+      this.set("focusedApp", appSlug);
+    }
+    /**
+     * Blur the given app (leaving no app focused).
+     * @param {string} appSlug - the identifier of the app to blue
+     */
+
+  }, {
+    key: "blurApp",
+    value: function blurApp(appSlug) {
+      // if this app is currently focused
+      if (this.focusedApp && this.focusedApp.slug == appSlug) {
+        // blur it
+        this.set("focusedApp", undefined);
+      }
     }
   }], [{
     key: "getInitialStateFromProps",
     //return an initial state object that is derived from some component props
     value: function getInitialStateFromProps(props) {
-      return Object.fromEntries(Object.entries(Object.assign({}, OrcusApp.defaultProps, props, {
-        opened: props.initialOpened
+      return Object.fromEntries(Object.entries(Object.assign({}, Desktop.defaultProps, props, {
+        id: (0, _uuid.v4)()
       })).filter(function (it) {
-        return it[0] in OrcusApp.fields;
+        return it[0] in Desktop.fields;
       }));
     } // SELECTORS
 
   }, {
     key: "createSelectors",
     value: function createSelectors(orm) {
-      OrcusApp.select.app = (0, _reduxOrm.createSelector)(orm.OrcusApp);
-      OrcusApp.select.appSlug = (0, _reduxOrm.createSelector)(orm.OrcusApp.slug);
+      Desktop.select.desktop = (0, _reduxOrm.createSelector)(orm.Desktop);
+      Desktop.select.singleDesktop = (0, _reduxOrm.createSelector)(orm.Desktop, function (desktops) {
+        if (desktops.length !== 1) {
+          throw new Error("Expected session to contain exactly one desktop instance, but found ".concat(desktops.length, "."));
+        }
+
+        return desktops[0];
+      });
+      Desktop.select.focusedApp = (0, _reduxOrm.createSelector)(orm.Desktop.focusedApp);
     } // REDUCER
 
   }]);
 
-  return OrcusApp;
-}(_EnhancedModel2.EnhancedModel), _class.modelName = 'OrcusApp', _class.fields = {
+  return Desktop;
+}(_EnhancedModel2.EnhancedModel), _class.modelName = 'Desktop', _class.fields = {
   // non-relational fields
   // component props
-  slug: (0, _reduxOrm.attr)(),
-  //string, required
   id: (0, _reduxOrm.attr)(),
-  icon: (0, _reduxOrm.attr)(),
-  name: (0, _reduxOrm.attr)(),
-  opened: (0, _reduxOrm.attr)(),
-  //bool
-  minimized: (0, _reduxOrm.attr)(),
-  //bool
-  desktop: (0, _reduxOrm.fk)("Desktop", "apps")
+  //number, required
+  focusedApp: (0, _reduxOrm.oneToOne)('OrcusApp', 'focused')
 }, _class.options = {
-  idAttribute: "slug"
+  idAttribute: "id"
 }, _class.defaultProps = {
-  id: DEFAULT_ID,
-  icon: "fa:home",
-  name: "",
-  opened: false,
-  minimized: false
+  id: "0"
 }, _class.select = {}, _class.slice = (0, _toolkit.createSlice)({
-  name: 'OrcusAppSlice',
+  name: 'DesktopSlice',
   initialState: undefined,
   reducers: {
-    createApp: function createApp(App, action) {
-      // get desktop id
-      var session = App.session,
-          desktopId = session.Desktop.select.singleDesktop(session).id;
-      App.create(Object.assign({
-        desktop: desktopId
-      }, OrcusApp.defaultProps, action.payload));
+    focusApp: function focusApp(Desktop, action) {
+      Desktop.requireId(action.payload.id).focusApp(action.payload.slug);
     },
-    updateAppProp: function updateAppProp(App, action) {
-      App.requireId(action.payload.slug).set(action.payload.prop, action.payload.value);
+    blurApp: function blurApp(Desktop, action) {
+      Desktop.requireId(action.payload.id).blurApp(action.payload.slug);
     },
-    updateApp: function updateApp(App, action) {
-      App.requireId(action.payload.slug).update(action.payload.props);
+    createDesktop: function createDesktop(Desktop, action) {
+      Desktop.create(Object.assign({}, Desktop.defaultProps, action.payload));
     },
-    openApp: function openApp(App, action) {
-      // get our app
-      var app = App.requireId(action.payload.slug); // open it
-
-      app.set("opened", true); // focus it
-
-      app.desktop.focusApp(action.payload.slug);
+    updateDesktopProp: function updateDesktopProp(Desktop, action) {
+      Desktop.requireId(action.payload.id).set(action.payload.prop, action.payload.value);
     },
-    closeApp: function closeApp(App, action) {
-      // get our app
-      var app = App.requireId(action.payload.slug); // close it
-
-      app.set("opened", false); // blur it
-
-      app.desktop.blurApp(action.payload.slug);
+    updateDesktop: function updateDesktop(Desktop, action) {
+      Desktop.requireId(action.payload.id).update(action.payload.props);
     },
-    minimizeApp: function minimizeApp(App, action) {
-      App.requireId(action.payload.slug).set("minimized", true);
-    },
-    restoreApp: function restoreApp(App, action) {
-      // get our app
-      var app = App.requireId(action.payload.slug); // restore it
-
-      app.set("minimized", false); // focus it
-
-      app.desktop.focusApp(action.payload.slug);
-    },
-    destroyApp: function destroyApp(App, action) {
-      App.requireId(action.payload.slug)["delete"]();
+    destroyDesktop: function destroyDesktop(Desktop, action) {
+      Desktop.requireId(action.payload.id)["delete"]();
     }
   }
-}), _temp); //export OrcusApp class
+}), _temp); //export Desktop class
 
-var _default = OrcusApp; //export actions
+var _default = Desktop; //export actions
 
 exports["default"] = _default;
-var _OrcusApp$slice$actio = OrcusApp.slice.actions,
-    createApp = _OrcusApp$slice$actio.createApp,
-    updateAppProp = _OrcusApp$slice$actio.updateAppProp,
-    updateApp = _OrcusApp$slice$actio.updateApp,
-    openApp = _OrcusApp$slice$actio.openApp,
-    closeApp = _OrcusApp$slice$actio.closeApp,
-    minimizeApp = _OrcusApp$slice$actio.minimizeApp,
-    restoreApp = _OrcusApp$slice$actio.restoreApp,
-    destroyApp = _OrcusApp$slice$actio.destroyApp; //export DEFAULT_ID constant for default id functionality in render layer
-
-exports.destroyApp = destroyApp;
-exports.restoreApp = restoreApp;
-exports.minimizeApp = minimizeApp;
-exports.closeApp = closeApp;
-exports.openApp = openApp;
-exports.updateApp = updateApp;
-exports.updateAppProp = updateAppProp;
-exports.createApp = createApp;
+var _Desktop$slice$action = Desktop.slice.actions,
+    focusApp = _Desktop$slice$action.focusApp,
+    blurApp = _Desktop$slice$action.blurApp,
+    createDesktop = _Desktop$slice$action.createDesktop,
+    updateDesktopProp = _Desktop$slice$action.updateDesktopProp,
+    updateDesktop = _Desktop$slice$action.updateDesktop,
+    destroyDesktop = _Desktop$slice$action.destroyDesktop;
+exports.destroyDesktop = destroyDesktop;
+exports.updateDesktop = updateDesktop;
+exports.updateDesktopProp = updateDesktopProp;
+exports.createDesktop = createDesktop;
+exports.blurApp = blurApp;
+exports.focusApp = focusApp;

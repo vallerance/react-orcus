@@ -16,7 +16,15 @@ describe ('<Desktop /> PropTypes should', function () {
     });
 
     it ("Accept taskbar prop", function () {
-        checkProp.checkBooleanProp("taskbar");
+        // should be one of boolean or position
+        checkProp.assertInvalidPropTypeEnum("taskbar", 64);
+        checkProp.assertInvalidPropTypeEnum("taskbar", "not-a-position");
+        checkProp.assertValidPropType("taskbar", "top");
+        checkProp.assertValidPropType("taskbar", "right");
+        checkProp.assertValidPropType("taskbar", "bottom");
+        checkProp.assertValidPropType("taskbar", "left");
+        checkProp.assertValidPropType("taskbar", false);
+        checkProp.assertValidPropType("taskbar", true);
     });
 
     it ("Accept programMenu prop", function () {

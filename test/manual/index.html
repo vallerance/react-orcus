@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../../node_modules/@babel/standalone/babel.js"></script>
     <script type="text/javascript" src="../../node_modules/react/umd/react.development.js"></script>
     <script type="text/javascript" src="../../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script type="text/javascript" src="../../node_modules/moment-duration-format/lib/moment-duration-format.js"></script>
     
     <script type="text/javascript" src="../../dist/react-orcus.js"></script>
     
@@ -26,6 +27,31 @@
             border: 5px #000 solid;
         }
         
+        /* apps */
+        
+        #stopwatch time {
+            display: block;
+            font-family: calibri, sans-serif;
+            font-size: 3em;
+            margin: 20px auto;
+            text-align: center;
+        }
+        
+        #stopwatch .clock-controls {
+            text-align: center;
+        }
+        
+        #stopwatch .clock-controls button {
+            font-size: 2em;
+            margin: 5px;
+        }
+        
+        #stopwatch .start { color: green; }
+        #stopwatch .stop { color: red; }
+        #stopwatch .pause { color: orange; }
+        #stopwatch .resume { color: skyblue; }
+        
+        
     </style>
     
 </head>
@@ -35,12 +61,85 @@
     <div id="view-container">
     
     </div>
+    
+    <script type="module">
+        import moment from "../../node_modules/moment/dist/moment.js";
+        window.moment = moment;
+    </script>
 
     <script type="text/babel">
         
+        momentDurationFormatSetup(moment);
+
+        function Stopwatch (props) {
+            var [start, setStart] = React.useState(null),
+                [end, setEnd] = React.useState(null),
+                [looper, loop] = React.useState(0),
+                format = function (m) {
+                    return m.format("HH:mm:ss.SSS", {trim: false});
+                },
+                duration = function () {
+                    return moment.duration((end || moment()).diff(start));
+                };
+            
+            // loop
+            setTimeout(function () { loop(++looper); }, 50);
+            
+            function onStart (e) {
+                setStart(moment());
+                setEnd(null);
+            }
+            
+            function onResume (e) {
+                setStart(moment().subtract(duration()));
+                setEnd(null);
+            }
+            
+            // render
+            return (
+                <div className="stopwatch">
+                    <time>
+                        {
+                            start ?
+                                
+                            format(duration()) :
+                            
+                            format(moment.duration(0))
+                        }
+                    </time>
+                           
+                    <div className="clock-controls">
+                        {
+                            !start ?
+                                
+                            <button className="start" onClick={onStart}>
+                                Start
+                            </button> :
+                            
+                            <button className="stop" onClick={e => setStart(null)}>
+                                Stop
+                            </button>
+                        }
+                        
+                        {
+                            !end ?
+                                
+                            <button className="pause" onClick={e => setEnd(moment())}>
+                                Pause
+                            </button> :
+                            
+                            <button className="resume" onClick={onResume}>
+                                Resume
+                            </button>
+                        }
+                    </div>
+                </div>
+            );   
+        }
         
-        ReactDOM.render((
-                <Orcus.Desktop>
+        ReactDOM.render(
+            (
+                <Orcus.Desktop taskbar="bottom">
                     <Orcus.App
                         slug="file-manager"
                         name="File Manager"
@@ -58,9 +157,19 @@
                         slug="tetris"
                         name="Tetris"
                         icon="fa:th-large"
-                        initialPosition={[550, 200, 280, 450]}    //{x, y, w, h}
+                        initialPosition={[550, 150, 280, 450]}    //{x, y, w, h}
                     >
                         <p>Does anyone know how to build a tetris game?</p>
+                    </Orcus.App>
+                    
+                    <Orcus.App
+                        id="stopwatch"
+                        slug="stopwatch"
+                        name="Stopwatch"
+                        icon="fa:clock-o"
+                        initialPosition={[200, 180, 300, 200]}
+                    >
+                        <Stopwatch />
                     </Orcus.App>
                 </Orcus.Desktop>
             ),

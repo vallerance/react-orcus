@@ -2,7 +2,7 @@
  * The top-level component for react-orcus. Renders the entire desktop.
  * Dependencies:
     - modules: react, prop-types, @reduxjs/toolkit, react-redux, reselect
-    - components: OrcusApp, Shortcuts
+    - components: OrcusApp, DesktopShortcuts, Taskbar
     - other: orm reducer, OrcusApp class
  * Author: Joshua Carter
  * Created: January 18, 2020
@@ -24,15 +24,19 @@ var _reactRedux = require("react-redux");
 
 var _reselect = require("reselect");
 
-var _ormReducer = _interopRequireDefault(require("./redux/ormReducer.js"));
+var _ormReducer = _interopRequireWildcard(require("../redux/ormReducer.js"));
 
-var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
+var _Desktop = _interopRequireDefault(require("../redux/models/Desktop.js"));
+
+var _OrcusApp = _interopRequireWildcard(require("../redux/models/OrcusApp.js"));
 
 var _OrcusApp2 = require("./OrcusApp.js");
 
-var _Shortcuts = require("./components/Shortcuts.js");
+var _DesktopShortcuts = require("./DesktopShortcuts.js");
 
-var _class, _temp, _defaultId;
+var _Taskbar = require("./Taskbar.js");
+
+var _class, _temp, _initialState, _session, _create, _defaultId;
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -54,7 +58,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -63,10 +71,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
 
@@ -92,12 +96,25 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     }
 
     _this = _super.call.apply(_super, [this].concat(args));
+    Object.defineProperty(_assertThisInitialized(_this), _initialState, {
+      writable: true,
+      value: _ormReducer.orm.getEmptyState()
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _session, {
+      writable: true,
+      value: _ormReducer.orm.mutableSession(_classPrivateFieldLooseBase(_assertThisInitialized(_this), _initialState)[_initialState])
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _create, {
+      writable: true,
+      value: _classPrivateFieldLooseBase(_assertThisInitialized(_this), _session)[_session].Desktop.create(_Desktop["default"].getInitialStateFromProps({}))
+    });
     _this.reduxStore = (0, _toolkit.configureStore)({
-      reducer: _ormReducer["default"]
+      reducer: _ormReducer["default"],
+      preloadedState: _classPrivateFieldLooseBase(_assertThisInitialized(_this), _initialState)[_initialState]
     });
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
-      value: "orcus-desktop-" + Math.floor(Math.random() * 100)
+      value: "orcus-desktop-" + Math.floor(Math.random() * 10000000)
     });
     return _this;
   }
@@ -162,13 +179,16 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           programMenuContent = "";
 
       if (shortcuts) {
-        shortcutsContent = /*#__PURE__*/_react["default"].createElement(_Shortcuts.Shortcuts, null);
+        shortcutsContent = /*#__PURE__*/_react["default"].createElement(_DesktopShortcuts.DesktopShortcuts, null);
+      }
+
+      if (taskbar === true) {
+        taskbar = Desktop.defaultProps.taskbar;
       }
 
       if (taskbar) {
-        taskbarContent = /*#__PURE__*/_react["default"].createElement("div", {
-          className: "orcus-taskbar"
-        });
+        className += " taskbar-" + taskbar;
+        taskbarContent = /*#__PURE__*/_react["default"].createElement(_Taskbar.Taskbar, null);
       }
 
       if (programMenu) {
@@ -190,9 +210,9 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return Desktop;
-}(_react["default"].Component), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+}(_react["default"].Component), _initialState = _classPrivateFieldLooseKey("initialState"), _session = _classPrivateFieldLooseKey("session"), _create = _classPrivateFieldLooseKey("__create"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
   shortcuts: true,
-  taskbar: true,
+  taskbar: "bottom",
   programMenu: true,
   className: "",
   id: DEFAULT_ID
@@ -202,7 +222,7 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   id: _propTypes["default"].string,
   //component props
   shortcuts: _propTypes["default"].bool,
-  taskbar: _propTypes["default"].bool,
+  taskbar: _propTypes["default"].oneOfType([_propTypes["default"].bool, _propTypes["default"].oneOf(["top", "right", "bottom", "left"])]),
   programMenu: _propTypes["default"].bool
 }, _class.selectAppSlugs = function (state) {
   return _OrcusApp["default"].select.appSlug(state);

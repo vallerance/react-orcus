@@ -223,6 +223,19 @@ describe ('<App /> should render', function () {
                     "Unexpected node with orcus-maximize class"
                 );
             });
+            
+            it ("Minimize button that minimizes the app", function () {
+                // click minimize button
+                rtl.fireEvent.click(
+                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-minimize").get(0)
+                );
+                // app should be minimized
+                assert.lengthOf(
+                    titleBarWrapper.find(".orcus-window.minimized"),
+                    1,
+                    "Missing node with .orcus-window.minimized class"
+                )
+            })
         });
         
     });

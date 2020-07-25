@@ -20,11 +20,13 @@ var OrcusApp = class extends EnhancedModel {
     static fields = {
         // non-relational fields
         // component props
-        slug: attr(),   //string, required
+        slug: attr(),       //string, required
         id: attr(),
         icon: attr(),
         name: attr(),
-        opened: attr(),  //bool
+        opened: attr(),     //bool
+        minimized: attr(),  //bool
+        desktop: fk("Desktop", "apps")
     };
     
     static options = {
@@ -35,7 +37,8 @@ var OrcusApp = class extends EnhancedModel {
         id: DEFAULT_ID,
         icon: "fa:home",
         name: "",
-        opened: false
+        opened: false,
+        minimized: false
     };
     
     //return an initial state object that is derived from some component props
@@ -46,9 +49,7 @@ var OrcusApp = class extends EnhancedModel {
                     opened: props.initialOpened
                 })
             ).filter(
-                it => [
-                    'slug', 'id', 'icon', 'name', 'opened'
-                ].includes(it[0])
+                it => it[0] in OrcusApp.fields
             )
         );
     }
@@ -67,8 +68,13 @@ var OrcusApp = class extends EnhancedModel {
         initialState: undefined,
         reducers: {
             createApp (App, action) {
+                // get desktop id
+                var session = App.session,
+                    desktopId = session.Desktop.select.singleDesktop(session).id;
                 App.create(
-                    Object.assign({}, OrcusApp.defaultProps, action.payload)
+                    Object.assign({
+                        desktop: desktopId
+                    }, OrcusApp.defaultProps, action.payload)
                 );
             },
             updateAppProp (App, action) {
@@ -82,10 +88,31 @@ var OrcusApp = class extends EnhancedModel {
                     .update(action.payload.props);
             },
             openApp (App, action) {
-                App.requireId(action.payload.slug).set("opened", true);
+                // get our app
+                var app = App.requireId(action.payload.slug);
+                // open it
+                app.set("opened", true);
+                // focus it
+                app.desktop.focusApp(action.payload.slug);
             },
             closeApp (App, action) {
-                App.requireId(action.payload.slug).set("opened", false);
+                // get our app
+                var app = App.requireId(action.payload.slug);
+                // close it
+                app.set("opened", false);
+                // blur it
+                app.desktop.blurApp(action.payload.slug);
+            },
+            minimizeApp (App, action) {
+                App.requireId(action.payload.slug).set("minimized", true);
+            },
+            restoreApp (App, action) {
+                // get our app
+                var app = App.requireId(action.payload.slug);
+                // restore it
+                app.set("minimized", false);
+                // focus it
+                app.desktop.focusApp(action.payload.slug);
             },
             destroyApp (App, action) {
                 App.requireId(action.payload.slug).delete();
@@ -103,7 +130,9 @@ var OrcusApp = class extends EnhancedModel {
 export default OrcusApp;
 //export actions
 export const {
-    createApp, updateAppProp, updateApp, openApp, closeApp, destroyApp
+    createApp, updateAppProp, updateApp,
+    openApp, closeApp, minimizeApp, restoreApp,
+    destroyApp
 } = OrcusApp.slice.actions;
 //export DEFAULT_ID constant for default id functionality in render layer
 export { DEFAULT_ID };

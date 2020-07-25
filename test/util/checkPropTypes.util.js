@@ -15,7 +15,10 @@ class Util {
         this.propTypes = Component.propTypes;
     }
     
-    _generatePropDescription ({prop, value, ofType=false, withValue=false, required=false}) {
+    _generatePropDescription ({
+        prop, value,
+        ofType=false, ofValue=false, withValue=false, required=false
+    }) {
         var description = "";
         if (required) {
             description += "required ";
@@ -23,6 +26,9 @@ class Util {
         description += "prop `" + prop + "` ";
         if (ofType) {
             description += "of type `" + typeof value + "` ";
+        }
+        if (ofValue) {
+            description += "of value `" + value + "` ";
         }
         if (withValue) {
             description += "with value " + value + " ";
@@ -44,11 +50,15 @@ class Util {
         return `Expected ${propDesc} to pass, but it failed with: ${result}`;
     }
     
-    _generateFailedTypeMessage (propDescription) {
+    _generateFailedPropMessage (propDescription) {
         var propDesc = typeof propDescription == "string" ?
             propDescription :
             this._generatePropDescription(propDescription);
-        return `Failed prop type: Invalid ${propDesc} supplied to \`${this.name}\`, expected `;
+        return `Failed prop type: Invalid ${propDesc} supplied to \`${this.name}\``;
+    }
+    
+    _generateFailedTypeMessage (propDescription) {
+        return `${this._generateFailedPropMessage(propDescription)}, expected `;
     }
 
     testProp (prop, value) {
@@ -75,6 +85,26 @@ class Util {
     
     assertInvalidPropType (prop, value) {
         var propDesc = this._generatePropDescription({prop, value, ofType: true});
+        this.assertInvalidProp(
+            prop,
+            value,
+            propDesc,
+            this._generateFailedTypeMessage(propDesc)
+        );
+    }
+    
+    assertInvalidPropTypeEnum (prop, value) {
+        var propDesc = this._generatePropDescription({prop, value});
+        this.assertInvalidProp(
+            prop,
+            value,
+            propDesc,
+            this._generateFailedPropMessage(propDesc)
+        );
+    }
+    
+    assertInvalidPropEnum (prop, value) {
+        var propDesc = this._generatePropDescription({prop, value, ofValue: true});
         this.assertInvalidProp(
             prop,
             value,

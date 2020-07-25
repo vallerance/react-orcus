@@ -10,8 +10,8 @@
 //import static assets
 import mainClasses from './styles/main.css';
 //include dependencies
-import { Desktop } from './Desktop.js';
-import { OrcusApp } from './OrcusApp.js';
+import { Desktop } from './components/Desktop.js';
+import { OrcusApp } from './components/OrcusApp.js';
 
 //export modules
 export { 

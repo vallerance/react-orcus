@@ -24,13 +24,15 @@ var _reselect = require("reselect");
 
 var _reactRnd = require("react-rnd");
 
-var _OrcusApp = _interopRequireWildcard(require("./redux/models/OrcusApp.js"));
+var _Desktop = _interopRequireWildcard(require("../redux/models/Desktop.js"));
+
+var _OrcusApp = _interopRequireWildcard(require("../redux/models/OrcusApp.js"));
 
 var _OrcusUiButton = require("./OrcusUiButton.js");
 
-var _reduxConventionalConnect = require("./util/reduxConventionalConnect.js");
+var _reduxConventionalConnect = require("../util/reduxConventionalConnect.js");
 
-var _class, _temp, _handleMaximizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
+var _class, _temp, _handleFocus, _handleBlur, _handleMaximizeClick, _handleMinimizeClick, _handleRestoreClick, _handleCloseClick, _defaultId;
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -46,7 +48,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
@@ -64,7 +66,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -73,10 +79,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
 
@@ -100,9 +102,21 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     }
 
     _this = _super.call.apply(_super, [this].concat(args));
+    Object.defineProperty(_assertThisInitialized(_this), _handleFocus, {
+      writable: true,
+      value: _this.handleFocus.bind(_assertThisInitialized(_this))
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _handleBlur, {
+      writable: true,
+      value: _this.handleBlur.bind(_assertThisInitialized(_this))
+    });
     Object.defineProperty(_assertThisInitialized(_this), _handleMaximizeClick, {
       writable: true,
       value: _this.handleMaximizeClick.bind(_assertThisInitialized(_this))
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _handleMinimizeClick, {
+      writable: true,
+      value: _this.handleMinimizeClick.bind(_assertThisInitialized(_this))
     });
     Object.defineProperty(_assertThisInitialized(_this), _handleRestoreClick, {
       writable: true,
@@ -117,7 +131,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     };
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
-      value: "orcus-app-" + Math.floor(Math.random() * 10000)
+      value: "orcus-app-" + Math.floor(Math.random() * 10000000)
     });
     return _this;
   }
@@ -126,7 +140,8 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps) {
       var update = {},
-          props = this.props; // check for prop changes
+          props = this.props,
+          element = document.getElementById(this.getId()); // check for prop changes
 
       ["name", "icon", "id"].forEach(function (prop) {
         if (props[prop] != prevProps[prop]) {
@@ -139,23 +154,65 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           slug: this.props.slug,
           props: update
         });
+      } // check for state prop changes
+      // focus/blur
+
+
+      if (props.focused != prevProps.focused) {
+        // if our state is focused, but our element is NOT
+        if (props.focused && element != document.activeElement) {
+          // then focus our element
+          element.focus({
+            preventScroll: true
+          });
+        } // if our state is NOT focused, but our element is
+
+
+        if (!props.focused && element == document.activeElement) {
+          // then blur our element
+          element.blur();
+        }
       }
+      /*
+      // restore
+      if (prevProps.minimized && !props.minimized) {
+          // focus ourselves when we are restored
+          element.focus();
+      }
+      // open
+      if (!prevProps.opened && props.opened) {
+          // focus ourselves when we are opened
+          
+      }
+      */
+
+    }
+  }, {
+    key: "getId",
+    value: function getId() {
+      return this.props.id == _OrcusApp.DEFAULT_ID ? _classPrivateFieldLooseBase(this, _defaultId)[_defaultId] : this.props.id;
     }
   }, {
     key: "render",
     value: function render() {
       var className = "orcus-app orcus-window " + this.props.className,
-          id = this.props.id == _OrcusApp.DEFAULT_ID ? _classPrivateFieldLooseBase(this, _defaultId)[_defaultId] : this.props.id,
+          id = this.getId(),
           _this$props = this.props,
           slug = _this$props.slug,
           name = _this$props.name,
           icon = _this$props.icon,
           initialOpened = _this$props.initialOpened,
           initialPosition = _this$props.initialPosition,
+          desktopModelId = _this$props.desktopModelId,
+          focused = _this$props.focused,
+          minimized = _this$props.minimized,
           opened = _this$props.opened,
-          updateApp = _this$props.updateApp,
           closeApp = _this$props.closeApp,
-          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "opened", "updateApp", "closeApp"]),
+          minimizeApp = _this$props.minimizeApp,
+          updateApp = _this$props.updateApp,
+          focusApp = _this$props.focusApp,
+          blurApp = _this$props.blurApp,
+          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "desktopModelId", "focused", "minimized", "opened", "closeApp", "minimizeApp", "updateApp", "focusApp", "blurApp"]),
           _initialPosition = _slicedToArray(initialPosition, 4),
           x = _initialPosition[0],
           y = _initialPosition[1],
@@ -190,6 +247,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           className: "iconify",
           "data-icon": "fa:window-maximize"
         }));
+      } //if we are minimized
+
+
+      if (this.props.minimized) {
+        //add minimize class
+        className += " minimized";
       } //render
 
 
@@ -213,7 +276,9 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           bottomRight: "orcus-resize-handle bottom right",
           bottomLeft: "orcus-resize-handle bottom left",
           topLeft: "orcus-resize-handle top left"
-        }
+        },
+        onFocus: _classPrivateFieldLooseBase(this, _handleFocus)[_handleFocus],
+        onBlur: _classPrivateFieldLooseBase(this, _handleBlur)[_handleBlur]
       }), /*#__PURE__*/_react["default"].createElement("header", {
         className: "orcus-title-bar"
       }, /*#__PURE__*/_react["default"].createElement("h2", {
@@ -221,7 +286,8 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       }, this.props.name), /*#__PURE__*/_react["default"].createElement("p", {
         className: "orcus-controls"
       }, /*#__PURE__*/_react["default"].createElement(_OrcusUiButton.OrcusUiButton, {
-        className: "orcus-minimize"
+        className: "orcus-minimize",
+        onClick: _classPrivateFieldLooseBase(this, _handleMinimizeClick)[_handleMinimizeClick]
       }, /*#__PURE__*/_react["default"].createElement("i", {
         className: "iconify",
         "data-icon": "fa:window-minimize"
@@ -236,10 +302,61 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       }, this.props.children));
     }
   }, {
+    key: "handleFocus",
+    value: function handleFocus(e) {
+      //if we are NOT currently focused
+      if (!this.props.focused) {
+        //we need to be
+        this.props.focusApp({
+          id: this.props.desktopModelId,
+          slug: this.props.slug
+        });
+      }
+    }
+  }, {
+    key: "handleBlur",
+    value: function handleBlur(e) {
+      //first, check if this is a valid blur
+      //if the element gaining focus is a taskbar shortcut
+      if (e.relatedTarget instanceof window.Element && e.relatedTarget.closest(".orcus-taskbar .orcus-shortcut")) {
+        //If it is ours, then it should not steal focus from us. If it is
+        //another app's, it is fine to retain focus for now; the click
+        //handler of the shortcut will focus the other app shortly
+        e.preventDefault();
+        e.target.focus();
+        return;
+      } //else, if we are losing focus to ourselves
+
+
+      if (e.relatedTarget == e.target) {
+        //this is probably because we are being focused by the above code
+        //get out of this loop
+        return;
+      } //else, we are legitimately losing focus 
+      //if we are currently focused
+
+
+      if (this.props.focused) {
+        //relax
+        this.props.blurApp({
+          id: this.props.desktopModelId,
+          slug: this.props.slug
+        });
+      }
+    }
+  }, {
     key: "handleMaximizeClick",
     value: function handleMaximizeClick(e) {
       this.setState({
         maximized: true
+      });
+    }
+  }, {
+    key: "handleMinimizeClick",
+    value: function handleMinimizeClick(e) {
+      //dispatch minimize action
+      this.props.minimizeApp({
+        slug: this.props.slug
       });
     }
   }, {
@@ -260,12 +377,14 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return OrcusApp;
-}(_react["default"].Component), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+}(_react["default"].Component), _handleFocus = _classPrivateFieldLooseKey("handleFocus"), _handleBlur = _classPrivateFieldLooseKey("handleBlur"), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleMinimizeClick = _classPrivateFieldLooseKey("handleMinimizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
   className: "",
   id: _OrcusApp.DEFAULT_ID,
   icon: "fa:home",
   initialOpened: false,
   initialPosition: [0, 0, 100, 100],
+  focused: false,
+  minimized: false,
   opened: false
 }, _class.propTypes = {
   //custom html props
@@ -278,24 +397,45 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   initialOpened: _propTypes["default"].bool,
   initialPosition: _propTypes["default"].arrayOf(_propTypes["default"].number),
   //state props
+  focused: _propTypes["default"].bool,
+  minimized: _propTypes["default"].bool,
   opened: _propTypes["default"].bool,
+  desktopModelId: _propTypes["default"].string.isRequired,
   //dispatch props
   closeApp: _propTypes["default"].func.isRequired,
-  updateApp: _propTypes["default"].func.isRequired
+  minimizeApp: _propTypes["default"].func.isRequired,
+  updateApp: _propTypes["default"].func.isRequired,
+  focusApp: _propTypes["default"].func.isRequired,
+  blurApp: _propTypes["default"].func.isRequired
 }, _class.selectApp = function (state, ownProps) {
   return _OrcusApp["default"].select.app(state, ownProps.slug);
-}, _class.selectAppProps = (0, _reselect.createSelector)([_class.selectApp, function (state, ownProps) {
+}, _class.selectDesktop = function (state) {
+  return _Desktop["default"].select.singleDesktop(state);
+}, _class.selectFocusedApp = (0, _reselect.createSelector)(function (state) {
+  return state;
+}, _class.selectDesktop, function (state, desktop) {
+  return _Desktop["default"].select.focusedApp(state, desktop.id);
+}), _class.selectAppProps = (0, _reselect.createSelector)(_class.selectApp, _class.selectDesktop, _class.selectFocusedApp, function (state, ownProps) {
   return ownProps;
-}], function (app, ownProps) {
+}, function (app, desktop, focusedApp, ownProps) {
   var _ref = app || _OrcusApp["default"].getInitialStateFromProps(ownProps),
-      opened = _ref.opened;
+      minimized = _ref.minimized,
+      opened = _ref.opened,
+      focused = focusedApp && app.slug == focusedApp.slug,
+      desktopModelId = desktop.id;
 
   return {
+    desktopModelId: desktopModelId,
+    focused: focused,
+    minimized: minimized,
     opened: opened
   };
 }), _class.mapDispatchToProps = {
+  closeApp: _OrcusApp.closeApp,
+  minimizeApp: _OrcusApp.minimizeApp,
   updateApp: _OrcusApp.updateApp,
-  closeApp: _OrcusApp.closeApp
+  focusApp: _Desktop.focusApp,
+  blurApp: _Desktop.blurApp
 }, _class.mapStateToProps = _class.selectAppProps, _temp); //export OrcusApp class
 
 exports.OrcusAppUnit = OrcusApp;
