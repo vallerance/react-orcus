@@ -17,6 +17,7 @@ steps:
     working_directory: "${{clone}}"
     tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
     dockerfile: codefresh/test.Dockerfile
+    disable_push: true
   test:
     type: freestyle
     stage: test
