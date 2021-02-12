@@ -159,11 +159,7 @@ describe ('<Desktop /> should render taskbar', function () {
                     appsWrapper.find("#orcus-desktop-shortcut-first-app").get(0)
                 );
                 // first app should now be focused
-                assert.lengthOf(
-                    appsWrapper.find("#first-app:focus"),
-                    1,
-                    "Missing focused app"
-                );
+                testDom.assertFocused(appsWrapper, "#first-app");
                 // open second app
                 rtl.fireEvent.dblClick(
                     appsWrapper.find("#orcus-desktop-shortcut-second-app").get(0)
@@ -208,11 +204,7 @@ describe ('<Desktop /> should render taskbar', function () {
                 // focus the app
                 testDom.focusApp(appsWrapper.find("#"+appProps.id).get(0));
                 // app should now be focused
-                assert.lengthOf(
-                    appsWrapper.find(`#${appProps.id}:focus`),
-                    1,
-                    "Missing focused app"
-                );
+                testDom.assertFocused(appsWrapper, `#${appProps.id}`);
                 // click app in taskbar
                 testDom.click(
                     appsWrapper.find(".orcus-taskbar .orcus-shortcut").get(0)
@@ -235,7 +227,7 @@ describe ('<Desktop /> should render taskbar', function () {
                     appsWrapper.find(".orcus-window.minimized"),
                     1,
                     "Missing node with .orcus-window.minimized class"
-                )
+                );
                 // click app in taskbar
                 testDom.click(
                     appsWrapper.find(".orcus-taskbar .orcus-shortcut").get(0)
@@ -248,11 +240,7 @@ describe ('<Desktop /> should render taskbar', function () {
                 );
                 //restoring app should also focus app
                 // app should now be focused
-                assert.lengthOf(
-                    appsWrapper.find(".orcus-app:focus"),
-                    1,
-                    "Missing focused app"
-                );   
+                testDom.assertFocused(appsWrapper, ".orcus-app");
             });
 
             it ("Focuses app when clicked", function () {
@@ -261,29 +249,31 @@ describe ('<Desktop /> should render taskbar', function () {
                         Desktop,
                         Object.assign({}, extraProps),
                         [
-                            h(App, Object.assign({}, appPropsNoId, {initialOpened: true, id: "first-app", slug: "first-app"})),
-                            h(App, Object.assign({}, appPropsNoId, {initialOpened: true, id: "second-app", slug: "second-app"}))
+                            h(App, Object.assign({}, appPropsNoId, {initialFocused: 1, initialOpened: true, id: "first-app", slug: "first-app"})),
+                            h(App, Object.assign({}, appPropsNoId, {initialFocused: 2, initialOpened: true, id: "second-app", slug: "second-app"})),
+                            h(App, Object.assign({}, appPropsNoId, {initialFocused: 3, initialOpened: true, id: "third-app", slug: "third-app"})),
+                            h(App, Object.assign({}, appPropsNoId, {initialFocused: 4, initialOpened: true, id: "fourth-app", slug: "fourth-app"}))
                         ]
                     )),
                     appsWrapper = jQuery(renderResult.container);
-                // focus second app
-                testDom.focusApp(appsWrapper.find("#second-app").get(0));
+                // focus third app                          -> 3rd, 1st, 2nd, 4th
+                testDom.focusApp(appsWrapper.find("#third-app").get(0));
                 // first app should NOT be focused
                 assert.lengthOf(
                     appsWrapper.find("#first-app:focus"),
                     0,
                     "Found unexpected focused app"
                 );
-                // click on the app in the taskbar
+                //first app should be second place in queue
+                testDom.assertFocusedIndex(appsWrapper, "#first-app", 1);
+                // click on the fourth app in the taskbar   -> 4th, 3rd, 1st, 2nd
                 testDom.click(
-                    appsWrapper.find("#orcus-taskbar-shortcut-first-app").get(0)
+                    appsWrapper.find("#orcus-taskbar-shortcut-fourth-app").get(0)
                 );
-                // first app should now be focused
-                assert.lengthOf(
-                    appsWrapper.find("#first-app:focus"),
-                    1,
-                    "Missing focused app"
-                );
+                // fourth app should now be focused
+                testDom.assertFocused(appsWrapper, "#fourth-app");
+                //first app should be third place in queue
+                testDom.assertFocusedIndex(appsWrapper, "#first-app", 2);
             });
         });
     });

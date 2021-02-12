@@ -6,6 +6,8 @@
  */
 "use strict"; //import dependencies
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -19,8 +21,6 @@ var _EnhancedModel2 = require("./EnhancedModel.js");
 
 var _class, _temp;
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -31,7 +31,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function () { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -63,9 +63,17 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
     }
   }], [{
     key: "getInitialStateFromProps",
-    //return an initial state object that is derived from some component props
-    value: function getInitialStateFromProps(props) {
+    value: //return an initial state object that is derived from some component props
+    function getInitialStateFromProps(props) {
+      // transform initialFocused
+      var initialFocused = Number(props.initialFocused);
+
+      if (initialFocused <= 0) {
+        initialFocused = Infinity;
+      }
+
       return Object.fromEntries(Object.entries(Object.assign({}, OrcusApp.defaultProps, props, {
+        initialFocused: initialFocused,
         opened: props.initialOpened
       })).filter(function (it) {
         return it[0] in OrcusApp.fields;
@@ -89,6 +97,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   //string, required
   id: (0, _reduxOrm.attr)(),
   icon: (0, _reduxOrm.attr)(),
+  initialFocused: (0, _reduxOrm.attr)(),
   name: (0, _reduxOrm.attr)(),
   opened: (0, _reduxOrm.attr)(),
   //bool
@@ -100,6 +109,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 }, _class.defaultProps = {
   id: DEFAULT_ID,
   icon: "fa:home",
+  initialFocused: Infinity,
   name: "",
   opened: false,
   minimized: false
@@ -108,12 +118,15 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   initialState: undefined,
   reducers: {
     createApp: function createApp(App, action) {
-      // get desktop id
+      // get desktop
       var session = App.session,
-          desktopId = session.Desktop.select.singleDesktop(session).id;
-      App.create(Object.assign({
-        desktop: desktopId
-      }, OrcusApp.defaultProps, action.payload));
+          desktop = session.Desktop.select.singleDesktop(session),
+          // create app
+      app = App.create(Object.assign({
+        desktop: desktop.id
+      }, OrcusApp.defaultProps, action.payload)); // register app
+
+      app.desktop.registerApp(action.payload.slug);
     },
     updateAppProp: function updateAppProp(App, action) {
       App.requireId(action.payload.slug).set(action.payload.prop, action.payload.value);
@@ -138,7 +151,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       app.desktop.blurApp(action.payload.slug);
     },
     minimizeApp: function minimizeApp(App, action) {
-      App.requireId(action.payload.slug).set("minimized", true);
+      // get our app
+      var app = App.requireId(action.payload.slug); // minimize it it
+
+      app.set("minimized", true); // blur it
+
+      app.desktop.blurApp(action.payload.slug);
     },
     restoreApp: function restoreApp(App, action) {
       // get our app
@@ -149,7 +167,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       app.desktop.focusApp(action.payload.slug);
     },
     destroyApp: function destroyApp(App, action) {
-      App.requireId(action.payload.slug)["delete"]();
+      // get our app
+      var app = App.requireId(action.payload.slug); // deregister app
+
+      app.desktop.deregisterApp(action.payload.slug); // destroy app
+
+      app["delete"]();
     }
   }
 }), _temp); //export OrcusApp class

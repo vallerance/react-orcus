@@ -6,7 +6,8 @@
  */
 "use strict";
 //import dependencies
-var jQuery = require('jquery'),
+var assert = require('../util/extendedChai.util.js').assert,
+    jQuery = require('jquery'),
     rtl = require("@testing-library/react");
 
 function focusApp (appElem) {
@@ -61,5 +62,29 @@ function click (elem) {
     rtl.fireEvent.click(elem);
 }
 
+function assertFocusedIndex (appsWrapper, selector, index) {
+    // get apps sorted by z-index, high to low
+    var sortedApps = appsWrapper
+            .find(".orcus-app")
+            .get()
+            .sort((a, b) => jQuery(b).css("z-index") - jQuery(a).css("z-index")),
+        // convert negative indices
+        index = index >= 0 ? index : sortedApps.length + index;
+    // app should have given index in array sorted by z-index
+    assert.indexOf(appsWrapper.find(selector).get(0), index, sortedApps);
+}
+
+function assertFocused (appsWrapper, selector) {
+    // app should be focused
+    assert.lengthOf(
+        appsWrapper.find(`${selector}:focus`),
+        1,
+        "Missing focused app"
+    );
+    // app should have highest z-index
+    assertFocusedIndex(appsWrapper, selector, 0);
+}
+
 module.exports.click = click;
 module.exports.focusApp = focusApp;
+module.exports.assertFocused = assertFocused;
