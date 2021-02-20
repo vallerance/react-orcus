@@ -110,9 +110,17 @@ var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated
     key: "blurApp",
     value: function blurApp(appSlug) {
       // track this focus update
-      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true;
+      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true; // if this app isn't currently focused
 
-      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, Array.prototype.push);
+      if (this._focusedApps.indexOf(appSlug) !== 0) {
+        // then it is already blurred isn't it
+        return;
+      } //else, the app is focused, blur it using custom method
+
+
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function (slug) {
+        return this.splice(1, 0, slug);
+      });
     }
   }, {
     key: "registerApp",
@@ -247,7 +255,7 @@ var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated
   if (index >= 0) {
     //remove it from it's current place
     queue.splice(index, 1);
-  } // focus/blur the given app by moving it to the front/back of the queue
+  } // update the given app's focus by apply method to queue
 
 
   method.call(queue, appSlug); // update queue

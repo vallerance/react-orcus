@@ -50,19 +50,20 @@ describe ('<App /> should render', function () {
         }),
         reqPropsOpened = Object.assign({initialOpened: true}, reqProps),
         extraPropsOpened = Object.assign({initialOpened: true}, extraProps),
-        appWrapper = null;
+        appWrapper = null,
+        destroyAppsWrapper = function () {
+            //destroy wrappers
+            appWrapper = null;
+            //cleanup
+            rtl.cleanup();
+        };
             
     beforeEach (function () {
         var renderResult = renderApp(App, extraPropsOpened);
         appWrapper = jQuery(renderResult.container);
     });
 
-    afterEach (function () {
-        //destroy wrappers
-        appWrapper = null;
-        //cleanup
-        rtl.cleanup();
-    });
+    afterEach (destroyAppsWrapper);
 
     describe ("App with", function () {
         it ("Library class names", function () {
@@ -118,6 +119,10 @@ describe ('<App /> should render', function () {
     describe ("Focused state", function () {
         var focusedWrapper = null,
             render = function (initialFocused=[]) {
+                // first, destroy previous render
+                destroyFocusedWrapper();
+                destroyAppsWrapper();
+                // render again
                 var initialFocused = Object.assign([false, false, false, false], initialFocused),
                     renderResult = rtl.render(h(
                         Desktop,
@@ -130,16 +135,17 @@ describe ('<App /> should render', function () {
                         ]
                     ));
                 focusedWrapper = jQuery(renderResult.container); 
+            },
+            destroyFocusedWrapper = function () {
+                //destroy wrapper
+                focusedWrapper = null;
             };
             
         beforeEach (function () {
         
         });
 
-        afterEach (function () {
-            //destroy wrapper
-            focusedWrapper = null;
-        });
+        afterEach (destroyFocusedWrapper);
         
         describe ("According to initialFocus prop with value of", function () {
 
@@ -231,6 +237,8 @@ describe ('<App /> should render', function () {
             testDom.click(
                 focusedWrapper.find("#fourth-app").get(0)
             );
+            //fourth app should be focused
+            testDom.assertFocused(focusedWrapper, "#fourth-app");
             //first app should be third place in queue
             testDom.assertFocusedIndex(focusedWrapper, "#first-app", 2);
             //third app should be fourth place in queue

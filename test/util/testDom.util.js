@@ -88,3 +88,4 @@ function assertFocused (appsWrapper, selector) {
 module.exports.click = click;
 module.exports.focusApp = focusApp;
 module.exports.assertFocused = assertFocused;
+module.exports.assertFocusedIndex = assertFocusedIndex;

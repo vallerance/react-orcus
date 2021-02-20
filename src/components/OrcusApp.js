@@ -48,7 +48,7 @@ var OrcusApp = class extends React.Component {
         slug: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         icon: PropTypes.string,
-        initialFocused: PropTypes.oneOf([PropTypes.bool, PropTypes.number]),
+        initialFocused: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
         initialOpened: PropTypes.bool,
         initialPosition: PropTypes.arrayOf(PropTypes.number),
         //state props
@@ -91,7 +91,7 @@ var OrcusApp = class extends React.Component {
             var {
                     minimized, opened
                 } = app || AppModel.getInitialStateFromProps(ownProps),
-                focused = focusedSlug && app.slug == focusedSlug,
+                focused = focusedSlug && app.slug == focusedSlug && opened,
                 desktopModelId = desktop.id;
             return {
                 desktopModelId, focused, focusIndex, minimized, opened
@@ -142,11 +142,20 @@ var OrcusApp = class extends React.Component {
         if (props.focused != prevProps.focused) {
             // if our state is focused, but our element is NOT
             if (props.focused && element != document.activeElement) {
-                // then focus our element
-                element.focus({preventScroll: true});
+                // if we have been rendered correctly
+                if (element) {
+                    // then focus our element
+                    element.focus({preventScroll: true});
+                }
+                else {
+                    console.warn(
+                        "ORCUS: Tried to focus an app that wasn't rendered.",
+                        Object.assign({}, this.props)
+                    );
+                }
             }
             // if our state is NOT focused, but our element is
-            if (!props.focused && element == document.activeElement) {
+            if (!props.focused && element && element == document.activeElement) {
                 // then blur our element
                 element.blur();
             }
@@ -300,6 +309,15 @@ var OrcusApp = class extends React.Component {
             //get out of this loop
             return;
         }   //else, we are legitimately losing focus 
+        
+        /*
+         * Previously, we would blur our state on a DOM blur.
+         * However, now bluring our state sends our app backward in the queue.
+         * The subsequent focusing of another app would result in our app being
+         * sent back twice.
+         * For now, we're going to decouple DOM blurs from state blurs.
+         *
+         
         //if we are currently focused
         if (this.props.focused) {
             //relax
@@ -308,6 +326,8 @@ var OrcusApp = class extends React.Component {
                 slug: this.props.slug
             });
         }
+        
+         */
     }
     
     handleMaximizeClick (e) {

@@ -146,7 +146,7 @@ var Desktop = class extends EnhancedModel {
             //remove it from it's current place
             queue.splice(index, 1);
         }
-        // focus/blur the given app by moving it to the front/back of the queue
+        // update the given app's focus by apply method to queue
         method.call(queue, appSlug);
         // update queue
         this.set("_focusedApps", queue);
@@ -169,7 +169,15 @@ var Desktop = class extends EnhancedModel {
     blurApp (appSlug) {
         // track this focus update
         this.#focusUpdated = true;
-        this.#updateFocusQueue(appSlug, Array.prototype.push);
+        // if this app isn't currently focused
+        if (this._focusedApps.indexOf(appSlug) !== 0) {
+            // then it is already blurred isn't it
+            return;
+        }
+        //else, the app is focused, blur it using custom method
+        this.#updateFocusQueue(appSlug, function (slug) {
+            return this.splice(1, 0, slug);
+        });
     }
 
     #getIndexedApps () {

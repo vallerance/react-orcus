@@ -165,14 +165,19 @@ var OrcusApp = (_temp = (_handleFocus = _classPrivateFieldLooseKey("handleFocus"
       if (props.focused != prevProps.focused) {
         // if our state is focused, but our element is NOT
         if (props.focused && element != document.activeElement) {
-          // then focus our element
-          element.focus({
-            preventScroll: true
-          });
+          // if we have been rendered correctly
+          if (element) {
+            // then focus our element
+            element.focus({
+              preventScroll: true
+            });
+          } else {
+            console.warn("ORCUS: Tried to focus an app that wasn't rendered.", Object.assign({}, this.props));
+          }
         } // if our state is NOT focused, but our element is
 
 
-        if (!props.focused && element == document.activeElement) {
+        if (!props.focused && element && element == document.activeElement) {
           // then blur our element
           element.blur();
         }
@@ -343,16 +348,26 @@ var OrcusApp = (_temp = (_handleFocus = _classPrivateFieldLooseKey("handleFocus"
         //get out of this loop
         return;
       } //else, we are legitimately losing focus 
+
+      /*
+       * Previously, we would blur our state on a DOM blur.
+       * However, now bluring our state sends our app backward in the queue.
+       * The subsequent focusing of another app would result in our app being
+       * sent back twice.
+       * For now, we're going to decouple DOM blurs from state blurs.
+       *
+       
       //if we are currently focused
-
-
       if (this.props.focused) {
-        //relax
-        this.props.blurApp({
-          id: this.props.desktopModelId,
-          slug: this.props.slug
-        });
+          //relax
+          this.props.blurApp({
+              id: this.props.desktopModelId,
+              slug: this.props.slug
+          });
       }
+      
+       */
+
     }
   }, {
     key: "handleMaximizeClick",
@@ -406,7 +421,7 @@ var OrcusApp = (_temp = (_handleFocus = _classPrivateFieldLooseKey("handleFocus"
   slug: _propTypes["default"].string.isRequired,
   name: _propTypes["default"].string.isRequired,
   icon: _propTypes["default"].string,
-  initialFocused: _propTypes["default"].oneOf([_propTypes["default"].bool, _propTypes["default"].number]),
+  initialFocused: _propTypes["default"].oneOfType([_propTypes["default"].bool, _propTypes["default"].number]),
   initialOpened: _propTypes["default"].bool,
   initialPosition: _propTypes["default"].arrayOf(_propTypes["default"].number),
   //state props
@@ -441,7 +456,7 @@ var OrcusApp = (_temp = (_handleFocus = _classPrivateFieldLooseKey("handleFocus"
   var _ref = app || _OrcusApp["default"].getInitialStateFromProps(ownProps),
       minimized = _ref.minimized,
       opened = _ref.opened,
-      focused = focusedSlug && app.slug == focusedSlug,
+      focused = focusedSlug && app.slug == focusedSlug && opened,
       desktopModelId = desktop.id;
 
   return {
