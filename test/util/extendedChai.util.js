@@ -41,6 +41,17 @@ chai.use(function (_chai, utils) {
     });
     
     /**
+     * Asserts that the target has the given index in the given array.
+     * @param {number} index - The inedx to match
+     * @param {Array} array - The array to check element index of
+        expected value
+     */
+    Assertion.addMethod('indexOf', function (index, array) {
+        new Assertion(array).to.be.an('array');
+        new Assertion(array.indexOf(this._obj)).to.be.equal(index);
+    });
+    
+    /**
      * Asserts `valueToCheck` is in between `start` and `end`. Inclusive by
         default.
      * @param {*} valueToCheck
@@ -61,6 +72,16 @@ chai.use(function (_chai, utils) {
      */
     _chai.assert.isAbout = function (val, n, tolerance=1) {
         new Assertion(val).to.be.about(n, tolerance);
+    };
+    
+    /**
+     * Asserts `valueToCheck` has the given index in the given array.
+     * @param {*} valueToCheck
+     * @param {number} index - The inedx to match
+     * @param {Array} array - The array to check element index of
+     */
+    _chai.assert.indexOf = function (val, index, array) {
+        new Assertion(val).to.have.indexOf(index, array);
     };
 });
 

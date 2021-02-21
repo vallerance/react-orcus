@@ -50,19 +50,20 @@ describe ('<App /> should render', function () {
         }),
         reqPropsOpened = Object.assign({initialOpened: true}, reqProps),
         extraPropsOpened = Object.assign({initialOpened: true}, extraProps),
-        appWrapper = null;
+        appWrapper = null,
+        destroyAppsWrapper = function () {
+            //destroy wrappers
+            appWrapper = null;
+            //cleanup
+            rtl.cleanup();
+        };
             
     beforeEach (function () {
         var renderResult = renderApp(App, extraPropsOpened);
         appWrapper = jQuery(renderResult.container);
     });
 
-    afterEach (function () {
-        //destroy wrappers
-        appWrapper = null;
-        //cleanup
-        rtl.cleanup();
-    });
+    afterEach (destroyAppsWrapper);
 
     describe ("App with", function () {
         it ("Library class names", function () {
@@ -115,6 +116,138 @@ describe ('<App /> should render', function () {
         });
     });
     
+    describe ("Focused state", function () {
+        var focusedWrapper = null,
+            render = function (initialFocused=[]) {
+                // first, destroy previous render
+                destroyAppsWrapper();
+                // render again
+                var initialFocused = Object.assign([false, false, false, false], initialFocused),
+                    renderResult = rtl.render(h(
+                        Desktop,
+                        Object.assign({}, extraProps),
+                        [
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: initialFocused[0], id: "first-app", slug: "first-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: initialFocused[1], id: "second-app", slug: "second-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: initialFocused[2], id: "third-app", slug: "third-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: initialFocused[3], id: "fourth-app", slug: "fourth-app"}))
+                        ]
+                    ));
+                focusedWrapper = jQuery(renderResult.container); 
+            },
+            destroyFocusedWrapper = function () {
+                //destroy wrapper
+                focusedWrapper = null;
+            };
+            
+        beforeEach (function () {
+        
+        });
+
+        afterEach (destroyFocusedWrapper);
+        
+        describe ("According to initialFocus prop with value of", function () {
+
+            it ("1 or true", function () {
+                //render with first app focused
+                render([1]);
+                //first app should be focused
+                testDom.assertFocused(focusedWrapper, "#first-app");
+                //render again with second app focused
+                render([false, true]);
+                //second app should be focused
+                testDom.assertFocused(focusedWrapper, "#second-app");
+            });
+
+            it ("0 or false", function () {
+                //render with first app NOT focused
+                render([0, 1, 2, 3]);
+                // first app should NOT be focused
+                assert.lengthOf(
+                    focusedWrapper.find("#first-app:focus"),
+                    0,
+                    "Found unexpected focused app"
+                );
+                // first app should be at end of queue
+                testDom.assertFocusedIndex(focusedWrapper, "#first-app", -1);
+                //render again with second app NOT focused
+                render([true, false]);
+                //second app shouldNOT be focused
+                assert.lengthOf(
+                    focusedWrapper.find("#second-app:focus"),
+                    0,
+                    "Found unexpected focused app"
+                );
+            });
+
+            it ("default (false)", function () {
+                // first, destroy previous render
+                destroyAppsWrapper();
+                //render three apps
+                var renderResult = rtl.render(h(
+                        Desktop,
+                        Object.assign({}, extraProps),
+                        [
+                            h(App, Object.assign({}, reqPropsOpened, {id: "first-app", slug: "first-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: 2, id: "second-app", slug: "second-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: 3, id: "third-app", slug: "third-app"}))
+                        ]
+                    )),
+                    wrapper = jQuery(renderResult.container);
+                
+                // first app should NOT be focused
+                assert.lengthOf(
+                    wrapper.find("#first-app:focus"),
+                    0,
+                    "Found unexpected focused app"
+                );
+                // first app should be at end of queue
+                testDom.assertFocusedIndex(wrapper, "#first-app", -1);
+            });
+
+            it ("2 or higher", function () {
+                //render with first app NOT focused
+                render([0, 2, 1, 4]);
+                //third app should be focused
+                testDom.assertFocused(focusedWrapper, "#third-app");
+                //second app should be second place in queue
+                testDom.assertFocusedIndex(focusedWrapper, "#second-app", 1);
+                //fourth app should be third place in queue
+                testDom.assertFocusedIndex(focusedWrapper, "#fourth-app", 2);
+                // first app should be at end of queue
+                testDom.assertFocusedIndex(focusedWrapper, "#first-app", -1);
+            });
+        });
+        
+        it ("That updates when app is clicked", function () {
+            //render initial order      -> 1st, 2nd, 3rd, 4th
+            render([1, 2, 3, 4]);
+            //second app should be second place in queue
+            testDom.assertFocusedIndex(focusedWrapper, "#second-app", 1);
+            //fourth app should be fourth place in queue
+            testDom.assertFocusedIndex(focusedWrapper, "#fourth-app", 3);
+            //click the second app      -> 2nd, 1st, 3rd, 4th
+            testDom.click(
+                focusedWrapper.find("#second-app").get(0)
+            );
+            //second app should be focused
+            testDom.assertFocused(focusedWrapper, "#second-app");
+            //first app should be second place in queue
+            testDom.assertFocusedIndex(focusedWrapper, "#first-app", 1);
+            //click the fourth app      -> 4th, 2nd, 1st, 3rd
+            testDom.click(
+                focusedWrapper.find("#fourth-app").get(0)
+            );
+            //fourth app should be focused
+            testDom.assertFocused(focusedWrapper, "#fourth-app");
+            //first app should be third place in queue
+            testDom.assertFocusedIndex(focusedWrapper, "#first-app", 2);
+            //third app should be fourth place in queue
+            testDom.assertFocusedIndex(focusedWrapper, "#third-app", 3);
+        });
+        
+    });
+    
     describe ("Title bar with", function () {
         var titleBarWrapper = null;
 
@@ -154,6 +287,29 @@ describe ('<App /> should render', function () {
         });
         
         describe ("Window controls section that has", function () {
+            var testFocusReplacement = function (removeApp = function () {}) {
+                // first, destroy previous render
+                destroyAppsWrapper();
+                //render three apps
+                var renderResult = rtl.render(h(
+                        Desktop,
+                        Object.assign({}, extraProps),
+                        [
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: 2, id: "first-app", slug: "first-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: 2, id: "second-app", slug: "second-app"})),
+                            h(App, Object.assign({}, reqPropsOpened, {initialFocused: 3, id: "third-app", slug: "third-app"}))
+                        ]
+                    )),
+                    wrapper = jQuery(renderResult.container);
+
+                // fire callback that will remove app
+                removeApp(wrapper, "#first-app");
+                //second app should be focused
+                testDom.assertFocused(wrapper, "#second-app");
+                //third app should be second place in queue
+                testDom.assertFocusedIndex(wrapper, "#third-app", 1);
+            };
+            
             it ("Class name", function () {
                 assert.lengthOf(
                     titleBarWrapper.find(".orcus-title-bar .orcus-controls"),
@@ -180,19 +336,61 @@ describe ('<App /> should render', function () {
                 );
             });
             
-            it ("Close button that closes the app", function () {
-                //render app that will be closed
-                var renderResult = renderApp(App, reqPropsOpened);
-                //should currently be open
-                assert.isOk(renderResult.container.firstChild);
-                // click close button
-                rtl.fireEvent.click(
-                    jQuery(renderResult.container.firstChild)
-                        .find(".orcus-title-bar .orcus-ui.orcus-button.orcus-close")
-                        .get(0)
-                );
-                //app should now be closed
-                assert.isNotOk(renderResult.container.firstChild);
+            describe ("Close button that", function () {
+                it ("Closes the app", function () {
+                    //render app that will be closed
+                    var renderResult = renderApp(App, reqPropsOpened);
+                    //should currently be open
+                    assert.isOk(renderResult.container.firstChild);
+                    // click close button
+                    rtl.fireEvent.click(
+                        jQuery(renderResult.container.firstChild)
+                            .find(".orcus-title-bar .orcus-ui.orcus-button.orcus-close")
+                            .get(0)
+                    );
+                    //app should now be closed
+                    assert.isNotOk(renderResult.container.firstChild);
+                });
+                
+                it ("Focuses app directly beneath it", function () {
+                    // render three apps, close the first one, test focus replacement
+                    testFocusReplacement(function (wrapper, selector) {
+                        // click close button of first app
+                        testDom.click(
+                            wrapper
+                                .find(`${selector} .orcus-title-bar .orcus-ui.orcus-button.orcus-close`)
+                                .get(0)
+                        );
+                    });
+                });
+            });
+            
+                        
+            describe ("Minimize button that", function () {
+                it ("Minimizes the app", function () {
+                    // click minimize button
+                    rtl.fireEvent.click(
+                        titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-minimize").get(0)
+                    );
+                    // app should be minimized
+                    assert.lengthOf(
+                        titleBarWrapper.find(".orcus-window.minimized"),
+                        1,
+                        "Missing node with .orcus-window.minimized class"
+                    );
+                });
+                
+                it ("Focuses app directly beneath it", function () {
+                    // render three apps, close the first one, test focus replacement
+                    testFocusReplacement(function (wrapper, selector) {
+                        // click close button of first app
+                        testDom.click(
+                            wrapper
+                                .find(`${selector} .orcus-title-bar .orcus-ui.orcus-button.orcus-minimize`)
+                                .get(0)
+                        );
+                    });
+                });
             });
             
             it ("Restore button if maximized", function () {
@@ -233,19 +431,6 @@ describe ('<App /> should render', function () {
                     "Unexpected node with orcus-maximize class"
                 );
             });
-            
-            it ("Minimize button that minimizes the app", function () {
-                // click minimize button
-                rtl.fireEvent.click(
-                    titleBarWrapper.find(".orcus-title-bar .orcus-ui.orcus-button.orcus-minimize").get(0)
-                );
-                // app should be minimized
-                assert.lengthOf(
-                    titleBarWrapper.find(".orcus-window.minimized"),
-                    1,
-                    "Missing node with .orcus-window.minimized class"
-                )
-            })
         });
         
     });

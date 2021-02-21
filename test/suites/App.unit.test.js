@@ -31,5 +31,17 @@ describe ('<App /> PropTypes should', function () {
         checkProp.assertInvalidPropType("initialPosition", "top-right");
         checkProp.assertInvalidPropMemberType("initialPosition", ["top", "right"]);
         checkProp.assertValidPropType("initialPosition", [0, 1000, 100, 100]);
-    });  
+    });
+    
+    it ("Accept initialFocused", function () {
+        // should be one of boolean or position
+        checkProp.assertInvalidPropTypeEnum("initialFocused", {"a": 64});
+        checkProp.assertInvalidPropTypeEnum("initialFocused", "not-a-position");
+        checkProp.assertValidPropType("initialFocused", 1);
+        checkProp.assertValidPropType("initialFocused", 0);
+        checkProp.assertValidPropType("initialFocused", 2);
+        checkProp.assertValidPropType("initialFocused", 33);
+        checkProp.assertValidPropType("initialFocused", false);
+        checkProp.assertValidPropType("initialFocused", true);
+    });
 });
