@@ -24,6 +24,7 @@ DevOps.init({
         ],
         "plugins": [
             ["@babel/plugin-proposal-class-properties", { "loose": true }],
+            ["@babel/plugin-proposal-private-methods", { "loose": true }],
             ["transform-import-css", {"generateScopedName": "[local]"}]
         ]
     },
