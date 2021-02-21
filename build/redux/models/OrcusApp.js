@@ -148,7 +148,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 
       app.set("opened", false); // blur it
 
-      app.desktop.blurApp(action.payload.slug);
+      app.desktop.removeAppFocus(action.payload.slug);
     },
     minimizeApp: function minimizeApp(App, action) {
       // get our app
@@ -156,7 +156,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 
       app.set("minimized", true); // blur it
 
-      app.desktop.blurApp(action.payload.slug);
+      app.desktop.removeAppFocus(action.payload.slug);
     },
     restoreApp: function restoreApp(App, action) {
       // get our app

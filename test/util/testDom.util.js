@@ -66,6 +66,7 @@ function assertFocusedIndex (appsWrapper, selector, index) {
     // get apps sorted by z-index, high to low
     var sortedApps = appsWrapper
             .find(".orcus-app")
+            .not(".minimized")
             .get()
             .sort((a, b) => jQuery(b).css("z-index") - jQuery(a).css("z-index")),
         // convert negative indices

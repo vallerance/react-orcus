@@ -120,7 +120,6 @@ describe ('<App /> should render', function () {
         var focusedWrapper = null,
             render = function (initialFocused=[]) {
                 // first, destroy previous render
-                destroyFocusedWrapper();
                 destroyAppsWrapper();
                 // render again
                 var initialFocused = Object.assign([false, false, false, false], initialFocused),
@@ -182,6 +181,8 @@ describe ('<App /> should render', function () {
             });
 
             it ("default (false)", function () {
+                // first, destroy previous render
+                destroyAppsWrapper();
                 //render three apps
                 var renderResult = rtl.render(h(
                         Desktop,
@@ -287,6 +288,8 @@ describe ('<App /> should render', function () {
         
         describe ("Window controls section that has", function () {
             var testFocusReplacement = function (removeApp = function () {}) {
+                // first, destroy previous render
+                destroyAppsWrapper();
                 //render three apps
                 var renderResult = rtl.render(h(
                         Desktop,

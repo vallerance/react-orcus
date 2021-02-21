@@ -185,6 +185,7 @@ describe ('<Desktop /> should render taskbar', function () {
                 };
 
             beforeEach (function () {
+                rtl.cleanup();
                 var renderResult = rtl.render(h(
                     Desktop,
                     Object.assign({}, extraProps),

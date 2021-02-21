@@ -99,7 +99,14 @@ var Desktop = class extends React.Component {
                 React.Children
                     .toArray(children)
                     .filter(it => it.type == OrcusApp)
-                    .map(it => [it.props.slug, it.props])
+                    .map(it => {
+                        var props = Object.assign(
+                            {},
+                            OrcusApp.WrappedComponent.defaultProps,
+                            it.props
+                        );
+                        return [props.slug, props];
+                    })
             ),
             childAppSlugs = Object.keys(childApps),
             //get apps from store

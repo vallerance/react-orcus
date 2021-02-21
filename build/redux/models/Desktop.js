@@ -102,7 +102,8 @@ var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated
       _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, Array.prototype.unshift);
     }
     /**
-     * Blur the given app (leaving the next app focused).
+     * Blur the given app by altering its place in the focus queue.
+     * This will leave the next app focused.
      * @param {string} appSlug - the identifier of the app to blur
      */
 
@@ -115,12 +116,45 @@ var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated
       if (this._focusedApps.indexOf(appSlug) !== 0) {
         // then it is already blurred isn't it
         return;
-      } //else, the app is focused, blur it using custom method
+      } // else, the app is focused
+
+      /*
+       * There has been some back and forth as to how blur should work:
+       * 
+       */
+
+      /*
+       * This sends it back one space in the queue:
+       */
+      //blur the app using custom method
 
 
       _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function (slug) {
         return this.splice(1, 0, slug);
       });
+      /**/
+
+      /*
+       * This sends it to the end of the queue:
+       *
+      //blur the app
+      this.#updateFocusQueue(appSlug, Array.prototype.push);
+       */
+
+    }
+    /**
+     * Blur the given app by removing its focus state entirely.
+     * Like blurApp(), this will leave the next app focused.
+     * @param {string} appSlug - the identifier of the app to blur
+     */
+
+  }, {
+    key: "removeAppFocus",
+    value: function removeAppFocus(appSlug) {
+      // track this focus update
+      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true; //blur the app
+
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function () {});
     }
   }, {
     key: "registerApp",

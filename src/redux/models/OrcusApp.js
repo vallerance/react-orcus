@@ -112,7 +112,7 @@ var OrcusApp = class extends EnhancedModel {
                 // close it
                 app.set("opened", false);
                 // blur it
-                app.desktop.blurApp(action.payload.slug);
+                app.desktop.removeAppFocus(action.payload.slug);
             },
             minimizeApp (App, action) {
                 // get our app
@@ -120,7 +120,7 @@ var OrcusApp = class extends EnhancedModel {
                 // minimize it it
                 app.set("minimized", true);
                 // blur it
-                app.desktop.blurApp(action.payload.slug);
+                app.desktop.removeAppFocus(action.payload.slug);
             },
             restoreApp (App, action) {
                 // get our app

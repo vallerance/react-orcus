@@ -31,6 +31,7 @@ var OrcusApp = class extends React.Component {
         style: {},
         
         icon: "fa:home",
+        initialFocused: false,
         initialOpened: false,
         initialPosition: [0, 0, 100, 100],
         

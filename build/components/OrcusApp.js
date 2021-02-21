@@ -407,6 +407,7 @@ var OrcusApp = (_temp = (_handleFocus = _classPrivateFieldLooseKey("handleFocus"
   id: _OrcusApp.DEFAULT_ID,
   style: {},
   icon: "fa:home",
+  initialFocused: false,
   initialOpened: false,
   initialPosition: [0, 0, 100, 100],
   focused: false,
