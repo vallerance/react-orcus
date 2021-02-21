@@ -11,9 +11,12 @@ import Desktop from './models/Desktop.js';
 import OrcusApp from './models/OrcusApp.js';
 
 function registerModels (orm, models) {
+    // register models
     orm.register(...models);
+    // perform additional actions
     for (let i=0; i<models.length; i++) {
         let model = models[i];
+        // create selectors for models
         if (typeof model.createSelectors == "function") {
             model.createSelectors(orm);
         }

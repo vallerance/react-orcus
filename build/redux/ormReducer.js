@@ -32,10 +32,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function registerModels(orm, models) {
-  orm.register.apply(orm, _toConsumableArray(models));
+  // register models
+  orm.register.apply(orm, _toConsumableArray(models)); // perform additional actions
 
   for (var i = 0; i < models.length; i++) {
-    var model = models[i];
+    var model = models[i]; // create selectors for models
 
     if (typeof model.createSelectors == "function") {
       model.createSelectors(orm);
