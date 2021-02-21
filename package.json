@@ -4,7 +4,7 @@
   "description": "React library for creating an app with a windowed desktop interface.",
   "dependencies": {
     "@iconify/iconify": "^1.0.4",
-    "@reduxjs/toolkit": "^1.2.3",
+    "@reduxjs/toolkit": "^1.5.0",
     "minimist": "^1.2.2",
     "prop-types": "^15.7.2",
     "react-redux": "^7.2.0",
