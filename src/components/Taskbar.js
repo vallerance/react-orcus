@@ -102,8 +102,8 @@ function Taskbar (props) {
             state => Desktop.select.singleDesktop(state)
         ),
         //get our focused app
-        focusedApp = useSelector(
-            state => Desktop.select.focusedApp(state, desktop.id)
+        focusedAppSlug = useSelector(
+            state => Desktop.select.focusedAppSlug(state, desktop.id)
         );
     //render
     return (
@@ -114,7 +114,7 @@ function Taskbar (props) {
                         return (
                             <TaskbarShortcut
                                 key={it} slug={it} desktopModelId={desktop.id}
-                                active={focusedApp && it == focusedApp.slug}
+                                active={focusedAppSlug && it == focusedAppSlug}
                             />
                         );
                     })

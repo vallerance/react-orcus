@@ -23,6 +23,7 @@ var OrcusApp = class extends EnhancedModel {
         slug: attr(),       //string, required
         id: attr(),
         icon: attr(),
+        initialFocused: attr(),
         name: attr(),
         opened: attr(),     //bool
         minimized: attr(),  //bool
@@ -36,6 +37,7 @@ var OrcusApp = class extends EnhancedModel {
     static defaultProps = {
         id: DEFAULT_ID,
         icon: "fa:home",
+        initialFocused: Infinity,
         name: "",
         opened: false,
         minimized: false
@@ -43,9 +45,15 @@ var OrcusApp = class extends EnhancedModel {
     
     //return an initial state object that is derived from some component props
     static getInitialStateFromProps (props) {
+        // transform initialFocused
+        var initialFocused = Number(props.initialFocused);
+        if (initialFocused <= 0) {
+            initialFocused = Infinity;
+        }
         return Object.fromEntries(
             Object.entries(
                 Object.assign({}, OrcusApp.defaultProps, props, {
+                    initialFocused,
                     opened: props.initialOpened
                 })
             ).filter(
@@ -68,14 +76,17 @@ var OrcusApp = class extends EnhancedModel {
         initialState: undefined,
         reducers: {
             createApp (App, action) {
-                // get desktop id
+                // get desktop
                 var session = App.session,
-                    desktopId = session.Desktop.select.singleDesktop(session).id;
-                App.create(
-                    Object.assign({
-                        desktop: desktopId
-                    }, OrcusApp.defaultProps, action.payload)
-                );
+                    desktop = session.Desktop.select.singleDesktop(session),
+                    // create app
+                    app = App.create(
+                        Object.assign({
+                            desktop: desktop.id
+                        }, OrcusApp.defaultProps, action.payload)
+                    );
+                // register app
+                app.desktop.registerApp(action.payload.slug);
             },
             updateAppProp (App, action) {
                 App
@@ -101,10 +112,15 @@ var OrcusApp = class extends EnhancedModel {
                 // close it
                 app.set("opened", false);
                 // blur it
-                app.desktop.blurApp(action.payload.slug);
+                app.desktop.removeAppFocus(action.payload.slug);
             },
             minimizeApp (App, action) {
-                App.requireId(action.payload.slug).set("minimized", true);
+                // get our app
+                var app = App.requireId(action.payload.slug);
+                // minimize it it
+                app.set("minimized", true);
+                // blur it
+                app.desktop.removeAppFocus(action.payload.slug);
             },
             restoreApp (App, action) {
                 // get our app
@@ -115,7 +131,12 @@ var OrcusApp = class extends EnhancedModel {
                 app.desktop.focusApp(action.payload.slug);
             },
             destroyApp (App, action) {
-                App.requireId(action.payload.slug).delete();
+                // get our app
+                var app = App.requireId(action.payload.slug);
+                // deregister app
+                app.desktop.deregisterApp(action.payload.slug);
+                // destroy app
+                app.delete();
             }
         }
     });

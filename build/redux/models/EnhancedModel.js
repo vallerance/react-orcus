@@ -49,14 +49,14 @@ var EnhancedModel = /*#__PURE__*/function (_Model) {
 
   _createClass(EnhancedModel, null, [{
     key: "requireId",
-
+    value:
     /**
      * Lookup an instance by id. If not found, throw an error.
      * @param {*} id - The id to lookup
      * @return {EnhancedModel} - The found instance
      * @throws {Error} - If the object is not found
      */
-    value: function requireId(id) {
+    function requireId(id) {
       // lookup id
       var found = this.withId(id);
 

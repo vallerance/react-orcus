@@ -121,8 +121,8 @@ function Taskbar(props) {
     return _Desktop["default"].select.singleDesktop(state);
   }),
       //get our focused app
-  focusedApp = (0, _reactRedux.useSelector)(function (state) {
-    return _Desktop["default"].select.focusedApp(state, desktop.id);
+  focusedAppSlug = (0, _reactRedux.useSelector)(function (state) {
+    return _Desktop["default"].select.focusedAppSlug(state, desktop.id);
   }); //render
 
   return /*#__PURE__*/_react["default"].createElement("div", {
@@ -134,7 +134,7 @@ function Taskbar(props) {
       key: it,
       slug: it,
       desktopModelId: desktop.id,
-      active: focusedApp && it == focusedApp.slug
+      active: focusedAppSlug && it == focusedAppSlug
     });
   })));
 }

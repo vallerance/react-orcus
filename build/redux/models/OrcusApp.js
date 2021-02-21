@@ -63,9 +63,17 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
     }
   }], [{
     key: "getInitialStateFromProps",
-    //return an initial state object that is derived from some component props
-    value: function getInitialStateFromProps(props) {
+    value: //return an initial state object that is derived from some component props
+    function getInitialStateFromProps(props) {
+      // transform initialFocused
+      var initialFocused = Number(props.initialFocused);
+
+      if (initialFocused <= 0) {
+        initialFocused = Infinity;
+      }
+
       return Object.fromEntries(Object.entries(Object.assign({}, OrcusApp.defaultProps, props, {
+        initialFocused: initialFocused,
         opened: props.initialOpened
       })).filter(function (it) {
         return it[0] in OrcusApp.fields;
@@ -89,6 +97,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   //string, required
   id: (0, _reduxOrm.attr)(),
   icon: (0, _reduxOrm.attr)(),
+  initialFocused: (0, _reduxOrm.attr)(),
   name: (0, _reduxOrm.attr)(),
   opened: (0, _reduxOrm.attr)(),
   //bool
@@ -100,6 +109,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 }, _class.defaultProps = {
   id: DEFAULT_ID,
   icon: "fa:home",
+  initialFocused: Infinity,
   name: "",
   opened: false,
   minimized: false
@@ -108,12 +118,15 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   initialState: undefined,
   reducers: {
     createApp: function createApp(App, action) {
-      // get desktop id
+      // get desktop
       var session = App.session,
-          desktopId = session.Desktop.select.singleDesktop(session).id;
-      App.create(Object.assign({
-        desktop: desktopId
-      }, OrcusApp.defaultProps, action.payload));
+          desktop = session.Desktop.select.singleDesktop(session),
+          // create app
+      app = App.create(Object.assign({
+        desktop: desktop.id
+      }, OrcusApp.defaultProps, action.payload)); // register app
+
+      app.desktop.registerApp(action.payload.slug);
     },
     updateAppProp: function updateAppProp(App, action) {
       App.requireId(action.payload.slug).set(action.payload.prop, action.payload.value);
@@ -135,10 +148,15 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 
       app.set("opened", false); // blur it
 
-      app.desktop.blurApp(action.payload.slug);
+      app.desktop.removeAppFocus(action.payload.slug);
     },
     minimizeApp: function minimizeApp(App, action) {
-      App.requireId(action.payload.slug).set("minimized", true);
+      // get our app
+      var app = App.requireId(action.payload.slug); // minimize it it
+
+      app.set("minimized", true); // blur it
+
+      app.desktop.removeAppFocus(action.payload.slug);
     },
     restoreApp: function restoreApp(App, action) {
       // get our app
@@ -149,7 +167,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       app.desktop.focusApp(action.payload.slug);
     },
     destroyApp: function destroyApp(App, action) {
-      App.requireId(action.payload.slug)["delete"]();
+      // get our app
+      var app = App.requireId(action.payload.slug); // deregister app
+
+      app.desktop.deregisterApp(action.payload.slug); // destroy app
+
+      app["delete"]();
     }
   }
 }), _temp); //export OrcusApp class

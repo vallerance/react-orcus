@@ -11,6 +11,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {v4 as uuidv4 } from 'uuid';
 //import classes
 import { EnhancedModel } from './EnhancedModel.js';
+import OrcusApp from './OrcusApp.js';
 //create our Desktop model
 var Desktop = class extends EnhancedModel {
     
@@ -20,7 +21,10 @@ var Desktop = class extends EnhancedModel {
         // non-relational fields
         // component props
         id: attr(),       //number, required
-        focusedApp: oneToOne('OrcusApp', 'focused')
+        // model props
+        // a list of app slugs that is the focus queue
+        // an app may be closed by still listed in the focus queue
+        _focusedApps: attr() //array
     };
     
     static options = {
@@ -28,7 +32,8 @@ var Desktop = class extends EnhancedModel {
     };
     
     static defaultProps = {
-        id: "0"
+        id: "0",
+        _focusedApps: null
     };
     
     //return an initial state object that is derived from some component props
@@ -36,7 +41,8 @@ var Desktop = class extends EnhancedModel {
         return Object.fromEntries(
             Object.entries(
                 Object.assign({}, Desktop.defaultProps, props, {
-                    id: uuidv4()
+                    id: uuidv4(),
+                    _focusedApps: []
                 })
             ).filter(
                 it => it[0] in Desktop.fields
@@ -60,7 +66,23 @@ var Desktop = class extends EnhancedModel {
                 return desktops[0];
             }
         );
-        Desktop.select.focusedApp = createSelector(orm.Desktop.focusedApp);
+        Desktop.select.focusedAppSlug = createSelector(
+            orm.Desktop._focusedApps,
+            function (slugs) {
+                // the first app will be the focused app
+                return slugs[0];
+            }
+        );
+        // requires extra third argument: appSlug
+        // returns 1-indexed focus index of app
+        Desktop.select.focusIndex = createSelector(
+            orm.Desktop._focusedApps,
+            (state, id, appSlug) => appSlug,
+            function (slugs, appSlug) {
+                // return index (1 indexed) of slug
+                return slugs.indexOf(appSlug) + 1;
+            }
+        );
     }
     
     // REDUCER
@@ -99,8 +121,33 @@ var Desktop = class extends EnhancedModel {
         }
     });
     
+    // track when the focus of our apps is changed from the initial setting
+    #focusUpdated = false;
+    
     toString () {
         return `Desktop: ${this.id}`;
+    }
+    
+    // removes slug from focus queue and re-adds it using the provided method
+    #updateFocusQueue (appSlug, method) {
+        var queue, index;
+        if (typeof method != "function") {
+            throw new Error(
+                `Desktop.__updateFocusQueue(): invalid array prototype method: ${method}.`
+            );
+        }
+        // first search for this app in the focus queue
+        queue = this._focusedApps.slice();
+        index = queue.indexOf(appSlug);
+        // if our slug is already in the queue
+        if (index >= 0) {
+            //remove it from it's current place
+            queue.splice(index, 1);
+        }
+        // update the given app's focus by apply method to queue
+        method.call(queue, appSlug);
+        // update queue
+        this.set("_focusedApps", queue);
     }
     
     /**
@@ -108,20 +155,95 @@ var Desktop = class extends EnhancedModel {
      * @param {string} appSlug - the identifier of the app to focus
      */
     focusApp (appSlug) {
-        // focus the given app
-        this.set("focusedApp", appSlug);
+        // track this focus update
+        this.#focusUpdated = true;
+        this.#updateFocusQueue(appSlug, Array.prototype.unshift);
     }
 
     /**
-     * Blur the given app (leaving no app focused).
-     * @param {string} appSlug - the identifier of the app to blue
+     * Blur the given app by altering its place in the focus queue.
+     * This will leave the next app focused.
+     * @param {string} appSlug - the identifier of the app to blur
      */
     blurApp (appSlug) {
-        // if this app is currently focused
-        if (this.focusedApp && this.focusedApp.slug == appSlug) {
-            // blur it
-            this.set("focusedApp", undefined);
-        }
+        // track this focus update
+        this.#focusUpdated = true;
+        // if this app isn't currently focused
+        if (this._focusedApps.indexOf(appSlug) !== 0) {
+            // then it is already blurred isn't it
+            return;
+        }   // else, the app is focused
+        
+        /*
+         * There has been some back and forth as to how blur should work:
+         * 
+         */
+        
+        /*
+         * This sends it back one space in the queue:
+         */
+        //blur the app using custom method
+        this.#updateFocusQueue(appSlug, function (slug) {
+            return this.splice(1, 0, slug);
+        });
+        /**/
+        
+        /*
+         * This sends it to the end of the queue:
+         *
+        //blur the app
+        this.#updateFocusQueue(appSlug, Array.prototype.push);
+         */
+    }
+    
+    /**
+     * Blur the given app by removing its focus state entirely.
+     * Like blurApp(), this will leave the next app focused.
+     * @param {string} appSlug - the identifier of the app to blur
+     */
+    removeAppFocus (appSlug) {
+        // track this focus update
+        this.#focusUpdated = true;
+        //blur the app
+        this.#updateFocusQueue(appSlug, function () { });
+    }
+
+    #getIndexedApps () {
+        return Object.fromEntries(
+            this.apps.toModelArray().map(it => [it.slug, it])
+        );
+    }
+
+    /**
+     * Update extra desktop-level props when an app is created.
+     * @param {string} appSlug - the identifier of the app to register
+     */
+    registerApp (appSlug) {
+        // if our focus has been updated
+        if (this.#focusUpdated) {
+            // then just add our app to the end of the focus queue
+            this.#updateFocusQueue(appSlug, Array.prototype.push);
+            // there is nothing more to do
+            return;
+        }   // else, we should pay attention to the initial focused property
+        // get indexed apps
+        var indexedApps = this.#getIndexedApps(),
+            // sort keys into new queue
+            newQueue = Object.keys(indexedApps)
+                .sort((a, b) => {
+                    return indexedApps[a].initialFocused - indexedApps[b].initialFocused;
+                });
+        // update queue
+        this.set("_focusedApps", newQueue);
+    }
+
+    /**
+     * Remove extra desktop-level info when an app is destroyed.
+     * @param {string} appSlug - the identifier of the app to deregister
+     */
+    deregisterApp (appSlug) {
+        // remove this app from our focus queue
+        this.#updateFocusQueue(appSlug, function () { });
     }
     
 };

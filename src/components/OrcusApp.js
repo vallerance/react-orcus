@@ -28,8 +28,10 @@ var OrcusApp = class extends React.Component {
     static defaultProps = {
         className: "",
         id: DEFAULT_ID,
+        style: {},
         
         icon: "fa:home",
+        initialFocused: false,
         initialOpened: false,
         initialPosition: [0, 0, 100, 100],
         
@@ -42,14 +44,17 @@ var OrcusApp = class extends React.Component {
         //custom html props
         className: PropTypes.string,
         id: PropTypes.string,
+        style: PropTypes.object,
         //component props
         slug: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         icon: PropTypes.string,
+        initialFocused: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
         initialOpened: PropTypes.bool,
         initialPosition: PropTypes.arrayOf(PropTypes.number),
         //state props
         focused: PropTypes.bool,
+        focusIndex: PropTypes.number,
         minimized: PropTypes.bool,
         opened: PropTypes.bool,
         desktopModelId: PropTypes.string.isRequired,
@@ -64,24 +69,33 @@ var OrcusApp = class extends React.Component {
     //define selectors
     static selectApp = (state, ownProps) => AppModel.select.app(state, ownProps.slug);
     static selectDesktop = state => Desktop.select.singleDesktop(state)
-    static selectFocusedApp = createSelector(
+    static selectFocusedSlug = createSelector(
         state => state,
         this.selectDesktop,
-        (state, desktop) => Desktop.select.focusedApp(state, desktop.id)
-    );  
+        (state, desktop) => Desktop.select.focusedAppSlug(state, desktop.id)
+    );
+    static selectFocusIndex = createSelector(
+        state => state,
+        (_, ownProps) => ownProps,
+        this.selectDesktop,
+        (state, ownProps, desktop) => {
+            return Desktop.select.focusIndex(state, desktop.id, ownProps.slug);
+        }
+    );
     static selectAppProps = createSelector(
         this.selectApp,
         this.selectDesktop,
-        this.selectFocusedApp,
+        this.selectFocusedSlug,
+        this.selectFocusIndex,
         (state, ownProps) => ownProps,
-        function (app, desktop, focusedApp, ownProps) {
+        function (app, desktop, focusedSlug, focusIndex, ownProps) {
             var {
                     minimized, opened
                 } = app || AppModel.getInitialStateFromProps(ownProps),
-                focused = focusedApp && app.slug == focusedApp.slug,
+                focused = focusedSlug && app.slug == focusedSlug && opened,
                 desktopModelId = desktop.id;
             return {
-                desktopModelId, focused, minimized, opened
+                desktopModelId, focused, focusIndex, minimized, opened
             };
         }
     );
@@ -102,6 +116,8 @@ var OrcusApp = class extends React.Component {
     state = {
         maximized: false
     };
+    //config
+    #focusBaseZIndex = 500;
     //create default id
     #defaultId = "orcus-app-" + Math.floor(Math.random() * 10000000);
     
@@ -127,11 +143,20 @@ var OrcusApp = class extends React.Component {
         if (props.focused != prevProps.focused) {
             // if our state is focused, but our element is NOT
             if (props.focused && element != document.activeElement) {
-                // then focus our element
-                element.focus({preventScroll: true});
+                // if we have been rendered correctly
+                if (element) {
+                    // then focus our element
+                    element.focus({preventScroll: true});
+                }
+                else {
+                    console.warn(
+                        "ORCUS: Tried to focus an app that wasn't rendered.",
+                        Object.assign({}, this.props)
+                    );
+                }
             }
             // if our state is NOT focused, but our element is
-            if (!props.focused && element == document.activeElement) {
+            if (!props.focused && element && element == document.activeElement) {
                 // then blur our element
                 element.blur();
             }
@@ -159,13 +184,17 @@ var OrcusApp = class extends React.Component {
             //get id, either property or default
             id = this.getId(),
             {
-                slug, name, icon, initialOpened, initialPosition,
-                desktopModelId, focused, minimized, opened,
+                slug, name, icon,
+                initialFocused, initialOpened, initialPosition,
+                desktopModelId, focused, focusIndex, minimized, opened,
                 closeApp, minimizeApp, updateApp, focusApp, blurApp,
                 ...props
             } = this.props,
             [x, y, width, height] = initialPosition,
-            restoreMaximizeContent = "";
+            restoreMaximizeContent = "",
+            style = Object.assign({}, this.props.style, {
+                zIndex: this.#focusBaseZIndex + 99 - focusIndex
+            });
         
         //if we are closed
         if (!this.props.opened) {
@@ -206,7 +235,7 @@ var OrcusApp = class extends React.Component {
         //render
         return (
             <Rnd
-                {...props} className={className} id={id} tabIndex="0"
+                {...props} className={className} id={id} style={style} tabIndex="0"
                 default={{x, y, width, height}}
                 dragHandleClassName="orcus-title-bar"
                 resizeHandleClasses={{
@@ -281,6 +310,15 @@ var OrcusApp = class extends React.Component {
             //get out of this loop
             return;
         }   //else, we are legitimately losing focus 
+        
+        /*
+         * Previously, we would blur our state on a DOM blur.
+         * However, now bluring our state sends our app backward in the queue.
+         * The subsequent focusing of another app would result in our app being
+         * sent back twice.
+         * For now, we're going to decouple DOM blurs from state blurs.
+         *
+         
         //if we are currently focused
         if (this.props.focused) {
             //relax
@@ -289,6 +327,8 @@ var OrcusApp = class extends React.Component {
                 slug: this.props.slug
             });
         }
+        
+         */
     }
     
     handleMaximizeClick (e) {

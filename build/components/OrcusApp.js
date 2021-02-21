@@ -129,6 +129,10 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       maximized: false
     };
+    Object.defineProperty(_assertThisInitialized(_this), _focusBaseZIndex, {
+      writable: true,
+      value: 500
+    });
     Object.defineProperty(_assertThisInitialized(_this), _defaultId, {
       writable: true,
       value: "orcus-app-" + Math.floor(Math.random() * 10000000)
@@ -161,14 +165,19 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       if (props.focused != prevProps.focused) {
         // if our state is focused, but our element is NOT
         if (props.focused && element != document.activeElement) {
-          // then focus our element
-          element.focus({
-            preventScroll: true
-          });
+          // if we have been rendered correctly
+          if (element) {
+            // then focus our element
+            element.focus({
+              preventScroll: true
+            });
+          } else {
+            console.warn("ORCUS: Tried to focus an app that wasn't rendered.", Object.assign({}, this.props));
+          }
         } // if our state is NOT focused, but our element is
 
 
-        if (!props.focused && element == document.activeElement) {
+        if (!props.focused && element && element == document.activeElement) {
           // then blur our element
           element.blur();
         }
@@ -201,10 +210,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           slug = _this$props.slug,
           name = _this$props.name,
           icon = _this$props.icon,
+          initialFocused = _this$props.initialFocused,
           initialOpened = _this$props.initialOpened,
           initialPosition = _this$props.initialPosition,
           desktopModelId = _this$props.desktopModelId,
           focused = _this$props.focused,
+          focusIndex = _this$props.focusIndex,
           minimized = _this$props.minimized,
           opened = _this$props.opened,
           closeApp = _this$props.closeApp,
@@ -212,13 +223,16 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
           updateApp = _this$props.updateApp,
           focusApp = _this$props.focusApp,
           blurApp = _this$props.blurApp,
-          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialOpened", "initialPosition", "desktopModelId", "focused", "minimized", "opened", "closeApp", "minimizeApp", "updateApp", "focusApp", "blurApp"]),
+          props = _objectWithoutProperties(_this$props, ["slug", "name", "icon", "initialFocused", "initialOpened", "initialPosition", "desktopModelId", "focused", "focusIndex", "minimized", "opened", "closeApp", "minimizeApp", "updateApp", "focusApp", "blurApp"]),
           _initialPosition = _slicedToArray(initialPosition, 4),
           x = _initialPosition[0],
           y = _initialPosition[1],
           width = _initialPosition[2],
           height = _initialPosition[3],
-          restoreMaximizeContent = ""; //if we are closed
+          restoreMaximizeContent = "",
+          style = Object.assign({}, this.props.style, {
+        zIndex: _classPrivateFieldLooseBase(this, _focusBaseZIndex)[_focusBaseZIndex] + 99 - focusIndex
+      }); //if we are closed
 
 
       if (!this.props.opened) {
@@ -259,6 +273,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/_react["default"].createElement(_reactRnd.Rnd, _extends({}, props, {
         className: className,
         id: id,
+        style: style,
         tabIndex: "0",
         "default": {
           x: x,
@@ -333,16 +348,26 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
         //get out of this loop
         return;
       } //else, we are legitimately losing focus 
+
+      /*
+       * Previously, we would blur our state on a DOM blur.
+       * However, now bluring our state sends our app backward in the queue.
+       * The subsequent focusing of another app would result in our app being
+       * sent back twice.
+       * For now, we're going to decouple DOM blurs from state blurs.
+       *
+       
       //if we are currently focused
-
-
       if (this.props.focused) {
-        //relax
-        this.props.blurApp({
-          id: this.props.desktopModelId,
-          slug: this.props.slug
-        });
+          //relax
+          this.props.blurApp({
+              id: this.props.desktopModelId,
+              slug: this.props.slug
+          });
       }
+      
+       */
+
     }
   }, {
     key: "handleMaximizeClick",
@@ -377,10 +402,12 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return OrcusApp;
-}(_react["default"].Component), _handleFocus = _classPrivateFieldLooseKey("handleFocus"), _handleBlur = _classPrivateFieldLooseKey("handleBlur"), _handleMaximizeClick = _classPrivateFieldLooseKey("handleMaximizeClick"), _handleMinimizeClick = _classPrivateFieldLooseKey("handleMinimizeClick"), _handleRestoreClick = _classPrivateFieldLooseKey("handleRestoreClick"), _handleCloseClick = _classPrivateFieldLooseKey("handleCloseClick"), _defaultId = _classPrivateFieldLooseKey("defaultId"), _class.defaultProps = {
+}(_react["default"].Component)), _class.defaultProps = {
   className: "",
   id: _OrcusApp.DEFAULT_ID,
+  style: {},
   icon: "fa:home",
+  initialFocused: false,
   initialOpened: false,
   initialPosition: [0, 0, 100, 100],
   focused: false,
@@ -390,14 +417,17 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   //custom html props
   className: _propTypes["default"].string,
   id: _propTypes["default"].string,
+  style: _propTypes["default"].object,
   //component props
   slug: _propTypes["default"].string.isRequired,
   name: _propTypes["default"].string.isRequired,
   icon: _propTypes["default"].string,
+  initialFocused: _propTypes["default"].oneOfType([_propTypes["default"].bool, _propTypes["default"].number]),
   initialOpened: _propTypes["default"].bool,
   initialPosition: _propTypes["default"].arrayOf(_propTypes["default"].number),
   //state props
   focused: _propTypes["default"].bool,
+  focusIndex: _propTypes["default"].number,
   minimized: _propTypes["default"].bool,
   opened: _propTypes["default"].bool,
   desktopModelId: _propTypes["default"].string.isRequired,
@@ -411,22 +441,29 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_React$Component) {
   return _OrcusApp["default"].select.app(state, ownProps.slug);
 }, _class.selectDesktop = function (state) {
   return _Desktop["default"].select.singleDesktop(state);
-}, _class.selectFocusedApp = (0, _reselect.createSelector)(function (state) {
+}, _class.selectFocusedSlug = (0, _reselect.createSelector)(function (state) {
   return state;
 }, _class.selectDesktop, function (state, desktop) {
-  return _Desktop["default"].select.focusedApp(state, desktop.id);
-}), _class.selectAppProps = (0, _reselect.createSelector)(_class.selectApp, _class.selectDesktop, _class.selectFocusedApp, function (state, ownProps) {
+  return _Desktop["default"].select.focusedAppSlug(state, desktop.id);
+}), _class.selectFocusIndex = (0, _reselect.createSelector)(function (state) {
+  return state;
+}, function (_, ownProps) {
   return ownProps;
-}, function (app, desktop, focusedApp, ownProps) {
+}, _class.selectDesktop, function (state, ownProps, desktop) {
+  return _Desktop["default"].select.focusIndex(state, desktop.id, ownProps.slug);
+}), _class.selectAppProps = (0, _reselect.createSelector)(_class.selectApp, _class.selectDesktop, _class.selectFocusedSlug, _class.selectFocusIndex, function (state, ownProps) {
+  return ownProps;
+}, function (app, desktop, focusedSlug, focusIndex, ownProps) {
   var _ref = app || _OrcusApp["default"].getInitialStateFromProps(ownProps),
       minimized = _ref.minimized,
       opened = _ref.opened,
-      focused = focusedApp && app.slug == focusedApp.slug,
+      focused = focusedSlug && app.slug == focusedSlug && opened,
       desktopModelId = desktop.id;
 
   return {
     desktopModelId: desktopModelId,
     focused: focused,
+    focusIndex: focusIndex,
     minimized: minimized,
     opened: opened
   };

@@ -43,54 +43,161 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _classPrivateFieldLooseBase(receiver, privateKey) { if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) { throw new TypeError("attempted to use private field on non-instance"); } return receiver; }
+
+var id = 0;
+
+function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
+
 //create our Desktop model
-var Desktop = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
+var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated"), _updateFocusQueue = _classPrivateFieldLooseKey("updateFocusQueue"), _getIndexedApps = _classPrivateFieldLooseKey("getIndexedApps"), _class = /*#__PURE__*/function (_EnhancedModel) {
   _inherits(Desktop, _EnhancedModel);
 
   var _super = _createSuper(Desktop);
 
   function Desktop() {
+    var _this;
+
     _classCallCheck(this, Desktop);
 
-    return _super.apply(this, arguments);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+    Object.defineProperty(_assertThisInitialized(_this), _getIndexedApps, {
+      value: _getIndexedApps2
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _updateFocusQueue, {
+      value: _updateFocusQueue2
+    });
+    Object.defineProperty(_assertThisInitialized(_this), _focusUpdated, {
+      writable: true,
+      value: false
+    });
+    return _this;
   }
 
   _createClass(Desktop, [{
     key: "toString",
     value: function toString() {
       return "Desktop: ".concat(this.id);
-    }
+    } // removes slug from focus queue and re-adds it using the provided method
+
+  }, {
+    key: "focusApp",
+    value:
     /**
      * Focus the given app (bluring the existing focused app).
      * @param {string} appSlug - the identifier of the app to focus
      */
+    function focusApp(appSlug) {
+      // track this focus update
+      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true;
 
-  }, {
-    key: "focusApp",
-    value: function focusApp(appSlug) {
-      // focus the given app
-      this.set("focusedApp", appSlug);
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, Array.prototype.unshift);
     }
     /**
-     * Blur the given app (leaving no app focused).
-     * @param {string} appSlug - the identifier of the app to blue
+     * Blur the given app by altering its place in the focus queue.
+     * This will leave the next app focused.
+     * @param {string} appSlug - the identifier of the app to blur
      */
 
   }, {
     key: "blurApp",
     value: function blurApp(appSlug) {
-      // if this app is currently focused
-      if (this.focusedApp && this.focusedApp.slug == appSlug) {
-        // blur it
-        this.set("focusedApp", undefined);
-      }
+      // track this focus update
+      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true; // if this app isn't currently focused
+
+      if (this._focusedApps.indexOf(appSlug) !== 0) {
+        // then it is already blurred isn't it
+        return;
+      } // else, the app is focused
+
+      /*
+       * There has been some back and forth as to how blur should work:
+       * 
+       */
+
+      /*
+       * This sends it back one space in the queue:
+       */
+      //blur the app using custom method
+
+
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function (slug) {
+        return this.splice(1, 0, slug);
+      });
+      /**/
+
+      /*
+       * This sends it to the end of the queue:
+       *
+      //blur the app
+      this.#updateFocusQueue(appSlug, Array.prototype.push);
+       */
+
+    }
+    /**
+     * Blur the given app by removing its focus state entirely.
+     * Like blurApp(), this will leave the next app focused.
+     * @param {string} appSlug - the identifier of the app to blur
+     */
+
+  }, {
+    key: "removeAppFocus",
+    value: function removeAppFocus(appSlug) {
+      // track this focus update
+      _classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated] = true; //blur the app
+
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function () {});
+    }
+  }, {
+    key: "registerApp",
+    value:
+    /**
+     * Update extra desktop-level props when an app is created.
+     * @param {string} appSlug - the identifier of the app to register
+     */
+    function registerApp(appSlug) {
+      // if our focus has been updated
+      if (_classPrivateFieldLooseBase(this, _focusUpdated)[_focusUpdated]) {
+        // then just add our app to the end of the focus queue
+        _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, Array.prototype.push); // there is nothing more to do
+
+
+        return;
+      } // else, we should pay attention to the initial focused property
+      // get indexed apps
+
+
+      var indexedApps = _classPrivateFieldLooseBase(this, _getIndexedApps)[_getIndexedApps](),
+          // sort keys into new queue
+      newQueue = Object.keys(indexedApps).sort(function (a, b) {
+        return indexedApps[a].initialFocused - indexedApps[b].initialFocused;
+      }); // update queue
+
+
+      this.set("_focusedApps", newQueue);
+    }
+    /**
+     * Remove extra desktop-level info when an app is destroyed.
+     * @param {string} appSlug - the identifier of the app to deregister
+     */
+
+  }, {
+    key: "deregisterApp",
+    value: function deregisterApp(appSlug) {
+      // remove this app from our focus queue
+      _classPrivateFieldLooseBase(this, _updateFocusQueue)[_updateFocusQueue](appSlug, function () {});
     }
   }], [{
     key: "getInitialStateFromProps",
-    //return an initial state object that is derived from some component props
-    value: function getInitialStateFromProps(props) {
+    value: //return an initial state object that is derived from some component props
+    function getInitialStateFromProps(props) {
       return Object.fromEntries(Object.entries(Object.assign({}, Desktop.defaultProps, props, {
-        id: (0, _uuid.v4)()
+        id: (0, _uuid.v4)(),
+        _focusedApps: []
       })).filter(function (it) {
         return it[0] in Desktop.fields;
       }));
@@ -107,22 +214,40 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
 
         return desktops[0];
       });
-      Desktop.select.focusedApp = (0, _reduxOrm.createSelector)(orm.Desktop.focusedApp);
+      Desktop.select.focusedAppSlug = (0, _reduxOrm.createSelector)(orm.Desktop._focusedApps, function (slugs) {
+        // the first app will be the focused app
+        return slugs[0];
+      }); // requires extra third argument: appSlug
+      // returns 1-indexed focus index of app
+
+      Desktop.select.focusIndex = (0, _reduxOrm.createSelector)(orm.Desktop._focusedApps, function (state, id, appSlug) {
+        return appSlug;
+      }, function (slugs, appSlug) {
+        // return index (1 indexed) of slug
+        return slugs.indexOf(appSlug) + 1;
+      });
     } // REDUCER
 
   }]);
 
   return Desktop;
-}(_EnhancedModel2.EnhancedModel), _class.modelName = 'Desktop', _class.fields = {
+}(_EnhancedModel2.EnhancedModel)), _class.modelName = 'Desktop', _class.fields = {
+  // relational accessors
+  // - apps: OrcusApp.desktop.apps
   // non-relational fields
   // component props
   id: (0, _reduxOrm.attr)(),
   //number, required
-  focusedApp: (0, _reduxOrm.oneToOne)('OrcusApp', 'focused')
+  // model props
+  // a list of app slugs that is the focus queue
+  // an app may be closed by still listed in the focus queue
+  _focusedApps: (0, _reduxOrm.attr)() //array
+
 }, _class.options = {
   idAttribute: "id"
 }, _class.defaultProps = {
-  id: "0"
+  id: "0",
+  _focusedApps: null
 }, _class.select = {}, _class.slice = (0, _toolkit.createSlice)({
   name: 'DesktopSlice',
   initialState: undefined,
@@ -146,7 +271,31 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
       Desktop.requireId(action.payload.id)["delete"]();
     }
   }
-}), _temp); //export Desktop class
+}), _updateFocusQueue2 = function _updateFocusQueue2(appSlug, method) {
+  var queue, index;
+
+  if (typeof method != "function") {
+    throw new Error("Desktop.__updateFocusQueue(): invalid array prototype method: ".concat(method, "."));
+  } // first search for this app in the focus queue
+
+
+  queue = this._focusedApps.slice();
+  index = queue.indexOf(appSlug); // if our slug is already in the queue
+
+  if (index >= 0) {
+    //remove it from it's current place
+    queue.splice(index, 1);
+  } // update the given app's focus by apply method to queue
+
+
+  method.call(queue, appSlug); // update queue
+
+  this.set("_focusedApps", queue);
+}, _getIndexedApps2 = function _getIndexedApps2() {
+  return Object.fromEntries(this.apps.toModelArray().map(function (it) {
+    return [it.slug, it];
+  }));
+}, _temp); //export Desktop class
 
 var _default = Desktop; //export actions
 
