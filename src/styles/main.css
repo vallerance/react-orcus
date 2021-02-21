@@ -121,6 +121,7 @@
 .orcus-client-area {
     background-color: #ddd;
     padding: 2px;
+    position: relative;
     overflow: auto;
     width: 100%;
     height: calc(100% - 20px);
