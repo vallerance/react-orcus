@@ -61,7 +61,7 @@
     "bundle": "gulp bundle",
     "minify": "gulp minify",
     "release": "gulp release",
-    "test": "(npm run test-mocha || true) && npm run test-karma",
+    "test": "gulp lint && (npm run test-mocha || true) && npm run test-karma",
     "test-inspect": "(npm run test-mocha-inspect || true) && npm run test-karma-inspect",
     "test-mocha": "mocha --require test/util/setup.util.js test/suites/*.test.js",
     "test-mocha-inspect": "mocha --inspect --inspect-brk --require test/util/setup.util.js test/suites/*.test.js",
