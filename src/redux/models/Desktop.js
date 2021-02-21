@@ -18,6 +18,8 @@ var Desktop = class extends EnhancedModel {
     static modelName = 'Desktop';
 
     static fields = {
+        // relational accessors
+        // - apps: OrcusApp.desktop.apps
         // non-relational fields
         // component props
         id: attr(),       //number, required
