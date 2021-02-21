@@ -11,18 +11,28 @@ var assert = require('chai').assert,
     h = require('react-hyperscript'),
     rtl = require("@testing-library/react"),
     //rtl = require("react-testing-library"),
-    TestRenderer = require('react-test-renderer'),
+    //TestRenderer = require('react-test-renderer'),
+    reactDomInstance = require('react-dom-instance'),
+    testDom = require("../util/testDom.util.js"),
     {App, Desktop} = require('../../build/index.js'),
     //include redux store
     {Provider} = require("react-redux");
     
 var renderApp = function (...args) {
     //mount dekstop
-    var mountedDesktop = TestRenderer.create(h(Desktop, {}, h(...args)));
+    //var mountedDesktop = TestRenderer.create(h(Desktop, {}, h(...args)));
+    var desktopId = "mounted-desktop",
+        mountedDesktop = reactDomInstance.findInstance(
+            jQuery(
+                rtl
+                    .render(h(Desktop, {id: desktopId}, h(...args)))
+                    .container
+            ).find("#" + desktopId).get(0)
+        );
     //render app, wrapped in a provider
     return rtl.render(h(
         Provider,
-        {store: mountedDesktop.getInstance().reduxStore},
+        {store: mountedDesktop.reduxStore},
         h(...args)
     ));        
 };
