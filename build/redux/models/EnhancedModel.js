@@ -15,6 +15,8 @@ exports.EnhancedModel = void 0;
 
 var _reduxOrm = require("redux-orm");
 
+var _toolkit = require("@reduxjs/toolkit");
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -65,6 +67,35 @@ var EnhancedModel = /*#__PURE__*/function (_Model) {
       }
 
       throw new Error("Required instance of ".concat(this, " not found with id: ").concat(id, "."));
+    }
+  }, {
+    key: "createSlice",
+    value: function createSlice(sliceSpec) {
+      /*
+       * redux-toolkit 1.5 requires reducers to NOT return undefined.
+       * However, standard redux-orm reducers return undefined.
+       * Wrap this model's case reducers to NOT return undefined.
+       *
+       */
+      Object.keys(sliceSpec.reducers).forEach(function (name) {
+        var original = sliceSpec.reducers[name];
+
+        sliceSpec.reducers[name] = function (modelClass) {
+          for (var _len = arguments.length, rest = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            rest[_key - 1] = arguments[_key];
+          }
+
+          // call original
+          var result = original.apply(void 0, [modelClass].concat(rest)); // don't return undefined
+
+          if (typeof result == "undefined") {
+            result = null;
+          }
+
+          return result;
+        };
+      });
+      return (0, _toolkit.createSlice)(sliceSpec);
     }
   }]);
 

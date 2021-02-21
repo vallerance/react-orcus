@@ -15,8 +15,6 @@ exports.DEFAULT_ID = exports.destroyApp = exports.restoreApp = exports.minimizeA
 
 var _reduxOrm = require("redux-orm");
 
-var _toolkit = require("@reduxjs/toolkit");
-
 var _EnhancedModel2 = require("./EnhancedModel.js");
 
 var _class, _temp;
@@ -113,7 +111,7 @@ var OrcusApp = (_temp = _class = /*#__PURE__*/function (_EnhancedModel) {
   name: "",
   opened: false,
   minimized: false
-}, _class.select = {}, _class.slice = (0, _toolkit.createSlice)({
+}, _class.select = {}, _class.slice = _class.createSlice({
   name: 'OrcusAppSlice',
   initialState: undefined,
   reducers: {

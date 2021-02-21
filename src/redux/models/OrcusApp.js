@@ -7,7 +7,6 @@
 "use strict";
 //import dependencies
 import { fk, many, attr, createSelector } from 'redux-orm';
-import { createSlice } from '@reduxjs/toolkit';
 //import classes
 import { EnhancedModel } from './EnhancedModel.js';
 //define constants
@@ -71,7 +70,7 @@ var OrcusApp = class extends EnhancedModel {
     }
     
     // REDUCER
-    static slice = createSlice({
+    static slice = this.createSlice({
         name: 'OrcusAppSlice',
         initialState: undefined,
         reducers: {

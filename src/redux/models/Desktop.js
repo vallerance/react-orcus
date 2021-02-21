@@ -7,7 +7,6 @@
 "use strict";
 //import dependencies
 import { fk, many, oneToOne, attr, createSelector } from 'redux-orm';
-import { createSlice } from '@reduxjs/toolkit';
 import {v4 as uuidv4 } from 'uuid';
 //import classes
 import { EnhancedModel } from './EnhancedModel.js';
@@ -88,7 +87,7 @@ var Desktop = class extends EnhancedModel {
     }
     
     // REDUCER
-    static slice = createSlice({
+    static slice = this.createSlice({
         name: 'DesktopSlice',
         initialState: undefined,
         reducers: {

@@ -15,8 +15,6 @@ exports.destroyDesktop = exports.updateDesktop = exports.updateDesktopProp = exp
 
 var _reduxOrm = require("redux-orm");
 
-var _toolkit = require("@reduxjs/toolkit");
-
 var _uuid = require("uuid");
 
 var _EnhancedModel2 = require("./EnhancedModel.js");
@@ -252,7 +250,7 @@ var Desktop = (_temp = (_focusUpdated = _classPrivateFieldLooseKey("focusUpdated
 }, _class.defaultProps = {
   id: "0",
   _focusedApps: null
-}, _class.select = {}, _class.slice = (0, _toolkit.createSlice)({
+}, _class.select = {}, _class.slice = _class.createSlice({
   name: 'DesktopSlice',
   initialState: undefined,
   reducers: {
