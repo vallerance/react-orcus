@@ -128,7 +128,8 @@ var Desktop = (_temp = _class = /*#__PURE__*/function (_React$Component) {
       var childApps = Object.fromEntries(_react["default"].Children.toArray(children).filter(function (it) {
         return it.type == _OrcusApp2.OrcusApp;
       }).map(function (it) {
-        return [it.props.slug, it.props];
+        var props = Object.assign({}, _OrcusApp2.OrcusApp.WrappedComponent.defaultProps, it.props);
+        return [props.slug, props];
       })),
           childAppSlugs = Object.keys(childApps),
           //get apps from store
