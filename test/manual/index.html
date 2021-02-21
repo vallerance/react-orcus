@@ -51,6 +51,14 @@
         #stopwatch .pause { color: orange; }
         #stopwatch .resume { color: skyblue; }
         
+        #browserify img {
+            margin: auto;
+            position: absolute;
+                top: 0;
+                bottom: 0;
+            width: calc(100% - 4px);
+            max-height: 100%;
+        }
         
     </style>
     
@@ -170,6 +178,19 @@
                         initialPosition={[200, 180, 300, 200]}
                     >
                         <Stopwatch />
+                    </Orcus.App>
+                    
+                    <Orcus.App
+                        id="browserify"
+                        slug="browserify"
+                        name="Browserify"
+                        icon="fa-solid:file-image"
+                        initialPosition={[120, 60, 500, 500]}
+                    >
+                        <img
+                            src="../../node_modules/stream-http/test/server/static/browserify.png"
+                            alt="Browserify"
+                        />
                     </Orcus.App>
                 </Orcus.Desktop>
             ),
