@@ -37,7 +37,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon": "^1.0.5",
     "karma-webpack": "^4.0.2",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "moment": "^2.25.3",
     "moment-duration-format": "^2.3.2",
     "q": "^1.5.1",
