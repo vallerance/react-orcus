@@ -131,6 +131,8 @@ npm install
 
 Run `npm install` to install/update dependencies.
 
-Run `npm run build && npm run minify` to build and bundle app.
+Run `npm run build` to build the app.
 
 Run `npm test` to run the tests.
+
+Run `npm start` to run the demo example.
