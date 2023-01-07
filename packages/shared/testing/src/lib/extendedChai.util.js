@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* extendedChai.util.js
  * Chai customizations
  * Dependencies: modules, services, classes

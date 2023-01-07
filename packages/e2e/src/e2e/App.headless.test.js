@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* App.headless.test.js
  * Tests <Orcus.App /> functionality in headless browser environment
  * Dependencies: assert, sinon, stainless-player, react, react-testing-library modules, mocha context
@@ -6,13 +7,14 @@
  */
 "use strict";
 
-var assert = require('../util/extendedChai.util.js').assert,
+var assert = require('../../../shared/testing/src/lib/extendedChai.util').assert,
     jQuery = require('jquery'),
-    h = require('react-hyperscript'),
+    React = require('react'),
+    h = React.createElement,
     rtl = require("@testing-library/react"),
     //rtl = require("react-testing-library"),
     TestRenderer = require('react-test-renderer'),
-    {Desktop, App} = require('../../build/index.js'),
+    {Desktop, App} = require('../../../../dist/packages/react-orcus/build/index.js'),
     {Provider} = require("react-redux");
 
 var renderApp = function (...args) {
