@@ -1,3 +1,6 @@
+import { createGlobalStyle } from 'styled-components';
+
+export default createGlobalStyle`
 .orcus-desktop,
 .orcus-desktop * {
     box-sizing: border-box;
@@ -235,4 +238,4 @@
 .orcus-desktop.taskbar-right .orcus-taskbar .orcus-shortcut .orcus-title {
     display: none;
 }
-
+`;

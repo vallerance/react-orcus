@@ -23,6 +23,8 @@ import AppModel, { createApp, openApp, closeApp, destroyApp } from '../redux/mod
 import { OrcusApp } from './OrcusApp.js';
 import { DesktopShortcuts } from './DesktopShortcuts.js';
 import { Taskbar } from './Taskbar.js';
+// import styles
+import Styles from '../styles'
 //define constants
 const DEFAULT_ID = "ORCUS_DESKTOP_DEFAULT_ID_VALUE_392183";
 //create our Desktop class
@@ -175,6 +177,8 @@ var Desktop = class extends React.Component {
         //render
         return (
             <Provider store={this.reduxStore}>
+                <Styles />
+                
                 <div {...props} className={className} id={id}>
                     <div className="orcus-desktop-content">
                         {shortcutsContent}
