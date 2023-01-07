@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 /* Desktop.unit.test.js
  * Test Desktop component api
  * Dependencies: checkPropTypes util, mocha context
@@ -6,7 +7,7 @@
  */
 "use strict";
 //include dependencies
-var Desktop = require('../../build/index.js').Desktop,
+var Desktop = require('../../../../dist/packages/react-orcus/build/index.js').Desktop,
     checkProp = new (require('../util/checkPropTypes.util.js'))(Desktop);
 
 //begin mocha tests

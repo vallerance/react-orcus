@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable strict */
 /* DesktopTaskbar.functional.test.js
  * Tests functionality of Desktop component
  * Dependencies: assert, jquery, react-testing-library, react-hyperscript modules, mocha context
@@ -8,9 +10,9 @@
 //include dependencies
 var assert = require('chai').assert,
     jQuery = require('jquery'),
-    h = require('react-hyperscript'),
+    //h = require('react-hyperscript'),
     rtl = require("@testing-library/react"),
-    {Desktop, App} = require('../../build/index.js'),
+    {Desktop, App} = require('../../../../dist/packages/react-orcus/build/index.js'),
     testDom = require("../util/testDom.util.js"),
     behavior = require("../behavior/Shortcut.behavior.js");
 

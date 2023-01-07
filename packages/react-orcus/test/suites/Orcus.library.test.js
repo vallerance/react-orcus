@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 /* Orcus.library.test.js
  * Tests module inclusion
  * Dependencies: assert, jsdom modules, mocha context
@@ -21,8 +22,8 @@ describe('Orcus', function () {
             var dom = new JSDOM(
                 `
 <html><head>
-    <script src="../node_modules/react/umd/react.development.js"></script>
-    <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
+    <script src="../../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="${filename}"></script>
 </head></html>
                 `, 
@@ -48,23 +49,23 @@ describe('Orcus', function () {
         };
 
         it ("A script tag", function (done) {
-            testScriptTag("../dist/react-orcus.js", done);
+            testScriptTag("../../../dist/packages/react-orcus/dev/react-orcus.js", done);
         });
 
         it ("A script tag using minified script", function (done) {
-            testScriptTag("../dist/react-orcus.min.js", done);
+            testScriptTag("../../../dist/packages/react-orcus/prod/react-orcus.min.js", done);
         });
 
         it ("CommonJS", function () {
             //include using CommonJS
-            var OrcusInc = require('../../build/index.js');
+            var OrcusInc = require('../../../../dist/packages/react-orcus/build/index.js');
             //should have been imported
             assert.equal(typeof OrcusInc.Desktop, "function");
         });
         
         it ("CommonJS using default export", function () {
             //include using CommonJS
-            var OrcusInc = require('../../build/index.js');
+            var OrcusInc = require('../../../../dist/packages/react-orcus/build/index.js');
             //should have been imported
             assert.equal(typeof OrcusInc.default, "object");
             assert.equal(typeof OrcusInc.default.Desktop, "function");
@@ -75,18 +76,18 @@ describe('Orcus', function () {
             var dom = new JSDOM(
                 `
 <html><head>
-    <script src="../node_modules/requirejs/require.js"></script>
+    <script src="../../../node_modules/requirejs/require.js"></script>
     <script>
         //setup dependencies
         requirejs.config({
             paths: {
-                'react': '../node_modules/react/umd/react.development',
-                'react-dom': '../node_modules/react-dom/umd/react-dom.development',
+                'react': '../../../node_modules/react/umd/react.development',
+                'react-dom': '../../../node_modules/react-dom/umd/react-dom.development',
             }
         });
         
         //include using RequireJS
-        requirejs(['../dist/react-orcus.js'], function (OrcusInc) {
+        requirejs(['../../../dist/packages/react-orcus/dev/react-orcus.js'], function (OrcusInc) {
             window.onOrcusLoad(OrcusInc);
         });
     </script>

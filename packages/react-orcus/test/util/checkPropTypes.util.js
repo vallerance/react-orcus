@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-foreign-prop-types */
 /* checkPropTypes.util.js
  * Utility methods for using the check-prop-types library
  * Dependencies: jsdom

@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 /* App.unit.test.js
  * Test App component api
  * Dependencies: checkPropTypes util, mocha context
@@ -6,7 +7,7 @@
  */
 "use strict";
 //include dependencies
-var App = require('../../build/components/OrcusApp.js').OrcusAppUnit,
+var App = require('../../../../dist/packages/react-orcus/build/lib/components/OrcusApp.js').OrcusAppUnit,
     checkProp = new (require('../util/checkPropTypes.util.js'))(App);
 
 //begin mocha tests

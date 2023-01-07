@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 /* testDom.util.js
  * Utilities for testing the DOM
  * Dependencies: jQuery, react-testing-library modules
@@ -6,7 +7,7 @@
  */
 "use strict";
 //import dependencies
-var assert = require('../util/extendedChai.util.js').assert,
+var assert = require('../../../shared/testing/src/lib/extendedChai.util.js').assert,
     jQuery = require('jquery'),
     rtl = require("@testing-library/react");
 

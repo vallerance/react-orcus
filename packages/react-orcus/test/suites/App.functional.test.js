@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-redeclare */
+/* eslint-disable no-undef */
 /* App.functional.test.js
  * Tests functionality of App component
  * Dependencies: assert, jquery, react-testing-library, react-hyperscript modules, mocha context
@@ -5,21 +8,24 @@
  * Created: December 7, 2019
  */
 "use strict";
+
+const { waitFor } = require('@testing-library/react');
+
 //include dependencies
 var assert = require('chai').assert,
     jQuery = require('jquery'),
-    h = require('react-hyperscript'),
+    //h = require('react-hyperscript'),
     rtl = require("@testing-library/react"),
     //rtl = require("react-testing-library"),
     //TestRenderer = require('react-test-renderer'),
-    reactDomInstance = require('react-dom-instance'),
+    reactDomInstance = require('../util/react-dom-instance'),
     testDom = require("../util/testDom.util.js"),
-    {App, Desktop} = require('../../build/index.js'),
+    {App, Desktop} = require('../../../../dist/packages/react-orcus/build/index.js'),
     //include redux store
     {Provider} = require("react-redux");
     
 var renderApp = function (...args) {
-    //mount dekstop
+    //mount desktop
     //var mountedDesktop = TestRenderer.create(h(Desktop, {}, h(...args)));
     var desktopId = "mounted-desktop",
         mountedDesktop = reactDomInstance.findInstance(
@@ -219,7 +225,7 @@ describe ('<App /> should render', function () {
             });
         });
         
-        it ("That updates when app is clicked", function () {
+        it ("That updates when app is clicked", async () => {
             //render initial order      -> 1st, 2nd, 3rd, 4th
             render([1, 2, 3, 4]);
             //second app should be second place in queue
@@ -231,7 +237,7 @@ describe ('<App /> should render', function () {
                 focusedWrapper.find("#second-app").get(0)
             );
             //second app should be focused
-            testDom.assertFocused(focusedWrapper, "#second-app");
+            await waitFor(() => testDom.assertFocused(focusedWrapper, "#second-app"));
             //first app should be second place in queue
             testDom.assertFocusedIndex(focusedWrapper, "#first-app", 1);
             //click the fourth app      -> 4th, 2nd, 1st, 3rd
@@ -239,7 +245,7 @@ describe ('<App /> should render', function () {
                 focusedWrapper.find("#fourth-app").get(0)
             );
             //fourth app should be focused
-            testDom.assertFocused(focusedWrapper, "#fourth-app");
+            await waitFor(() => testDom.assertFocused(focusedWrapper, "#fourth-app"));
             //first app should be third place in queue
             testDom.assertFocusedIndex(focusedWrapper, "#first-app", 2);
             //third app should be fourth place in queue
