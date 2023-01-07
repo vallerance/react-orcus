@@ -1,0 +1,184 @@
+{
+  "name": "react-orcus",
+  "sourceRoot": "packages/react-orcus/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/react-orcus/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run react-orcus:build-tsc-babel"
+          },
+          {
+            "command": "npm run nx -- run react-orcus:build-webpack:development"
+          },
+          {
+            "command": "npm run nx -- run react-orcus:build-production"
+          }
+        ],
+        "parallel": true
+      }
+    },
+    "build-tsc-babel": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run react-orcus:build-tsc"
+          },
+          {
+            "command": "npm run nx -- run react-orcus:build-babel"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "build-tsc": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/react-orcus",
+        "tsConfig": "packages/react-orcus/tsconfig.lib.json",
+        "main": "packages/react-orcus/src/index.ts",
+        "assets": []
+      }
+    },
+    "build-babel": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run babel -- --config-file ./packages/react-orcus/.babelrc dist/packages/react-orcus/src --out-dir dist/packages/react-orcus/build"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "build-production": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run react-orcus:build-webpack:production"
+          },
+          {
+            "command": "npm run nx -- run react-orcus:build-package-json"
+          },
+          {
+            "command": "cp README.md dist/packages/react-orcus/prod/README.md"
+          }
+        ],
+        "parallel": false
+      }
+    },
+
+    "build-webpack": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/packages/react-orcus",
+        "tsConfig": "packages/react-orcus/tsconfig.lib.json",
+        "entryFile": "packages/react-orcus/src/index.ts",
+        "index": "",
+        "main": "packages/react-orcus/src/index.ts",
+        "assets": [
+          {
+            "glob": "packages/react-orcus/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "webpackConfig": "packages/react-orcus/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "dist/packages/react-orcus/dev",
+          "outputFileName": "react-orcus.js",
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": false,
+          "runtimeChunk": false
+        },
+        "production": {
+          "outputPath": "dist/packages/react-orcus/prod",
+          "outputFileName": "react-orcus.min.js",
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "runtimeChunk": false,
+          "generatePackageJson": true
+        }
+      }
+    },
+    "build-package-json": {
+      "executor": "@react-orcus/tools/plugin:generate-package-json",
+      "options": {
+        "packageJson": "package.json",
+        "outputPath": "dist/packages/react-orcus/prod"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/webpack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "react-orcus:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "react-orcus:build:development"
+        },
+        "production": {
+          "buildTarget": "react-orcus:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run react-orcus:test-mocha"
+          },
+          {
+            "command": "npm run nx -- run react-orcus:test-jest"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "test-jest": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/react-orcus/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "test-mocha": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run mocha -- --require packages/react-orcus/test/util/setup.util.js packages/react-orcus/test/suites/*.test.js"
+          }
+        ],
+        "parallel": false
+      }
+    }
+  }
+}

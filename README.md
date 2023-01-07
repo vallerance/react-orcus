@@ -76,6 +76,7 @@ planned release.
 #### Roadmap
 
 - [x] Taskbar ([#53][i53])
+- [ ] Grid layout ([#104][i104])
 - [ ] Program menu ([#55][i55])
 - [ ] Themes ([#43][i43])
 - [ ] App Groups ([#48][i48])
@@ -85,10 +86,53 @@ planned release.
 [i43]: https://github.com/vallerance/react-orcus/issues/43
 [i48]: https://github.com/vallerance/react-orcus/issues/48
 
+#### Environment Setup
+
+##### nvm
+
+Run:
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+```
+
+##### Autoenv
+
+Installing autoenv eliminates the need to run `nvm use` every time you `cd`
+into the project.
+
+Run:
+
+```bash
+curl -#fLo- 'https://raw.githubusercontent.com/hyperupcall/autoenv/master/scripts/install.sh' | sh
+```
+
+The above command will append a line to your `~/.bashrc` file that sources
+`autoenv/activate.sh`. Add the following variables to your `~/.bashrc` file
+immediately _before_ the source line:
+
+```bash
+AUTOENV_ENABLE_LEAVE=yes
+AUTOENV_ENV_FILENAME=.autoenv
+AUTOENV_ENV_LEAVE_FILENAME=.autoenv.leave
+```
+
+##### Project
+
+Once all above dependencies are installed, run:
+
+```bash
+nvm use
+
+npm install
+```
+
 #### Building and testing
 
 Run `npm install` to install/update dependencies.
 
-Run `npm run build && npm run minify` to build and bundle app.
+Run `npm run build` to build the app.
 
 Run `npm test` to run the tests.
+
+Run `npm start` to run the demo example.

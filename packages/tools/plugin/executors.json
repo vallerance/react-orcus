@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "executors": {
+    "generate-package-json": {
+      "implementation": "./src/executors/generate-package-json/executor",
+      "schema": "./src/executors/generate-package-json/schema.json",
+      "description": "Generate package json file content"
+    }
+  }
+}
