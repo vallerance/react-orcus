@@ -25,7 +25,7 @@
             "command": "npm run nx -- run react-orcus:build-production"
           }
         ],
-        "parallel": true
+        "parallel": false
       }
     },
     "build-tsc-babel": {
