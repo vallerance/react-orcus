@@ -1,0 +1,29 @@
+version: 1.0
+stages:
+  - install
+  - build
+  - test
+steps:
+  clone:
+    description: Cloning repository...
+    type: git-clone
+    stage: clone
+    repo: vallerance/react-orcus
+    revision: ${{CF_BRANCH}}
+  install:
+    title: Build react-orcus docker image
+    type: build
+    stage: install
+    image_name: vallerance/react-orcus
+    tag: latest
+    working_directory: ${{clone}}
+    disable_push: true
+  build:
+    title: Building library
+    type: build
+    stage: build
+    image_name: vallerance/react-orcus-build
+    tag: latest
+    working_directory: ${{clone}}
+    dockerfile: codefresh/build.Dockerfile
+    disable_push: true
