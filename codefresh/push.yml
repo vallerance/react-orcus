@@ -54,4 +54,5 @@ steps:
     working_directory: IMAGE_WORK_DIR
     commands:
       - cp -r /codefresh/volume/dist ./dist
-      - npm test
+      - npm run nx -- run-many --target test --all --exclude default --parallel=1
+      - npm run nx -- run-many --target e2e --all --exclude default --parallel=1
