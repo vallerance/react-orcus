@@ -7,7 +7,7 @@ steps:
   clone:
     description: Cloning repository...
     type: git-clone
-    stage: clone
+    stage: install
     repo: vallerance/react-orcus
     revision: ${{CF_BRANCH}}
   install:
