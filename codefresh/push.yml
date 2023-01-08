@@ -44,6 +44,8 @@ steps:
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     dockerfile: codefresh/test.Dockerfile
+    build_arguments:
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
   test:
     title: Running tests
