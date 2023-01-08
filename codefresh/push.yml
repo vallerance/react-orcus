@@ -15,9 +15,8 @@ steps:
     type: build
     stage: install
     image_name: vallerance/react-orcus
-    tag: latest
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    disable_push: true
   build:
     title: Building library
     type: build
@@ -27,5 +26,5 @@ steps:
     working_directory: ${{clone}}
     dockerfile: codefresh/build.Dockerfile
     build_arguments:
-      - PARENT_IMAGE=${{install}}
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     disable_push: true

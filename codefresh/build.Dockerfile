@@ -1,5 +1,5 @@
-ARG PARENT_IMAGE=ubuntu
-FROM $PARENT_IMAGE
+ARG VERSION=latest
+FROM ghcr.io/vallerance/react-orcus:${VERSION}
 
 RUN mkdir -p /usr/src/react-orcus
 
