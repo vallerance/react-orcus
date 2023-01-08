@@ -9,7 +9,7 @@ RUN apt install -y curl wget git
 # install NodeJS
 #RUN snap install node --classic --channel=12
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt install -y nodejs
+RUN apt-get install -y nodejs
 
 # copy app files
 #USER chrome
