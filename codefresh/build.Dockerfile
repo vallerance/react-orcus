@@ -17,7 +17,7 @@ COPY --from=install /usr/src/react-orcus/tsconfig.base.json tsconfig.base.json
 COPY --from=install /usr/src/react-orcus/nx.json nx.json
 COPY --from=install /usr/src/react-orcus/README.md README.md
 COPY --from=install /usr/src/react-orcus/LICENSE LICENSE
-COPY --from=install /usr/src/react-orcus/node_modules .
+COPY --from=install /usr/src/react-orcus/node_modules ./node_modules
 
 COPY packages packages
 
