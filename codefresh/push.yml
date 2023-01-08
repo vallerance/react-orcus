@@ -26,4 +26,6 @@ steps:
     tag: latest
     working_directory: ${{clone}}
     dockerfile: codefresh/build.Dockerfile
+    build_arguments:
+      - PARENT_IMAGE=${{install}}
     disable_push: true

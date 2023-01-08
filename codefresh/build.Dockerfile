@@ -1,4 +1,5 @@
-FROM vallerance/react-orcus:latest
+ARG PARENT_IMAGE=ubuntu
+FROM $PARENT_IMAGE
 
 RUN mkdir -p /usr/src/react-orcus
 
