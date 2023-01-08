@@ -23,7 +23,7 @@ steps:
     type: build
     stage: build
     image_name: react-orcus-build
-    tag: latest
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     dockerfile: codefresh/build.Dockerfile
     build_arguments:
@@ -41,6 +41,7 @@ steps:
     type: build
     stage: test
     image_name: react-orcus-test
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     dockerfile: codefresh/test.Dockerfile
     registry: github-container-registry-vallerance
