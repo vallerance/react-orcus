@@ -7,4 +7,4 @@ WORKDIR /usr/src/react-orcus
 
 COPY . .
 
-RUN npm run build -- --memoryLimit 256
+RUN npm run nx -- run react-orcus:build-webpack:production
