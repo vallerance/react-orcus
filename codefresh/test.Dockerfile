@@ -18,5 +18,3 @@ USER seluser
 WORKDIR /home/seluser
 RUN rm -rf .npm
 COPY --chown=seluser:seluser . ./
-
-ENTRYPOINT npm test

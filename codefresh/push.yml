@@ -48,8 +48,8 @@ steps:
   test:
     title: Running tests
     stage: test
-    image: ghcr.io/vallerance/react-orcus-test:${{CF_BRANCH_TAG_NORMALIZED}}
+    image: ${{build-test}}
     working_directory: IMAGE_WORK_DIR
     commands:
       - cp -r /codefresh/volume/dist ./dist
-      - react-orcus-test "--abc"
+      - npm test
