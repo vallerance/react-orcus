@@ -22,12 +22,12 @@ WORKDIR /home/seluser
 RUN rm -rf .npm
 COPY --chown=seluser:seluser . ./
 
-COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/package.json .
-COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/package-lock.json .
+COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/package.json package.json
+COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/package-lock.json package-lock.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/tools tools
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/.eslintrc.json .eslintrc.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/.prettierrc .prettierrc
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/babel.config.json babel.config.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/tsconfig.base.json tsconfig.base.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/nx.json nx.json
-COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/node_modules ./node_modules
+COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/node_modules node_modules

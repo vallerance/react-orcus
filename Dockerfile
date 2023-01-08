@@ -6,8 +6,8 @@ RUN mkdir -p /usr/src/react-orcus
 
 WORKDIR /usr/src/react-orcus
 
-COPY package.json .
-COPY package-lock.json .
+COPY package.json package.json
+COPY package-lock.json package-lock.json
 
 RUN npm ci
 
