@@ -21,6 +21,3 @@ COPY tsconfig.base.json tsconfig.base.json
 COPY nx.json nx.json
 COPY README.md README.md
 COPY LICENSE LICENSE
-
-LABEL io.codefresh.repo.hash="disabled"
-LABEL io.codefresh.repo.sha="disabled"
