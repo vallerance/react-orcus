@@ -17,6 +17,7 @@ steps:
     image_name: react-orcus
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
+    target: install
     registry: github-container-registry-vallerance
   build:
     title: Building library

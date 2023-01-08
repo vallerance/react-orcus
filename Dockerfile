@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-alpine AS install
 
 RUN apk add bash
 
@@ -21,6 +21,8 @@ COPY tsconfig.base.json tsconfig.base.json
 COPY nx.json nx.json
 COPY README.md README.md
 COPY LICENSE LICENSE
+
+FROM alpine AS label
 
 LABEL io.codefresh.repo.hash="disabled"
 LABEL io.codefresh.repo.sha="disabled"
