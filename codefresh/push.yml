@@ -14,7 +14,7 @@ steps:
     title: Build react-orcus docker image
     type: build
     stage: install
-    image_name: vallerance/react-orcus
+    image_name: react-orcus
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     registry: github-container-registry-vallerance
@@ -22,7 +22,7 @@ steps:
     title: Building library
     type: build
     stage: build
-    image_name: vallerance/react-orcus-build
+    image_name: react-orcus-build
     tag: latest
     working_directory: ${{clone}}
     dockerfile: codefresh/build.Dockerfile
