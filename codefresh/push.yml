@@ -52,4 +52,4 @@ steps:
     working_directory: IMAGE_WORK_DIR
     commands:
       - cp -r /codefresh/volume/dist ./dist
-      - react-orcus-test
+      - react-orcus-test "--abc"
