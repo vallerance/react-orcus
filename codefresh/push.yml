@@ -33,6 +33,7 @@ steps:
     title: Caching build artifacts
     stage: build
     image: ${{build}}
+    working_directory: IMAGE_WORK_DIR
     commands:
       - cp -r ./dist /codefresh/volume/dist
   build-test:
@@ -47,6 +48,7 @@ steps:
     title: Running tests
     stage: test
     image: ${{build-test}}
+    working_directory: IMAGE_WORK_DIR
     commands:
       - cp -r /codefresh/volume/dist ./dist
       - react-orcus-test
