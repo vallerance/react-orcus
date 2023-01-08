@@ -19,7 +19,4 @@ WORKDIR /home/seluser
 RUN rm -rf .npm
 COPY --chown=seluser:seluser . ./
 
-# install app
-RUN npm ci
-
-ENTRYPOINT npm run build && npm test
+ENTRYPOINT npm test
