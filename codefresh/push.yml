@@ -29,13 +29,6 @@ steps:
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
-  build-cache:
-    title: Caching build artifacts
-    stage: build
-    image: ${{build}}
-    working_directory: IMAGE_WORK_DIR
-    commands:
-      - cp -r ./dist /codefresh/volume/dist
   build-test:
     title: Building test image
     type: build
