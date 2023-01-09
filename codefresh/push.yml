@@ -17,7 +17,7 @@ steps:
     type: build
     stage: install
     image_name: react-orcus-status
-    working_directory: ${{clone}}
+    working_directory: ${{clone}}/codefresh
     dockerfile: codefresh/status.Dockerfile
     build_arguments:
       - GITHUB_TOKEN=${{GITHUB_TOKEN}}

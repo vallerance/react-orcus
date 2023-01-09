@@ -2,6 +2,10 @@ FROM node:18-alpine
 
 RUN apk add bash curl
 
+RUN mkdir -p /usr/src/status
+
+WORKDIR /usr/src/status
+
 RUN npm install axios
 
 COPY status.js .
