@@ -72,6 +72,7 @@ steps:
     cmd: install ${{steps.install.result}}
     when:
       steps:
+        - name: build-status-image
         - name: install
           on:
             - finished
@@ -103,6 +104,7 @@ steps:
     cmd: lint ${{steps.lint.result}}
     when:
       steps:
+        - name: build-status-image
         - name: lint
           on:
             - finished
@@ -126,6 +128,7 @@ steps:
     cmd: build ${{steps.build.result}}
     when:
       steps:
+        - name: build-status-image
         - name: build
           on:
             - finished
@@ -157,6 +160,7 @@ steps:
     cmd: test ${{steps.test.result}}
     when:
       steps:
+        - name: build-status-image
         - name: test
           on:
             - finished
