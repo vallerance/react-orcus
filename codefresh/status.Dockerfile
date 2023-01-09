@@ -8,7 +8,7 @@ RUN npm install axios
 
 COPY status.js .
 
-ENTRYPOINT node status.js
+ENTRYPOINT ["node", "status.js"]
 
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
