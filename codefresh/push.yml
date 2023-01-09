@@ -31,6 +31,7 @@ steps:
   install-pending:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: install pending
     when:
       steps:
@@ -38,6 +39,7 @@ steps:
   lint-pending:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: lint pending
     when:
       steps:
@@ -45,6 +47,7 @@ steps:
   build-pending:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: build pending
     when:
       steps:
@@ -52,6 +55,7 @@ steps:
   test-pending:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: test pending
     when:
       steps:
@@ -70,6 +74,7 @@ steps:
   install-status:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: install ${{steps.install.result}}
     when:
       steps:
@@ -102,6 +107,7 @@ steps:
   lint-status:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: lint ${{steps.lint.result}}
     when:
       steps:
@@ -126,6 +132,7 @@ steps:
   build-status:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: build ${{steps.build.result}}
     when:
       steps:
@@ -158,6 +165,7 @@ steps:
   test-status:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
     cmd: test ${{steps.test.result}}
     when:
       steps:
