@@ -9,6 +9,8 @@ WORKDIR /usr/src/react-orcus
 
 COPY --from=install /usr/src/react-orcus/package.json package.json
 COPY --from=install /usr/src/react-orcus/package-lock.json package-lock.json
+COPY --from=install /usr/src/react-orcus/node_modules node_modules
+
 COPY --from=install /usr/src/react-orcus/tools tools
 COPY --from=install /usr/src/react-orcus/.eslintrc.json .eslintrc.json
 COPY --from=install /usr/src/react-orcus/.prettierrc .prettierrc
@@ -17,7 +19,6 @@ COPY --from=install /usr/src/react-orcus/tsconfig.base.json tsconfig.base.json
 COPY --from=install /usr/src/react-orcus/nx.json nx.json
 COPY --from=install /usr/src/react-orcus/README.md README.md
 COPY --from=install /usr/src/react-orcus/LICENSE LICENSE
-COPY --from=install /usr/src/react-orcus/node_modules node_modules
 
 COPY packages packages
 
