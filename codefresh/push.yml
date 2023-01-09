@@ -117,9 +117,8 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd:
-      - lint
-      - ${{steps.lint.result}}
+    commands:
+      - node status.js lint ${{steps.lint.result}}
     when:
       steps:
         - name: build-status-image
@@ -144,9 +143,8 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd:
-      - build
-      - ${{steps.build.result}}
+    commands:
+      - node status.js build ${{steps.build.result}}
     when:
       steps:
         - name: build-status-image
@@ -179,9 +177,8 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd:
-      - test
-      - ${{steps.test.result}}
+    commands:
+      - node status.js test ${{steps.test.result}}
     when:
       steps:
         - name: build-status-image
