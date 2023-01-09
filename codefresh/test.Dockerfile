@@ -8,8 +8,8 @@ FROM selenium/standalone-chrome:108.0-20221219
 
 # install utils
 USER root
-RUN apt update
-RUN apt install -y curl wget git
+RUN apt-get update
+RUN apt-get install -y curl wget git
 
 # install NodeJS
 #RUN snap install node --classic --channel=12
