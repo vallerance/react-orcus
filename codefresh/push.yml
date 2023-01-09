@@ -1,6 +1,7 @@
 version: 1.0
 mode: parallel
 stages:
+  - status
   - install
   - lint
   - build
@@ -15,7 +16,7 @@ steps:
   build-status-image:
     title: Building status util
     type: build
-    stage: install
+    stage: status
     image_name: react-orcus-status
     working_directory: ${{clone}}/codefresh
     dockerfile: status.Dockerfile
@@ -28,28 +29,28 @@ steps:
       steps:
         - name: clone
   install-pending:
-    stage: install
+    stage: status
     image: ${{build-status-image}}
     cmd: install pending
     when:
       steps:
         - name: build-status-image
   lint-pending:
-    stage: install
+    stage: status
     image: ${{build-status-image}}
     cmd: lint pending
     when:
       steps:
         - name: build-status-image
   build-pending:
-    stage: install
+    stage: status
     image: ${{build-status-image}}
     cmd: build pending
     when:
       steps:
         - name: build-status-image
   test-pending:
-    stage: install
+    stage: status
     image: ${{build-status-image}}
     cmd: test pending
     when:
@@ -67,7 +68,7 @@ steps:
       steps:
         - name: clone
   install-status:
-    stage: install
+    stage: status
     image: ${{build-status-image}}
     cmd: install ${{steps.install.result}}
     when:
@@ -99,7 +100,7 @@ steps:
       steps:
         - name: build-lint
   lint-status:
-    stage: lint
+    stage: status
     image: ${{build-status-image}}
     cmd: lint ${{steps.lint.result}}
     when:
@@ -123,7 +124,7 @@ steps:
       steps:
         - name: install
   build-status:
-    stage: build
+    stage: status
     image: ${{build-status-image}}
     cmd: build ${{steps.build.result}}
     when:
@@ -155,7 +156,7 @@ steps:
       steps:
         - name: build-test
   test-status:
-    stage: test
+    stage: status
     image: ${{build-status-image}}
     cmd: test ${{steps.test.result}}
     when:
