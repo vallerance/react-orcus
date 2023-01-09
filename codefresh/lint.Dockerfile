@@ -21,4 +21,4 @@ COPY --from=install /usr/src/react-orcus/LICENSE LICENSE
 
 COPY packages packages
 
-RUN npm run lint
+ENTRYPOINT npm run lint
