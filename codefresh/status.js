@@ -11,6 +11,13 @@ const descriptions = {
 };
 const description = descriptions[state];
 
+console.log(`Sending GitHub commit status: `, {
+    state,
+    CF_BUILD_URL,
+    description,
+    CF_REVISION,
+});
+
 axios
     .post(
         `https://api.github.com/repos/vallerance/react-orcus/statuses/${CF_REVISION}`,
