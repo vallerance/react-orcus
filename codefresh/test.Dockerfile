@@ -31,6 +31,8 @@ COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/tools tools
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/.eslintrc.json .eslintrc.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/.prettierrc .prettierrc
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/babel.config.json babel.config.json
+COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/jest.config.ts jest.config.ts
+COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/jest.preset.js jest.preset.js
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/tsconfig.base.json tsconfig.base.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/nx.json nx.json
 
