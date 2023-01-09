@@ -28,24 +28,28 @@ steps:
       steps:
         - name: clone
   install-pending:
+    stage: install
     image: ${{build-status-image}}
     cmd: install pending
     when:
       steps:
         - name: build-status-image
   lint-pending:
+    stage: install
     image: ${{build-status-image}}
     cmd: lint pending
     when:
       steps:
         - name: build-status-image
   build-pending:
+    stage: install
     image: ${{build-status-image}}
     cmd: build pending
     when:
       steps:
         - name: build-status-image
   test-pending:
+    stage: install
     image: ${{build-status-image}}
     cmd: test pending
     when:
@@ -63,6 +67,7 @@ steps:
       steps:
         - name: clone
   install-status:
+    stage: install
     image: ${{build-status-image}}
     cmd: install ${{steps.install.result}}
     when:
@@ -93,6 +98,7 @@ steps:
       steps:
         - name: build-lint
   lint-status:
+    stage: lint
     image: ${{build-status-image}}
     cmd: lint ${{steps.lint.result}}
     when:
@@ -115,6 +121,7 @@ steps:
       steps:
         - name: install
   build-status:
+    stage: build
     image: ${{build-status-image}}
     cmd: build ${{steps.build.result}}
     when:
@@ -145,6 +152,7 @@ steps:
       steps:
         - name: build-test
   test-status:
+    stage: test
     image: ${{build-status-image}}
     cmd: test ${{steps.test.result}}
     when:
