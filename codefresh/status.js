@@ -12,10 +12,12 @@ console.log('Received args: ', process.argv);
 
 const [stage, state] = process.argv.slice(2);
 
+const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
+
 const descriptions = {
-    pending: 'Build pending',
-    success: 'Build successful',
-    failure: 'Build failed',
+    pending: `${capitalize(stage)} pending`,
+    success: `${capitalize(stage)} successful`,
+    failure: `${capitalize(stage)} failed`,
 };
 const description = descriptions[state];
 
