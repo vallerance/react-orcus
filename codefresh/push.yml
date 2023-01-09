@@ -32,7 +32,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: install pending
+    cmd:
+      - install
+      - pending
     when:
       steps:
         - name: build-status-image
@@ -40,7 +42,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: lint pending
+    cmd:
+      - lint
+      - pending
     when:
       steps:
         - name: build-status-image
@@ -48,7 +52,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: build pending
+    cmd:
+      - build
+      - pending
     when:
       steps:
         - name: build-status-image
@@ -56,7 +62,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: test pending
+    cmd:
+      - test
+      - pending
     when:
       steps:
         - name: build-status-image
@@ -75,7 +83,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: install ${{steps.install.result}}
+    cmd:
+      - install
+      - ${{steps.install.result}}
     when:
       steps:
         - name: build-status-image
@@ -108,7 +118,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: lint ${{steps.lint.result}}
+    cmd:
+      - lint
+      - ${{steps.lint.result}}
     when:
       steps:
         - name: build-status-image
@@ -133,7 +145,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: build ${{steps.build.result}}
+    cmd:
+      - build
+      - ${{steps.build.result}}
     when:
       steps:
         - name: build-status-image
@@ -166,7 +180,9 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd: test ${{steps.test.result}}
+    cmd:
+      - test
+      - ${{steps.test.result}}
     when:
       steps:
         - name: build-status-image
