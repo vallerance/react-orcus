@@ -83,9 +83,8 @@ steps:
     stage: status
     image: ${{build-status-image}}
     working_directory: IMAGE_WORK_DIR
-    cmd:
-      - install
-      - ${{steps.install.result}}
+    commands:
+      - node status.js install ${{steps.install.result}}
     when:
       steps:
         - name: build-status-image
