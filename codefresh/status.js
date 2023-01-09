@@ -2,6 +2,8 @@ const axios = require('axios');
 
 const { GITHUB_TOKEN, CF_BUILD_URL, CF_REVISION } = process.env;
 
+console.log('Received args: ', process.argv);
+
 const [stage, state] = process.argv.slice(2);
 
 const descriptions = {
@@ -12,6 +14,7 @@ const descriptions = {
 const description = descriptions[state];
 
 console.log(`Sending GitHub commit status: `, {
+    stage,
     state,
     CF_BUILD_URL,
     description,
