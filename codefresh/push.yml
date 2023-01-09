@@ -44,3 +44,4 @@ steps:
     title: Running tests
     stage: test
     image: ${{build-test}}
+    working_directory: IMAGE_WORK_DIR
