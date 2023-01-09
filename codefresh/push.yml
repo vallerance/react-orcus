@@ -22,6 +22,7 @@ steps:
       - GITHUB_TOKEN=${{GITHUB_TOKEN}}
       - CF_BUILD_URL=${{CF_BUILD_URL}}
       - CF_REVISION=${{CF_REVISION}}
+    disable_push: true
     when:
       steps:
         - name: clone
