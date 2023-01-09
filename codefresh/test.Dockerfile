@@ -32,3 +32,6 @@ COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/.prettierrc .pr
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/babel.config.json babel.config.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/tsconfig.base.json tsconfig.base.json
 COPY --from=install --chown=seluser:seluser /usr/src/react-orcus/nx.json nx.json
+
+ENTRYPOINT npm run nx -- run-many --target test --all --exclude default --parallel=1 && \
+    npm run nx -- run-many --target e2e --all --exclude default --parallel=1
