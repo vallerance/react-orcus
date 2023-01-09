@@ -1,6 +1,7 @@
 version: 1.0
 stages:
   - install
+  - lint
   - build
   - test
 steps:
@@ -18,6 +19,22 @@ steps:
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     registry: github-container-registry-vallerance
+  build-lint:
+    title: Building lint image
+    type: build
+    stage: lint
+    image_name: react-orcus-lint
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    dockerfile: codefresh/lint.Dockerfile
+    build_arguments:
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+    registry: github-container-registry-vallerance
+  lint:
+    title: Linting source
+    stage: lint
+    image: ${{build-lint}}
+    working_directory: IMAGE_WORK_DIR
   build:
     title: Building library
     type: build
