@@ -1,11 +1,11 @@
 version: 1.0
 mode: parallel
 stages:
-  - status
   - install
   - lint
   - build
   - test
+  - status
 steps:
   clone:
     description: Cloning repository...
