@@ -138,7 +138,7 @@ steps:
     registry: github-container-registry-vallerance
     when:
       steps:
-        - name: install
+        - name: lint
   build-status:
     stage: status
     image: ${{build-status-image}}
