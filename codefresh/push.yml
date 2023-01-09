@@ -1,0 +1,187 @@
+version: 1.0
+mode: parallel
+stages:
+  - install
+  - lint
+  - build
+  - test
+  - status
+steps:
+  clone:
+    description: Cloning repository...
+    type: git-clone
+    stage: install
+    repo: vallerance/react-orcus
+    revision: ${{CF_BRANCH}}
+  build-status-image:
+    title: Building status util
+    type: build
+    stage: status
+    image_name: react-orcus-status
+    working_directory: ${{clone}}/codefresh
+    dockerfile: status.Dockerfile
+    build_arguments:
+      - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+      - CF_BUILD_URL=${{CF_BUILD_URL}}
+      - CF_REVISION=${{CF_REVISION}}
+    disable_push: true
+    when:
+      steps:
+        - name: clone
+  install-pending:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    cmd:
+      - install
+      - pending
+    when:
+      steps:
+        - name: build-status-image
+  lint-pending:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    cmd:
+      - lint
+      - pending
+    when:
+      steps:
+        - name: build-status-image
+  build-pending:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    cmd:
+      - build
+      - pending
+    when:
+      steps:
+        - name: build-status-image
+  test-pending:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    cmd:
+      - test
+      - pending
+    when:
+      steps:
+        - name: build-status-image
+  install:
+    title: Build react-orcus docker image
+    type: build
+    stage: install
+    image_name: react-orcus
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    registry: github-container-registry-vallerance
+    when:
+      steps:
+        - name: clone
+  install-status:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node status.js install ${{steps.install.result}}
+    when:
+      steps:
+        - name: build-status-image
+        - name: install
+          on:
+            - finished
+  build-lint:
+    title: Building lint image
+    type: build
+    stage: lint
+    image_name: react-orcus-lint
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    dockerfile: codefresh/lint.Dockerfile
+    build_arguments:
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+    registry: github-container-registry-vallerance
+    when:
+      steps:
+        - name: install
+  lint:
+    title: Linting source
+    stage: lint
+    image: ${{build-lint}}
+    working_directory: IMAGE_WORK_DIR
+    when:
+      steps:
+        - name: build-lint
+  lint-status:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node status.js lint ${{steps.lint.result}}
+    when:
+      steps:
+        - name: build-status-image
+        - name: lint
+          on:
+            - finished
+  build:
+    title: Building library
+    type: build
+    stage: build
+    image_name: react-orcus-build
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    dockerfile: codefresh/build.Dockerfile
+    build_arguments:
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+    registry: github-container-registry-vallerance
+    when:
+      steps:
+        - name: lint
+  build-status:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node status.js build ${{steps.build.result}}
+    when:
+      steps:
+        - name: build-status-image
+        - name: build
+          on:
+            - finished
+  build-test:
+    title: Building test image
+    type: build
+    stage: test
+    image_name: react-orcus-test
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    dockerfile: codefresh/test.Dockerfile
+    build_arguments:
+      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+    registry: github-container-registry-vallerance
+    when:
+      steps:
+        - name: build
+  test:
+    title: Running tests
+    stage: test
+    image: ${{build-test}}
+    working_directory: IMAGE_WORK_DIR
+    when:
+      steps:
+        - name: build-test
+  test-status:
+    stage: status
+    image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node status.js test ${{steps.test.result}}
+    when:
+      steps:
+        - name: build-status-image
+        - name: test
+          on:
+            - finished

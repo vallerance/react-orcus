@@ -56,7 +56,8 @@
       "options": {
         "commands": [
           {
-            "command": "npm run babel -- --config-file ./packages/react-orcus/.babelrc dist/packages/react-orcus/src --out-dir dist/packages/react-orcus/build"
+            "command": "npm run babel -- --config-file ./packages/react-orcus/ts.babelrc dist/packages/react-orcus/src --out-dir dist/packages/react-orcus/build",
+            "forwardAllArgs": false
           }
         ],
         "parallel": false
@@ -73,7 +74,8 @@
             "command": "npm run nx -- run react-orcus:build-package-json"
           },
           {
-            "command": "cp README.md dist/packages/react-orcus/prod/README.md"
+            "command": "cp README.md dist/packages/react-orcus/prod/README.md",
+            "forwardAllArgs": false
           }
         ],
         "parallel": false
