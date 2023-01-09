@@ -1,7 +1,13 @@
 const axios = require('axios');
 
-const { GITHUB_TOKEN, CF_BUILD_URL, CF_REVISION } = process.env;
+const { GITHUB_TOKEN, CF_BUILD_URL, CF_REVISION, steps } = process.env;
 
+console.log('Found environment: ', {
+    GITHUB_TOKEN: ''.padStart(GITHUB_TOKEN.length, '*'),
+    CF_BUILD_URL,
+    CF_REVISION,
+    steps,
+});
 console.log('Received args: ', process.argv);
 
 const [stage, state] = process.argv.slice(2);
