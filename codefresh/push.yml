@@ -12,6 +12,43 @@ steps:
     stage: install
     repo: vallerance/react-orcus
     revision: ${{CF_BRANCH}}
+  build-status-image:
+    title: Building status util
+    type: build
+    stage: install
+    image_name: react-orcus-status
+    working_directory: ${{clone}}
+    build_arguments:
+      - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+      - CF_BUILD_URL=${{CF_BUILD_URL}}
+      - CF_REVISION=${{CF_REVISION}}
+    when:
+      steps:
+        - name: clone
+  install-pending:
+    image: ${{build-status-image}}
+    cmd: install pending
+    when:
+      steps:
+        - name: build-status-image
+  lint-pending:
+    image: ${{build-status-image}}
+    cmd: lint pending
+    when:
+      steps:
+        - name: build-status-image
+  build-pending:
+    image: ${{build-status-image}}
+    cmd: build pending
+    when:
+      steps:
+        - name: build-status-image
+  test-pending:
+    image: ${{build-status-image}}
+    cmd: test pending
+    when:
+      steps:
+        - name: build-status-image
   install:
     title: Build react-orcus docker image
     type: build
@@ -23,7 +60,14 @@ steps:
     when:
       steps:
         - name: clone
+  install-status:
+    image: ${{build-status-image}}
+    cmd: install ${{steps.install.result}}
+    when:
+      steps:
+        - name: install
           on:
+            - finished
   build-lint:
     title: Building lint image
     type: build
@@ -46,6 +90,14 @@ steps:
     when:
       steps:
         - name: build-lint
+  lint-status:
+    image: ${{build-status-image}}
+    cmd: lint ${{steps.lint.result}}
+    when:
+      steps:
+        - name: lint
+          on:
+            - finished
   build:
     title: Building library
     type: build
@@ -60,6 +112,14 @@ steps:
     when:
       steps:
         - name: install
+  build-status:
+    image: ${{build-status-image}}
+    cmd: build ${{steps.build.result}}
+    when:
+      steps:
+        - name: build
+          on:
+            - finished
   build-test:
     title: Building test image
     type: build
@@ -82,4 +142,11 @@ steps:
     when:
       steps:
         - name: build-test
+  test-status:
+    image: ${{build-status-image}}
+    cmd: test ${{steps.test.result}}
+    when:
+      steps:
+        - name: test
           on:
+            - finished
