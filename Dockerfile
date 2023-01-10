@@ -36,7 +36,9 @@ FROM install AS build
 
 # Codefresh can't support the memory overhead of just `npm run build`
 RUN npm run nx -- run react-orcus:build-tsc-babel
-RUN npm run nx -- run react-orcus:build-webpack:development
+# For some reason, using Buildkit will cause this command to immediately fail,
+# adding && true fixes it
+RUN npm run nx -- run react-orcus:build-webpack:development && true
 RUN npm run nx -- run react-orcus:build-production
 
 
