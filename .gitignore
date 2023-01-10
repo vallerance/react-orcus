@@ -41,3 +41,4 @@ Thumbs.db
 # Project
 *.stg
 webpack-stats.json
+.local.env

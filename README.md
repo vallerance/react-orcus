@@ -1,18 +1,18 @@
-React Orcus
-====
+# React Orcus
 
 [![npm](https://img.shields.io/npm/v/react-orcus)](https://www.npmjs.com/package/react-orcus) [![Codefresh build status](https://g.codefresh.io/api/badges/pipeline/joshuacwebdeveloper/react-orcus%2Fgithub-test-hook?branch=master&key=eyJhbGciOiJIUzI1NiJ9.NWU2NGIwZDk4ZTc3MDkyNWRlMzk4NTY4.1RyVgiNLIw7YYzkLCJLcJtK-p6zRYarO3sCielzfkP4&type=cf-1)](https://g.codefresh.io/public/accounts/joshuacwebdeveloper/pipelines/5e65bd75d7e4d02008a90182)
 
 React library for creating an app with a windowed desktop interface.
 
-- [Installation/Setup](#installation)
-- [Examples](#examples)
-- [API](#api)
-- [Development](#development)
+-   [Installation/Setup](#installation)
+-   [Examples](#examples)
+-   [API](#api)
+-   [Development](#development)
 
 ![Demo GIF](demo.gif)
 
 ## <a name="installation"></a>Installation/Setup
+
 Run:
 
 `npm install react-orcus`
@@ -28,9 +28,10 @@ Include it in your HTML header:
 `<script type="text/javascript" src="./react-orcus/dist/react-orcus.min.js"></script>`
 
 Then, in your React component:
+
 ```JavaScript
 var Desktop = (
-    
+
     <Orcus.Desktop taskbar="right">
         <Orcus.App
             slug="file-manager"
@@ -54,7 +55,7 @@ var Desktop = (
             <p>Does anyone know how to build a tetris game?</p>
         </Orcus.App>
     </Orcus.Desktop>
-    
+
 );
 ```
 
@@ -75,11 +76,11 @@ planned release.
 
 #### Roadmap
 
-- [x] Taskbar ([#53][i53])
-- [ ] Grid layout ([#104][i104])
-- [ ] Program menu ([#55][i55])
-- [ ] Themes ([#43][i43])
-- [ ] App Groups ([#48][i48])
+-   [x] Taskbar ([#53][i53])
+-   [ ] Grid layout ([#104][i104])
+-   [ ] Program menu ([#55][i55])
+-   [ ] Themes ([#43][i43])
+-   [ ] App Groups ([#48][i48])
 
 [i53]: https://github.com/vallerance/react-orcus/issues/53
 [i104]: https://github.com/vallerance/react-orcus/issues/104
