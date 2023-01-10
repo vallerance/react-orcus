@@ -36,8 +36,10 @@ FROM install AS build
 
 # Codefresh can't support the memory overhead of just `npm run build`
 RUN npm run nx -- run react-orcus:build-tsc-babel
-RUN npm run nx -- run react-orcus:build-webpack:development --verbose
-RUN npm run nx -- run react-orcus:build-production
+# For some reason, using the npm scripts results in a inexplicable failure of
+# the build commands when run in docker
+RUN node_modules/.bin/nx run react-orcus:build-webpack:development
+RUN node_modules/.bin/nx run react-orcus:build-production
 
 
 
