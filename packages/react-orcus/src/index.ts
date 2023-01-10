@@ -11,3 +11,4 @@ export default {
 };
 
 console.log('A CHANGE');
+console.log('ANOTHER CHANGE');
