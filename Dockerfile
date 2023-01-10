@@ -38,7 +38,7 @@ FROM install AS build
 RUN npm run nx -- run react-orcus:build-tsc-babel
 # For some reason, using the npm scripts results in a inexplicable failure of
 # the build commands when run in docker
-RUN until node_modules/.bin/nx run react-orcus:build-webpack:development -- --verbose; sleep 1; done
+RUN until node_modules/.bin/nx run react-orcus:build-webpack:development -- --verbose; do sleep 1; done
 RUN node_modules/.bin/nx run react-orcus:build-production
 
 
