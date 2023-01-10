@@ -6,137 +6,184 @@
  * Author: Joshua Carter
  * Created: April 17, 2020
  */
-"use strict";
+'use strict';
 //include dependencies
 var assert = require('chai').assert,
     jQuery = require('jquery'),
     //h = require('react-hyperscript'),
-    rtl = require("@testing-library/react"),
-    {Desktop, App} = require('../../../../dist/packages/react-orcus/build/index.js');
+    rtl = require('@testing-library/react'),
+    {
+        Desktop,
+        App,
+    } = require('../../../../dist/packages/react-orcus/build/index.js');
 
-function behavesLikeAShortcut (context) {
-
-    describe ("Has", function () {
-        it ("Class name", function () {
+function behavesLikeAShortcut(context) {
+    describe('Has', function () {
+        it('Class name', function () {
             assert.lengthOf(
-                context.appsWrapper.find(`${context.parentSelector} .orcus-shortcuts .orcus-shortcut`),
+                context.appsWrapper.find(
+                    `${context.parentSelector} .orcus-shortcuts .orcus-shortcut`
+                ),
                 1,
-                "Missing node with orcus-shortcut class"
+                'Missing node with orcus-shortcut class'
             );
         });
 
-        it ("Custom id", function () {
+        it('Custom id', function () {
             assert.equal(
-                context.appsWrapper.find(`${context.parentSelector} .orcus-shortcut`)[0].id,
+                context.appsWrapper.find(
+                    `${context.parentSelector} .orcus-shortcut`
+                )[0].id,
                 `orcus-${context.type}-shortcut-${context.appProps.id}`
             );
         });
 
-        it ("Unique default id", function () {
+        it('Unique default id', function () {
             //render two apps with no given id
-            var renderResult1 = rtl.render(h(
-                    Desktop,
-                    Object.assign({}, context.extraProps),
-                    h(App, context.appPropsNoId)
-                )),
+            var renderResult1 = rtl.render(
+                    h(
+                        Desktop,
+                        Object.assign({}, context.extraProps),
+                        h(App, context.appPropsNoId)
+                    )
+                ),
                 wrapper1 = jQuery(renderResult1.container.firstChild),
-                renderResult2 = rtl.render(h(
-                    Desktop,
-                    Object.assign({}, context.extraProps),
-                    h(App, context.appPropsNoId)
-                )),
+                renderResult2 = rtl.render(
+                    h(
+                        Desktop,
+                        Object.assign({}, context.extraProps),
+                        h(App, context.appPropsNoId)
+                    )
+                ),
                 wrapper2 = jQuery(renderResult2.container.firstChild);
             //should include default id
-            assert.include(wrapper1.find(`${context.parentSelector} .orcus-shortcut`)[0].id, `orcus-${context.type}-shortcut-`);
+            assert.include(
+                wrapper1.find(`${context.parentSelector} .orcus-shortcut`)[0]
+                    .id,
+                `orcus-${context.type}-shortcut-`
+            );
             //should inculde default id
             assert.notEqual(
-                wrapper1.find(`${context.parentSelector} .orcus-shortcut`)[0].id,
+                wrapper1.find(`${context.parentSelector} .orcus-shortcut`)[0]
+                    .id,
                 wrapper2.find(`${context.parentSelector} .orcus-shortcut`)[0].id
             );
         });
 
-        describe ("Icon with", function () {
-            it ("Class name", function () {
+        describe('Icon with', function () {
+            it('Class name', function () {
                 assert.lengthOf(
-                    context.appsWrapper.find(`${context.parentSelector} .orcus-shortcut .orcus-ui.orcus-icon`),
+                    context.appsWrapper.find(
+                        `${context.parentSelector} .orcus-shortcut .orcus-ui.orcus-icon`
+                    ),
                     1,
-                    "Missing node with orcus-icon class"
+                    'Missing node with orcus-icon class'
                 );
             });
 
-            it ("Iconify icon", function () {
+            it('Iconify icon', function () {
                 var selector = `${context.parentSelector} .orcus-shortcut .orcus-ui.orcus-icon .iconify`;
                 assert.lengthOf(
                     context.appsWrapper.find(selector),
                     1,
-                    "Missing node with iconify class"
+                    'Missing node with iconify class'
                 );
-                assert.equal(context.appsWrapper.find(selector).data("icon"), context.appProps.icon);
-            });
-
-            it ("Ability to update", function () {
-                var renderResult = rtl.render(h(
-                        Desktop,
-                        Object.assign({}, context.extraProps),
-                        h(App, context.appProps)
-                    )),
-                    selector = `${context.parentSelector} .orcus-shortcut .orcus-ui.orcus-icon .iconify`,
-                    newIcon = "fa:apple";
                 assert.equal(
-                    jQuery(renderResult.container).find(selector).data("icon"),
+                    context.appsWrapper.find(selector).data('icon'),
                     context.appProps.icon
                 );
-                renderResult.rerender(h(
-                    Desktop,
-                    Object.assign({}, context.extraProps),
-                    h(App, Object.assign({}, context.appProps, {icon: newIcon}))
-                ));
+            });
+
+            it('Ability to update', function () {
+                var renderResult = rtl.render(
+                        h(
+                            Desktop,
+                            Object.assign({}, context.extraProps),
+                            h(App, context.appProps)
+                        )
+                    ),
+                    selector = `${context.parentSelector} .orcus-shortcut .orcus-ui.orcus-icon .iconify`,
+                    newIcon = 'fa:apple';
                 assert.equal(
-                    jQuery(renderResult.container)
-                        .find(selector)
-                        .get(0).dataset.icon,
+                    jQuery(renderResult.container).find(selector).data('icon'),
+                    context.appProps.icon
+                );
+                renderResult.rerender(
+                    h(
+                        Desktop,
+                        Object.assign({}, context.extraProps),
+                        h(
+                            App,
+                            Object.assign({}, context.appProps, {
+                                icon: newIcon,
+                            })
+                        )
+                    )
+                );
+                assert.equal(
+                    jQuery(renderResult.container).find(selector).get(0).dataset
+                        .icon,
                     newIcon
                 );
             });
         });
 
-        describe ("Title with", function () {
-            it ("Class name", function () {
+        describe('Title with', function () {
+            it('Class name', function () {
                 assert.lengthOf(
-                    context.appsWrapper.find(`${context.parentSelector} .orcus-shortcut .orcus-title`),
+                    context.appsWrapper.find(
+                        `${context.parentSelector} .orcus-shortcut .orcus-title`
+                    ),
                     1,
-                    "Missing node with orcus-title class"
+                    'Missing node with orcus-title class'
                 );
             });
 
-            it ("Name of app", function () {
+            it('Name of app', function () {
                 assert.equal(
-                    context.appsWrapper.find(`${context.parentSelector} .orcus-shortcut .orcus-title`).text(),
-                    context.appProps.name
-                );
-            });
-
-            it ("Ability to update", function () {
-                var renderResult = rtl.render(h(
-                        Desktop,
-                        Object.assign({}, context.extraProps),
-                        h(App, context.appProps)
-                    )),
-                    newTitle = "I'm an Apple";
-                assert.equal(
-                    jQuery(renderResult.container)
-                        .find(`${context.parentSelector} .orcus-shortcut .orcus-title`)
+                    context.appsWrapper
+                        .find(
+                            `${context.parentSelector} .orcus-shortcut .orcus-title`
+                        )
                         .text(),
                     context.appProps.name
                 );
-                renderResult.rerender(h(
-                    Desktop,
-                    Object.assign({}, context.extraProps),
-                    h(App, Object.assign({}, context.appProps, {name: newTitle}))
-                ));
+            });
+
+            it('Ability to update', function () {
+                var renderResult = rtl.render(
+                        h(
+                            Desktop,
+                            Object.assign({}, context.extraProps),
+                            h(App, context.appProps)
+                        )
+                    ),
+                    newTitle = "I'm an Apple";
                 assert.equal(
                     jQuery(renderResult.container)
-                        .find(`${context.parentSelector} .orcus-shortcut .orcus-title`)
+                        .find(
+                            `${context.parentSelector} .orcus-shortcut .orcus-title`
+                        )
+                        .text(),
+                    context.appProps.name
+                );
+                renderResult.rerender(
+                    h(
+                        Desktop,
+                        Object.assign({}, context.extraProps),
+                        h(
+                            App,
+                            Object.assign({}, context.appProps, {
+                                name: newTitle,
+                            })
+                        )
+                    )
+                );
+                assert.equal(
+                    jQuery(renderResult.container)
+                        .find(
+                            `${context.parentSelector} .orcus-shortcut .orcus-title`
+                        )
                         .text(),
                     newTitle
                 );

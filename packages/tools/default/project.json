@@ -43,7 +43,7 @@
       "options": {
         "commands": [
           {
-            "command": "true || npm run nx -- format:check --all"
+            "command": "npm run nx -- format:check --all"
           },
           {
             "command": "npm run nx -- run-many --target lint --all --exclude default --parallel --max-warnings 0"

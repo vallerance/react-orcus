@@ -5,27 +5,26 @@
  * Author: Joshua Carter
  * Created: May 3, 2020
  */
-"use strict";
+'use strict';
 //import dependencies
-var assert = require('../../../shared/testing/src/lib/extendedChai.util.js').assert,
+var assert =
+        require('../../../shared/testing/src/lib/extendedChai.util.js').assert,
     jQuery = require('jquery'),
-    rtl = require("@testing-library/react");
+    rtl = require('@testing-library/react');
 
-function focusApp (appElem) {
+function focusApp(appElem) {
     // focus app (not triggered by click)
     /*
     if (document.activeElement && document.activeElement != appElem) {
         document.activeElement.blur();
     }
     */
-    rtl.fireEvent.focus(appElem);    
+    rtl.fireEvent.focus(appElem);
     // click app title
-    rtl.fireEvent.click(
-        jQuery(appElem).find(".orcus-title-bar").get(0)
-    );
+    rtl.fireEvent.click(jQuery(appElem).find('.orcus-title-bar').get(0));
 }
 
-function click (elem) {
+function click(elem) {
     /*
     // find focused app, if any
     var focusedApp = document.activeElement.className.includes("orcus-app") ?
@@ -63,25 +62,27 @@ function click (elem) {
     rtl.fireEvent.click(elem);
 }
 
-function assertFocusedIndex (appsWrapper, selector, index) {
+function assertFocusedIndex(appsWrapper, selector, index) {
     // get apps sorted by z-index, high to low
     var sortedApps = appsWrapper
-            .find(".orcus-app")
-            .not(".minimized")
+            .find('.orcus-app')
+            .not('.minimized')
             .get()
-            .sort((a, b) => jQuery(b).css("z-index") - jQuery(a).css("z-index")),
+            .sort(
+                (a, b) => jQuery(b).css('z-index') - jQuery(a).css('z-index')
+            ),
         // convert negative indices
         index = index >= 0 ? index : sortedApps.length + index;
     // app should have given index in array sorted by z-index
     assert.indexOf(appsWrapper.find(selector).get(0), index, sortedApps);
 }
 
-function assertFocused (appsWrapper, selector) {
+function assertFocused(appsWrapper, selector) {
     // app should be focused
     assert.lengthOf(
         appsWrapper.find(`${selector}:focus`),
         1,
-        "Missing focused app"
+        'Missing focused app'
     );
     // app should have highest z-index
     assertFocusedIndex(appsWrapper, selector, 0);
