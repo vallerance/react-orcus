@@ -40,14 +40,14 @@
         "development": {
           "commands": [
             {
-              "command": "npm run nx -- run react-orcus:build:development"
+              "command": "npm run nx -- run react-orcus:build-webpack:development"
             }
           ]
         },
         "production": {
           "commands": [
             {
-              "command": "npm run nx -- run react-orcus:build:production"
+              "command": "npm run nx -- run react-orcus:build-production"
             }
           ]
         }
