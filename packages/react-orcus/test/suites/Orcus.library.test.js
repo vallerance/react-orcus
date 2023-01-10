@@ -5,14 +5,10 @@
  * Author: Joshua Carter
  * Created: January 18, 2020
  */
-"use strict";
+'use strict';
 //include dependencies
 var assert = require('assert'),
     JSDOM = require('jsdom').JSDOM;
-    
-// Create a fake DOM for testing with $.ajax
-global.window = new JSDOM().window;
-global.document = window.document;
 
 //begin mocha tests
 describe('Orcus', function () {
@@ -26,52 +22,56 @@ describe('Orcus', function () {
     <script src="../../../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="${filename}"></script>
 </head></html>
-                `, 
+                `,
                 {
                     url: `file://${__dirname}`,
-                    runScripts: "dangerously",
-                    resources: "usable"
+                    runScripts: 'dangerously',
+                    resources: 'usable',
                 }
             );
             //wait for script to load
             dom.window.document.onload = function () {
                 try {
                     //console.log("loaded");
-                    assert.equal(typeof dom.window.Orcus, "object");
-                    assert.equal(typeof dom.window.Orcus.Desktop, "function");
+                    assert.equal(typeof dom.window.Orcus, 'object');
+                    assert.equal(typeof dom.window.Orcus.Desktop, 'function');
                     done();
-                }
-                catch (e) {
+                } catch (e) {
                     done(e);
                 }
             };
-
         };
 
-        it ("A script tag", function (done) {
-            testScriptTag("../../../dist/packages/react-orcus/dev/react-orcus.js", done);
+        it('A script tag', function (done) {
+            testScriptTag(
+                '../../../dist/packages/react-orcus/dev/react-orcus.js',
+                done
+            );
         });
 
-        it ("A script tag using minified script", function (done) {
-            testScriptTag("../../../dist/packages/react-orcus/prod/react-orcus.min.js", done);
+        it('A script tag using minified script', function (done) {
+            testScriptTag(
+                '../../../dist/packages/react-orcus/prod/react-orcus.min.js',
+                done
+            );
         });
 
-        it ("CommonJS", function () {
+        it('CommonJS', function () {
             //include using CommonJS
             var OrcusInc = require('../../../../dist/packages/react-orcus/build/index.js');
             //should have been imported
-            assert.equal(typeof OrcusInc.Desktop, "function");
+            assert.equal(typeof OrcusInc.Desktop, 'function');
         });
-        
-        it ("CommonJS using default export", function () {
+
+        it('CommonJS using default export', function () {
             //include using CommonJS
             var OrcusInc = require('../../../../dist/packages/react-orcus/build/index.js');
             //should have been imported
-            assert.equal(typeof OrcusInc.default, "object");
-            assert.equal(typeof OrcusInc.default.Desktop, "function");
+            assert.equal(typeof OrcusInc.default, 'object');
+            assert.equal(typeof OrcusInc.default.Desktop, 'function');
         });
-        
-        it ("RequireJS", function (done) {
+
+        it('RequireJS', function (done) {
             //include the file via a script tag
             var dom = new JSDOM(
                 `
@@ -92,22 +92,21 @@ describe('Orcus', function () {
         });
     </script>
 </head></html>
-                `, 
+                `,
                 {
                     url: `file://${__dirname}`,
-                    runScripts: "dangerously",
-                    resources: "usable"
+                    runScripts: 'dangerously',
+                    resources: 'usable',
                 }
             );
             //wait for script to load
             dom.window.onOrcusLoad = function (OrcusInc) {
                 try {
                     //console.log("loaded");
-                    assert.equal(typeof OrcusInc, "object");
-                    assert.equal(typeof OrcusInc.Desktop, "function");
+                    assert.equal(typeof OrcusInc, 'object');
+                    assert.equal(typeof OrcusInc.Desktop, 'function');
                     done();
-                }
-                catch (e) {
+                } catch (e) {
                     done(e);
                 }
             };
