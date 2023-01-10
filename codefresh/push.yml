@@ -75,6 +75,8 @@ steps:
     image_name: react-orcus
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
+    buildkit: true
+    target: install
     registry: github-container-registry-vallerance
     when:
       steps:
@@ -98,7 +100,8 @@ steps:
     image_name: react-orcus-lint
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/lint.Dockerfile
+    buildkit: true
+    target: lint
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
@@ -132,7 +135,8 @@ steps:
     image_name: react-orcus-build
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/build.Dockerfile
+    buildkit: true
+    target: build
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
@@ -158,7 +162,8 @@ steps:
     image_name: react-orcus-test
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/test.Dockerfile
+    buildkit: true
+    target: test
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
