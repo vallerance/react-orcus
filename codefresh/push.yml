@@ -1,10 +1,12 @@
 version: 1.0
 mode: parallel
+fail_fast: false
 stages:
   - install
   - lint
   - build
   - test
+  - release
   - status
 steps:
   clone:
@@ -75,6 +77,8 @@ steps:
     image_name: react-orcus
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
+    buildkit: true
+    target: install
     registry: github-container-registry-vallerance
     when:
       steps:
@@ -98,7 +102,8 @@ steps:
     image_name: react-orcus-lint
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/lint.Dockerfile
+    buildkit: true
+    target: lint
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
@@ -132,13 +137,14 @@ steps:
     image_name: react-orcus-build
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/build.Dockerfile
+    buildkit: true
+    target: build
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
     when:
       steps:
-        - name: lint
+        - name: install
   build-status:
     stage: status
     image: ${{build-status-image}}
@@ -158,12 +164,14 @@ steps:
     image_name: react-orcus-test
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
-    dockerfile: codefresh/test.Dockerfile
+    buildkit: true
+    target: test
     build_arguments:
       - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
     registry: github-container-registry-vallerance
     when:
       steps:
+        - name: install
         - name: build
   test:
     title: Running tests
@@ -173,6 +181,7 @@ steps:
     when:
       steps:
         - name: build-test
+        - name: lint
   test-status:
     stage: status
     image: ${{build-status-image}}
@@ -185,3 +194,74 @@ steps:
         - name: test
           on:
             - finished
+  build-release:
+    title: Building release image
+    type: build
+    stage: release
+    image_name: react-orcus-release
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    buildkit: true
+    target: release
+    build_arguments:
+      - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+      - GITHUB_USER=${{GITHUB_USER}}
+      - GITHUB_EMAIL=${{GITHUB_EMAIL}}
+      - NPM_TOKEN=${{NPM_TOKEN}}
+      - CF_BRANCH=${{CF_BRANCH}}
+    registry: github-container-registry-vallerance
+    when:
+      steps:
+        - name: build
+  release-approve-patch:
+    title: Approve PATCH release
+    stage: release
+    type: pending-approval
+    when:
+      steps:
+        - name: build-release
+        - name: lint
+        - name: build
+        - name: test
+  release-approve-minor:
+    title: Approve MINOR release
+    stage: release
+    type: pending-approval
+    when:
+      steps:
+        - name: build-release
+        - name: lint
+        - name: build
+        - name: test
+  release-approve-major:
+    title: Approve MAJOR release
+    stage: release
+    type: pending-approval
+    when:
+      steps:
+        - name: build-release
+        - name: lint
+        - name: build
+        - name: test
+  release:
+    title: Creating and pushing release
+    stage: release
+    image: ghcr.io/vallerance/react-orcus-release:${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node release.js
+        ${{steps.release-approve-major.result}}
+        ${{steps.release-approve-minor.result}}
+        ${{steps.release-approve-patch.result}}
+    when:
+      steps:
+        any:
+          - name: release-approve-major
+            on:
+              - approved
+          - name: release-approve-minor
+            on:
+              - approved
+          - name: release-approve-patch
+            on:
+              - approved
