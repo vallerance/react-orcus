@@ -207,7 +207,6 @@ steps:
     disable_push: true
     when:
       steps:
-        - name: install
         - name: build
   release:
     stage: release
@@ -217,7 +216,7 @@ steps:
       - node status.js test ${{steps.test.result}}
     when:
       steps:
-        - name: build-status-image
+        - name: build-release
+        - name: lint
+        - name: build
         - name: test
-          on:
-            - finished
