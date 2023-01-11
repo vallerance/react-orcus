@@ -36,10 +36,10 @@ FROM install AS build
 
 # Codefresh can't support the memory overhead of just `npm run build`
 RUN npm run nx -- run react-orcus:build-tsc-babel
-# For some reason, using the npm scripts results in a inexplicable failure of
-# the build commands when run in docker
-RUN until node_modules/.bin/nx run react-orcus:build-webpack:development -- --verbose; do sleep 1; done
-RUN node_modules/.bin/nx run react-orcus:build-production
+# Sometimes, these build commands will fail...
+# not sure why, but retrying seems to help
+RUN until node_modules/.bin/nx run react-orcus:build-webpack:development; do sleep 1; done
+RUN until node_modules/.bin/nx run react-orcus:build-production; do sleep 1; done
 
 
 
