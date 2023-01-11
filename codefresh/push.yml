@@ -204,6 +204,8 @@ steps:
     target: release
     build_arguments:
       - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+      - GITHUB_USER=${{GITHUB_USER}}
+      - GITHUB_EMAIL=${{GITHUB_EMAIL}}
       - NPM_TOKEN=${{NPM_TOKEN}}
     disable_push: true
     when:

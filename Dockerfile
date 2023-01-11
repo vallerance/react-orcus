@@ -88,6 +88,11 @@ FROM build AS release
 
 RUN apk add git
 
+ARG GITHUB_USER
+ARG GITHUB_EMAIL
+RUN git config --global user.name ${GITHUB_USER}
+RUN git config --global user.email ${GITHUB_EMAIL}
+
 COPY codefresh/release.js .
 
 ARG GITHUB_TOKEN
