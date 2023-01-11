@@ -92,5 +92,7 @@ COPY codefresh/release.js .
 
 ARG GITHUB_TOKEN
 ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+ARG NPM_TOKEN
+ENV NPM_TOKEN=${NPM_TOKEN}
 
 ENTRYPOINT [ "node", "release.js" ]

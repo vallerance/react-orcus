@@ -203,6 +203,7 @@ steps:
     target: release
     build_arguments:
       - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+      - NPM_TOKEN=${{NPM_TOKEN}}
     disable_push: true
     when:
       steps:
