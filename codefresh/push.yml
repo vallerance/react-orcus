@@ -213,7 +213,7 @@ steps:
     image: ${{build-release}}
     working_directory: IMAGE_WORK_DIR
     commands:
-      - node status.js test ${{steps.test.result}}
+      - node release.js
     when:
       steps:
         - name: build-release
