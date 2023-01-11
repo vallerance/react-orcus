@@ -213,8 +213,8 @@ steps:
     when:
       steps:
         - name: build
-  release-approve-major:
-    title: Approve MAJOR release
+  release-approve-patch:
+    title: Approve PATCH release
     stage: release
     type: pending-approval
     when:
@@ -233,8 +233,8 @@ steps:
         - name: lint
         - name: build
         - name: test
-  release-approve-patch:
-    title: Approve PATCH release
+  release-approve-major:
+    title: Approve MAJOR release
     stage: release
     type: pending-approval
     when:
