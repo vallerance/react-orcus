@@ -3,7 +3,7 @@ const { promisify } = require('node:util');
 
 const execAsync = promisify(exec);
 
-const release = async () => {
+const test = async () => {
     const { stdout: switchOut } = await execAsync('git switch master');
     console.log('Switch master: ', switchOut.toString());
     const { stdout: pullOut } = await execAsync('git pull');
@@ -21,14 +21,18 @@ const release = async () => {
     );
     console.log('Commit: ', commitOut.toString());
     const { stdout: pushOut } = await execAsync(
-        'git push -u origin jc/temp/test-ci-git'
+        'git push -u github jc/temp/test-ci-git'
     );
     console.log('Push: ', pushOut.toString());
-    //await execAsync('npm --no-git-tag-version version patch');
-    //await execAsync('git push --follow-tags');
 };
 
-release()
+const release = async () => {
+    await execAsync('npm --no-git-tag-version version patch');
+    await execAsync('git push --follow-tags');
+};
+
+test()
+    //release()
     .then(() => {
         console.log('Done');
     })

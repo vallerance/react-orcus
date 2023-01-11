@@ -95,13 +95,14 @@ RUN git config --global user.email ${GITHUB_EMAIL}
 
 COPY codefresh/release.js .
 
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 ARG NPM_TOKEN
 ENV NPM_TOKEN=${NPM_TOKEN}
 
 COPY examples examples
 COPY demo.gif demo.gif
 COPY .git .git
+
+ARG GITHUB_TOKEN
+RUN git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/vallerance/react-orcus.git
 
 ENTRYPOINT [ "node", "release.js" ]
