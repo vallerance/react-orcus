@@ -1,1 +1,8 @@
+# Project
+.github
+.vscode
+codefresh
+
+# Release stage
 release.js
+built-dist

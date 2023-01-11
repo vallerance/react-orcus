@@ -212,15 +212,54 @@ steps:
     when:
       steps:
         - name: build
-  release:
+  release-approve-major:
+    title: Approve MAJOR release
     stage: release
-    image: ${{build-release}}
-    working_directory: IMAGE_WORK_DIR
-    commands:
-      - node release.js
+    type: pending-approval
     when:
       steps:
         - name: build-release
         - name: lint
         - name: build
         - name: test
+  release-approve-minor:
+    title: Approve MINOR release
+    stage: release
+    type: pending-approval
+    when:
+      steps:
+        - name: build-release
+        - name: lint
+        - name: build
+        - name: test
+  release-approve-patch:
+    title: Approve PATCH release
+    stage: release
+    type: pending-approval
+    when:
+      steps:
+        - name: build-release
+        - name: lint
+        - name: build
+        - name: test
+  release:
+    stage: release
+    image: ${{build-release}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node release.js \
+        ${{steps.release-approve-major.result}} \
+        ${{steps.release-approve-minor.result}} \
+        ${{steps.release-approve-patch.result}}
+    when:
+      steps:
+        any:
+          - name: release-approve-major
+            on:
+              - approved
+          - name: release-approve-minor
+            on:
+              - approved
+          - name: release-approve-patch
+            on:
+              - approved

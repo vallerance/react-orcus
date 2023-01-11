@@ -93,17 +93,18 @@ ARG GITHUB_EMAIL
 RUN git config --global user.name ${GITHUB_USER}
 RUN git config --global user.email ${GITHUB_EMAIL}
 
-COPY codefresh/release.js .
-
 ARG NPM_TOKEN
 ENV NPM_TOKEN=${NPM_TOKEN}
 
-COPY examples examples
-COPY demo.gif demo.gif
 COPY .git .git
 
 ARG GITHUB_TOKEN
 RUN git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/vallerance/react-orcus.git
+
+COPY codefresh/release.js .
+COPY .npmignore .
+COPY examples examples
+COPY demo.gif .
 
 ARG CF_BRANCH
 ENV CF_BRANCH=${CF_BRANCH}
