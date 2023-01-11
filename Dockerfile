@@ -100,6 +100,8 @@ ENV GITHUB_TOKEN=${GITHUB_TOKEN}
 ARG NPM_TOKEN
 ENV NPM_TOKEN=${NPM_TOKEN}
 
+COPY examples examples
+COPY demo.gif demo.gif
 COPY .git .git
 
 ENTRYPOINT [ "node", "release.js" ]
