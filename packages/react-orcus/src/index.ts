@@ -9,6 +9,3 @@ export default {
     Desktop,
     App: OrcusApp,
 };
-
-console.log('A CHANGE');
-console.log('ANOTHER CHANGE');
