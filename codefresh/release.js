@@ -57,6 +57,8 @@ const test = async () => {
 };
 
 const release = async () => {
+    console.log('Received env: ', { CF_BRANCH });
+    console.log('Received semver args: ', semverArgs);
     // get our semver type
     let semverType =
         semverTypeIndices[semverArgs.indexOf(RELEASE_APPROVAL.APPROVED)];

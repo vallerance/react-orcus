@@ -249,9 +249,9 @@ steps:
     image: ghcr.io/vallerance/react-orcus-release:${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: IMAGE_WORK_DIR
     commands:
-      - node release.js \
-        ${{steps.release-approve-major.result}} \
-        ${{steps.release-approve-minor.result}} \
+      - node release.js
+        ${{steps.release-approve-major.result}}
+        ${{steps.release-approve-minor.result}}
         ${{steps.release-approve-patch.result}}
     when:
       steps:
