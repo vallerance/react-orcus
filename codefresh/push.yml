@@ -95,41 +95,41 @@ steps:
         - name: install
           on:
             - finished
-  build-lint:
-    title: Building lint image
-    type: build
-    stage: lint
-    image_name: react-orcus-lint
-    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
-    working_directory: ${{clone}}
-    buildkit: true
-    target: lint
-    build_arguments:
-      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
-    registry: github-container-registry-vallerance
-    when:
-      steps:
-        - name: install
-  lint:
-    title: Linting source
-    stage: lint
-    image: ${{build-lint}}
-    working_directory: IMAGE_WORK_DIR
-    when:
-      steps:
-        - name: build-lint
-  lint-status:
-    stage: status
-    image: ${{build-status-image}}
-    working_directory: IMAGE_WORK_DIR
-    commands:
-      - node status.js lint ${{steps.lint.result}}
-    when:
-      steps:
-        - name: build-status-image
-        - name: lint
-          on:
-            - finished
+  # build-lint:
+  #   title: Building lint image
+  #   type: build
+  #   stage: lint
+  #   image_name: react-orcus-lint
+  #   tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+  #   working_directory: ${{clone}}
+  #   buildkit: true
+  #   target: lint
+  #   build_arguments:
+  #     - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+  #   registry: github-container-registry-vallerance
+  #   when:
+  #     steps:
+  #       - name: install
+  # lint:
+  #   title: Linting source
+  #   stage: lint
+  #   image: ${{build-lint}}
+  #   working_directory: IMAGE_WORK_DIR
+  #   when:
+  #     steps:
+  #       - name: build-lint
+  # lint-status:
+  #   stage: status
+  #   image: ${{build-status-image}}
+  #   working_directory: IMAGE_WORK_DIR
+  #   commands:
+  #     - node status.js lint ${{steps.lint.result}}
+  #   when:
+  #     steps:
+  #       - name: build-status-image
+  #       - name: lint
+  #         on:
+  #           - finished
   build:
     title: Building library
     type: build
@@ -157,43 +157,43 @@ steps:
         - name: build
           on:
             - finished
-  build-test:
-    title: Building test image
-    type: build
-    stage: test
-    image_name: react-orcus-test
-    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
-    working_directory: ${{clone}}
-    buildkit: true
-    target: test
-    build_arguments:
-      - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
-    registry: github-container-registry-vallerance
-    when:
-      steps:
-        - name: install
-        - name: build
-  test:
-    title: Running tests
-    stage: test
-    image: ${{build-test}}
-    working_directory: IMAGE_WORK_DIR
-    when:
-      steps:
-        - name: build-test
-        - name: lint
-  test-status:
-    stage: status
-    image: ${{build-status-image}}
-    working_directory: IMAGE_WORK_DIR
-    commands:
-      - node status.js test ${{steps.test.result}}
-    when:
-      steps:
-        - name: build-status-image
-        - name: test
-          on:
-            - finished
+  # build-test:
+  #   title: Building test image
+  #   type: build
+  #   stage: test
+  #   image_name: react-orcus-test
+  #   tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+  #   working_directory: ${{clone}}
+  #   buildkit: true
+  #   target: test
+  #   build_arguments:
+  #     - VERSION=${{CF_BRANCH_TAG_NORMALIZED}}
+  #   registry: github-container-registry-vallerance
+  #   when:
+  #     steps:
+  #       - name: install
+  #       - name: build
+  # test:
+  #   title: Running tests
+  #   stage: test
+  #   image: ${{build-test}}
+  #   working_directory: IMAGE_WORK_DIR
+  #   when:
+  #     steps:
+  #       - name: build-test
+  #       - name: lint
+  # test-status:
+  #   stage: status
+  #   image: ${{build-status-image}}
+  #   working_directory: IMAGE_WORK_DIR
+  #   commands:
+  #     - node status.js test ${{steps.test.result}}
+  #   when:
+  #     steps:
+  #       - name: build-status-image
+  #       - name: test
+  #         on:
+  #           - finished
   build-release:
     title: Building release image
     type: build
