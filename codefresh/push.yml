@@ -244,6 +244,7 @@ steps:
         - name: build
         - name: test
   release:
+    title: Creating and pushing release
     stage: release
     image: ${{build-release}}
     working_directory: IMAGE_WORK_DIR
