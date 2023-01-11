@@ -5,6 +5,7 @@ stages:
   - lint
   - build
   - test
+  - release
   - status
 steps:
   clone:
@@ -182,6 +183,34 @@ steps:
   test-status:
     stage: status
     image: ${{build-status-image}}
+    working_directory: IMAGE_WORK_DIR
+    commands:
+      - node status.js test ${{steps.test.result}}
+    when:
+      steps:
+        - name: build-status-image
+        - name: test
+          on:
+            - finished
+  build-release:
+    title: Building release image
+    type: build
+    stage: release
+    image_name: react-orcus
+    tag: ${{CF_BRANCH_TAG_NORMALIZED}}
+    working_directory: ${{clone}}
+    buildkit: true
+    target: release
+    build_arguments:
+      - GITHUB_TOKEN=${{GITHUB_TOKEN}}
+    disable_push: true
+    when:
+      steps:
+        - name: install
+        - name: build
+  release:
+    stage: release
+    image: ${{build-release}}
     working_directory: IMAGE_WORK_DIR
     commands:
       - node status.js test ${{steps.test.result}}

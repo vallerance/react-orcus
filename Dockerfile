@@ -81,3 +81,16 @@ COPY --from=build --chown=seluser:seluser /usr/src/react-orcus/dist dist
 
 ENTRYPOINT npm run nx -- run-many --target test --all --exclude default --parallel=1 && \
     npm run nx -- run-many --target e2e --all --exclude default --parallel=1
+
+
+
+FROM build AS release
+
+RUN apk add git
+
+COPY codefresh/release.js .
+
+ARG GITHUB_TOKEN
+ENV GITHUB_TOKEN=${GITHUB_TOKEN}
+
+ENTRYPOINT [ "node", "release.js" ]
