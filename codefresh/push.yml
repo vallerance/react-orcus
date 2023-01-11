@@ -180,6 +180,7 @@ steps:
     when:
       steps:
         - name: build-test
+        - name: lint
   test-status:
     stage: status
     image: ${{build-status-image}}
