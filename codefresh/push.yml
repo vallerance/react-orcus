@@ -198,7 +198,7 @@ steps:
     title: Building release image
     type: build
     stage: release
-    image_name: react-orcus
+    image_name: react-orcus-release
     tag: ${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: ${{clone}}
     buildkit: true
@@ -209,7 +209,7 @@ steps:
       - GITHUB_EMAIL=${{GITHUB_EMAIL}}
       - NPM_TOKEN=${{NPM_TOKEN}}
       - CF_BRANCH=${{CF_BRANCH}}
-    disable_push: true
+    registry: github-container-registry-vallerance
     when:
       steps:
         - name: build
@@ -246,7 +246,7 @@ steps:
   release:
     title: Creating and pushing release
     stage: release
-    image: ${{build-release}}
+    image: ghcr.io/vallerance/react-orcus-release:${{CF_BRANCH_TAG_NORMALIZED}}
     working_directory: IMAGE_WORK_DIR
     commands:
       - node release.js \
