@@ -104,9 +104,9 @@ react-orcus v${newVersion}
 ${commitHistory}
 "`);
     // push our changes to the remote
-    await execOut('git push');
+    await execOut('git push github');
     // push our tag to the remote
-    await execOut(`git push v${newVersion}`);
+    await execOut(`git push github v${newVersion}`);
 
     // now, it's time to build our distribution
     await execOut('mv dist built-dist');
