@@ -1,0 +1,15 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 4,
+  "overrides": [
+    {
+      "files": ["*.json", "*.yaml", "*.yml", "*.prettierrc", "*.babelrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "version": 2,
+  "cli": "nx",
+  "title": "package.json executor",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "outputPath": {
+      "type": "string",
+      "description": "The output path for package.json.",
+      "x-prompt": "Where is the package json that needs to be edited?"
+    },
+    "packageJson": {
+      "type": "string",
+      "description": "The source path for package.json.",
+      "x-prompt": "Where is the package json that should be read from?"
+    }
+  },
+  "required": ["outputPath"]
+}

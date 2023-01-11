@@ -17,57 +17,57 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    
-    - name: Apply netrc creds
-      uses: little-core-labs/netrc-creds@v1
-      with:
-        creds: |
-          [
-            {
-              "machine": "${{secrets.ATLASSIAN_API_ENDPOINT}}",
-              "login": "${{secrets.ATLASSIAN_API_USER}}",
-              "password": "${{secrets.ATLASSIAN_API_TOKEN}}"
-            }
-          ]
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
-    - name: Send edit request to JIRA API
-      run: |-
-        ISSUE_BODY="$(jq .issue.body ${{github.event_path}})"
-        echo "Original ISSUE_BODY: $ISSUE_BODY"
-        ISSUE_BODY='"'"$(echo "$ISSUE_BODY" | awk -F'</react-orcus-jira-ticket>' '{print $2}')"
-        echo "ISSUE_BODY: $ISSUE_BODY"
-        
-        JSON_DATA='{
-          "fields": {
-            "customfield_10030": "ignore",
-            "summary": "'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')"'",
-            "description": {
-              "version": 1,
-              "type": "doc",
-              "content": [
-                {
-                  "type": "paragraph",
-                  "content": [
-                    {
-                      "type": "text",
-                      "text": '"$ISSUE_BODY"'
-                    }
-                  ]
-                }
-              ]
+      - name: Apply netrc creds
+        uses: little-core-labs/netrc-creds@v1
+        with:
+          creds: |
+            [
+              {
+                "machine": "${{secrets.ATLASSIAN_API_ENDPOINT}}",
+                "login": "${{secrets.ATLASSIAN_API_USER}}",
+                "password": "${{secrets.ATLASSIAN_API_TOKEN}}"
+              }
+            ]
+
+      # Runs a single command using the runners shell
+      - name: Send edit request to JIRA API
+        run: |-
+          ISSUE_BODY="$(jq .issue.body ${{github.event_path}})"
+          echo "Original ISSUE_BODY: $ISSUE_BODY"
+          ISSUE_BODY='"'"$(echo "$ISSUE_BODY" | awk -F'</react-orcus-jira-ticket>' '{print $2}')"
+          echo "ISSUE_BODY: $ISSUE_BODY"
+
+          JSON_DATA='{
+            "fields": {
+              "customfield_10030": "ignore",
+              "summary": "'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $2}')"'",
+              "description": {
+                "version": 1,
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": '"$ISSUE_BODY"'
+                      }
+                    ]
+                  }
+                ]
+              }
             }
-          }
-        }'
-        echo "JSON_DATA: $JSON_DATA"
-        
-        ISSUE_ENDPOINT='https://${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')"
-        echo "ISSUE_ENDPOINT: $ISSUE_ENDPOINT"
-        
-        curl --netrc --request PUT \
-        --url "$ISSUE_ENDPOINT" \
-        --header 'Accept: application/json' \
-        --header 'Content-Type: application/json' \
-        --data "$JSON_DATA"
+          }'
+          echo "JSON_DATA: $JSON_DATA"
+
+          ISSUE_ENDPOINT='https://${{secrets.ATLASSIAN_API_ENDPOINT}}/rest/api/3/issue/'"$(echo "${{github.event.issue.title}}" | awk -F' - ' '{print $1}')"
+          echo "ISSUE_ENDPOINT: $ISSUE_ENDPOINT"
+
+          curl --netrc --request PUT \
+          --url "$ISSUE_ENDPOINT" \
+          --header 'Accept: application/json' \
+          --header 'Content-Type: application/json' \
+          --data "$JSON_DATA"

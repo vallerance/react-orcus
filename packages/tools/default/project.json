@@ -1,0 +1,56 @@
+{
+  "name": "default",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": ".",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run react-orcus:build"
+          }
+        ]
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run examples-demo:serve"
+          }
+        ]
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- run-many --target test --all --exclude default"
+          },
+          {
+            "command": "npm run nx -- run-many --target e2e --all --exclude default"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npm run nx -- format:check --all"
+          },
+          {
+            "command": "npm run nx -- run-many --target lint --all --exclude default --parallel --max-warnings 0"
+          }
+        ],
+        "parallel": false
+      }
+    }
+  }
+}
