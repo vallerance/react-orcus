@@ -91,7 +91,7 @@ const release = async () => {
     const newVersion = await getPackageJsonVersion();
 
     // get the commit history since our last release
-    const commitHistory = await execOut(
+    const { stdout: commitHistory } = await execAsync(
         `git --no-pager log --pretty=format:'%s' --graph v${currentVersion}..HEAD`
     );
     // commit the changes to our package.json
