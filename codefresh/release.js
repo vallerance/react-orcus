@@ -81,7 +81,7 @@ const release = async () => {
     // before we update our package versions, get our current version
     const currentVersion = await getPackageJsonVersion();
     // now, version our distribution package
-    const versionCommand = `npm --no-git-tag-version version ${semverType}`;
+    const versionCommand = `npm version --git-tag-version false --preid alpha  ${semverType}`;
     await execOut(versionCommand, {
         cwd: path.join(process.cwd(), 'dist/packages/react-orcus/prod'),
     });
