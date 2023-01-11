@@ -1,4 +1,5 @@
 const { exec } = require('node:child_process');
+const path = require('node:path');
 const fs = require('node:fs/promises');
 const { promisify } = require('node:util');
 
@@ -15,6 +16,7 @@ const BRANCH = {
 const RELEASE_APPROVAL = {
     APPROVED: 'approved',
     DENIED: 'denied',
+    PENDING: 'pending-approval',
 };
 
 const semverTypeIndices = {
