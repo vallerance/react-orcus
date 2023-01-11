@@ -72,6 +72,11 @@ const release = async () => {
         // then this should be a pre-release semver type
         semverType = `pre${semverType}`;
     }
+    // if our release type if a prepatch
+    if (semverType === 'prepatch') {
+        // then we should actually use pre-release, so that we can increment an existing pre-release
+        semverType = 'prerelease';
+    }
 
     // before we update our package versions, get our current version
     const currentVersion = await getPackageJsonVersion();
