@@ -3,15 +3,24 @@ const { promisify } = require('node:util');
 
 const execAsync = promisify(exec);
 
+const { CF_BRANCH } = process.env;
+
+const execOut = async (...args) => {
+    const { stdout, stderr } = await execAsync(...args);
+    if (stderr) {
+        console.error(...args, stderr);
+    }
+    if (stdout) {
+        console.log(...args, stdout);
+    }
+};
+
 const test = async () => {
-    const { stdout: switchOut } = await execAsync('git switch master');
-    console.log('Switch master: ', switchOut.toString());
-    const { stdout: pullOut } = await execAsync('git pull');
-    console.log('Pull master: ', pullOut.toString());
-    const { stdout: switchCOut } = await execAsync(
-        'git switch -c jc/temp/test-ci-git'
+    await execOut('git switch jc/temp/test-ci-git');
+    await execOut('git pull');
+    await execOut(
+        `git merge ${CF_BRANCH} -m "Merge branch '${CF_BRANCH}' into 'jc/temp/test-ci-git'"`
     );
-    console.log('Create temp branch: ', switchCOut.toString());
     const { stdout: tarOut } = await execAsync('npm pack');
     console.log('Tar: ', tarOut.toString());
     const { stdout: addOut } = await execAsync('git add *.tgz');

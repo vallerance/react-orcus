@@ -207,6 +207,7 @@ steps:
       - GITHUB_USER=${{GITHUB_USER}}
       - GITHUB_EMAIL=${{GITHUB_EMAIL}}
       - NPM_TOKEN=${{NPM_TOKEN}}
+      - CF_BRANCH=${{CF_BRANCH}}
     disable_push: true
     when:
       steps:

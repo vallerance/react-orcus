@@ -105,4 +105,7 @@ COPY .git .git
 ARG GITHUB_TOKEN
 RUN git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/vallerance/react-orcus.git
 
+ARG CF_BRANCH
+ENV CF_BRANCH=${CF_BRANCH}
+
 ENTRYPOINT [ "node", "release.js" ]
