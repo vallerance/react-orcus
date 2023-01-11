@@ -103,6 +103,7 @@ RUN git remote add github https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/vall
 
 COPY codefresh/release.js .
 COPY .npmignore .
+COPY .npmrc .
 COPY examples examples
 COPY demo.gif .
 
