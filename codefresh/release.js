@@ -120,6 +120,9 @@ ${commitHistory}
     await execOut('rm package-lock.json');
     await execOut('mv dist/package.json package.json');
     await execOut('mv dist/package-lock.json package-lock.json');
+
+    // we are finally ready to publish our release
+    await execOut('npm publish');
 };
 
 // test()
