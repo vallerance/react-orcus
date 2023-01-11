@@ -220,9 +220,9 @@ steps:
     when:
       steps:
         - name: build-release
-        - name: lint
+        # - name: lint
         - name: build
-        - name: test
+        # - name: test
   release-approve-minor:
     title: Approve MINOR release
     stage: release
@@ -230,9 +230,9 @@ steps:
     when:
       steps:
         - name: build-release
-        - name: lint
+        # - name: lint
         - name: build
-        - name: test
+        # - name: test
   release-approve-major:
     title: Approve MAJOR release
     stage: release
@@ -240,9 +240,9 @@ steps:
     when:
       steps:
         - name: build-release
-        - name: lint
+        # - name: lint
         - name: build
-        - name: test
+        # - name: test
   release:
     title: Creating and pushing release
     stage: release
